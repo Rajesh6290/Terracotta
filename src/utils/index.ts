@@ -1,6 +1,8 @@
 // import { Options } from "@material-table/core";
 // import { ExportCsv, ExportPdf } from "@material-table/exporters";
 
+import { Options } from "@material-table/core";
+
 export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 //? SET To LocalStorage
@@ -416,3 +418,58 @@ export const COUNTRIES = [
 //     );
 //   } catch (error) {}
 // }
+export const MuiTblOptions = (downloadTitle?: string) => {
+  const options: Options<any> = {
+    headerStyle: {
+      whiteSpace: "nowrap",
+      backgroundColor: "#696cff",
+      color: "#fff",
+      fontWeight: "bold",
+      fontSize: "0.9rem",
+      fontFamily: "inherit",
+      border: "none",
+    },
+    rowStyle: {
+      color: "#000",
+      fontWeight: "500",
+      fontSize: "0.9rem",
+    },
+    actionsColumnIndex: -1,
+    addRowPosition: "first",
+    pageSize: 8,
+    detailPanelColumnAlignment: "right",
+    exportAllData: false,
+    headerSelectionProps: { color: "secondary" },
+    selectionProps: () => ({ color: "secondary" }),
+    hideFilterIcons: true,
+  };
+
+  return options;
+};
+
+// export const MuiTblOptionsWithDownload = (downloadFileName?: string) => {
+//   const options: Options<any> = {
+//     actionsColumnIndex: -1,
+//     addRowPosition: "first",
+//     pageSize: 8,
+//     detailPanelColumnAlignment: "right",
+//     exportAllData: true,
+//     headerSelectionProps: { color: "secondary" },
+//     selectionProps: () => ({
+//       color: "secondary",
+//     }),
+//     exportMenu: [
+//       {
+//         label: "Export All Data In CSV",
+//         exportFunc: (cols: any, data: any) =>
+//           ExportCsv(cols, data, downloadFileName || "AllData"),
+//       },
+//       {
+//         label: "Export All Data In PDF",
+//         exportFunc: (cols: any, data: any) =>
+//           ExportPdf(cols, data, downloadFileName || "AllData"),
+//       },
+//     ],
+//   };
+//   return options;
+// };

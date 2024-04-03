@@ -26,7 +26,7 @@ const AccountMenu = () => {
   const { mutation, isLoading } = useMutation();
 
   const handleLogout = async () => {
-    const res = await mutation("users", {
+    const res = await mutation("customer/update", {
       method: "PUT",
       isAlert: true,
       body: {
@@ -149,11 +149,10 @@ const AccountMenu = () => {
           <Link href={item.path} key={item.id}>
             <p
               className={`group    flex items-center gap-1 rounded-md p-3  font-medium common-transition
-            ${
-              item.path === router.asPath
-                ? " bg-secondary/5"
-                : " hover:text-primary hover:bg-primary/5"
-            }
+            ${item.path === router.asPath
+                  ? " bg-secondary/5"
+                  : " hover:text-primary hover:bg-primary/5"
+                }
             `}
             >
               {item.icon}
@@ -169,15 +168,13 @@ const AccountMenu = () => {
           <p className="w-full capitalize font-semibold tracking-wide flex items-center justify-between">
             Become an influencer
             <MdExpandMore
-              className={`text-2xl text-gray-800 common-transition ${
-                open ? "" : " -rotate-90"
-              }`}
+              className={`text-2xl text-gray-800 common-transition ${open ? "" : " -rotate-90"
+                }`}
             />
           </p>
           <div
-            className={`animate-collapse grid common-transition ease-in-out ${
-              open ? "grid-rows-[1fr] pt-2" : "grid-rows-[0fr] "
-            }`}
+            className={`animate-collapse grid common-transition ease-in-out ${open ? "grid-rows-[1fr] pt-2" : "grid-rows-[0fr] "
+              }`}
           >
             <div className="overflow-hidden description text-sm md:text-base">
               {INFLUENCER_MENU_ARR.map((item) => (

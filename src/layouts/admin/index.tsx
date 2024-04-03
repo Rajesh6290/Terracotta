@@ -1,43 +1,37 @@
-// import { useAppContext } from "contexts";
 import Head from "next/head";
 import Navbar from "./Navbar";
-import { useState } from "react";
+import AdminDrawer from "./AdminDrawer";
 
-type Props = {
+export default function AdminLayout({
+  title = "Welcome To Admin Panel",
+  children = <></>,
+  description,
+  ogImage,
+}: {
   children: React.ReactNode;
   title?: string;
   description?: string;
   ogImage?: string;
-};
-export default function AdminLayout({
-  children = <></>,
-  title = "Dashboard Layout",
-  description,
-  ogImage,
-}: Props) {
+}) {
   return (
     <>
       <Head>
-        <meta property="og:url" content="https://printbrix-web.vercel.app/" />
+        <meta property="og:url" content="https://terracotta-seven.vercel.app/" />
         <meta property="og:type" content="website" />
         <title>{title}</title>
         <meta name="description" content={description} />
-        <meta
-          property="og:image"
-          content={ogImage || "https://printbrix-web.vercel.app/logo.png"}
-        />
+        <meta property="og:image" content={ogImage} />
       </Head>
-      <section className=" w-full  h-screen ">
-        <div className=" relative w-full h-full flex items-start  justify-between ">
-          {/* <AdminDrawer isFull={isFull} setIsFull={setIsFull} /> */}
-          <div
-            className="h-full w-full  duration-500 transition-all ease-out"
-          >
+      <section className="w-full h-screen bg-slate-50 bg-center bg-cover bg-no-repeat overflow-hidden">
+        <div className="relative w-full flex items-start justify-between gap-2 p-2 h-full">
+          <AdminDrawer />
+
+          <aside className="w-full px-2 flex flex-col gap-2">
             <Navbar />
-            <article className="w-full h-[calc(100vh-78px)] overflow-y-scroll px-3 py-2 ">
+            <article className="h-[calc(100vh-100px)] w-full">
               {children}
             </article>
-          </div>
+          </aside>
         </div>
       </section>
     </>

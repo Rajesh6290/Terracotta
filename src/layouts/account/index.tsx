@@ -1,10 +1,26 @@
+import useAuth from "@/hooks/useAuth";
 import AccountMenu from "./AccountMenu";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
+import { toast } from "react-toastify";
+import useAppContext from "@/context";
 
 export default function AccountLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
+    const { setIsLogin } = useAppContext()
+    const router = useRouter()
+    const { user, logout } = useAuth();
+    useEffect(() => {
+        if (!user?._id || user?.isActive === false || user?.isOnline === false) {
+            router.push("/");
+            logout()
+            setIsLogin(false);
+            toast.error("Not Authenticated")
+        }
+    }, [user?._id, user?.isActive, user?.isOnline]);
     return (
         <article className="bg-gray-100 py-8">
             <section className="relative main-container">

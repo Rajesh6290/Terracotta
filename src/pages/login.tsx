@@ -12,7 +12,7 @@ import * as Yup from "yup";
 const Login = () => {
   const { isLogin, setIsLogin } = useAppContext();
   const router = useRouter()
-  const { getUser } = useAuth();
+  const { getUser, user } = useAuth();
   const { mutation, isLoading } = useMutation();
   const LoginSchema = Yup.object({
     emailOrUsername: Yup.string().required("This field is required"),
@@ -34,21 +34,40 @@ const Login = () => {
       });
 
       if (res?.status === 200) {
-        resetForm();
-        if (res?.results?._id) {
-          setIsLogin(true);
+        getUser();
+        if (user?.isBlocked === false) {
+          router.push("/");
+          toast.error("User is blocked")
         } else {
-          setIsLogin(false);
+          resetForm();
+          if (res?.results?._id) {
+            setIsLogin(true);
+          } else {
+            setIsLogin(false);
+          }
+
+
+
+          res?.results?.token &&
+            saveToLocalStorage("ACCESS_TOKEN", res?.results?.token);
+          getUser();
+          toast.success("Login SuccessFully");
+          await mutation(`customer/update`, {
+            method: "PUT",
+            body: {
+              isOnline: true,
+
+            },
+
+          })
+          if (user?.role === "USER") {
+            router.push("/")
+          } else {
+            router.push("/admin")
+          }
+          return;
         }
-        router.push("/");
-        getUser();
 
-        res?.results?.token &&
-          saveToLocalStorage("ACCESS_TOKEN", res?.results?.token);
-        getUser();
-        toast.success("Login SuccessFully");
-
-        return;
       }
       toast.error(res?.results?.msg);
 

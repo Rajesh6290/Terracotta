@@ -1,5 +1,6 @@
 
 import useMenuItems from "@/hooks/useMenuItems";
+import { Dialog } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
@@ -21,7 +22,7 @@ interface Props {
 const Navbar = () => {
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [profile, setProfile] = useState(false);
-  const MenuItems = useMenuItems;
+  const MenuItems = useMenuItems();
   const { pathname } = useRouter();
   const profileDivRef = useRef<HTMLDivElement | null>(null);
   const toggleFullScreen = () => {
@@ -72,20 +73,11 @@ const Navbar = () => {
     };
   }, []);
   return (
-    <nav className=" sticky top-0  w-full h-fit flex items-center  justify-center pt-3  px-5">
-      <div className=" w-full   flex items-center shadow-2xl h-16  rounded-xl px-4">
+    <nav className=" sticky top-0  w-full h-full flex items-center  justify-center pt-3 ">
+      <div className=" w-full   flex items-center h-16  rounded-xl px-4 bg-white shadow-[0px_0px_4px_0px_#00000024]">
         <div className=" w-full flex items-center justify-between">
           <div className=" flex items-center gap-4">
-            {/* <p
-              onClick={() => setIsFull(!isFull)}
-              className="  flex items-center cursor-pointer border-primary justify-center border rounded-md p-2"
-            >
-              {isFull ? (
-                <FaAnglesRight className="text-xl text-primary" />
-              ) : (
-                <AiOutlineMenuUnfold className="text-xl text-primary  " />
-              )}
-            </p> */}
+
             <p className=" flex items-center cursor-pointer border-primary justify-center border rounded-md p-2">
               <IoIosSearch className="text-xl  text-primary " />
             </p>
@@ -146,10 +138,11 @@ const Navbar = () => {
                 onClick={() => setProfile(!profile)}
                 className="cursor-pointer w-full h-full object-fill rounded-full"
               />
-              {profile && (
+
+              <Dialog open={profile} onClose={() => setProfile(false)}>
                 <div
                   ref={profileDivRef}
-                  className=" absolute top-10 right-0 h-[30rem] w-[23rem] commonClass z-10 rounded-lg "
+                  className="  h-[30rem] w-[23rem] commonClass  rounded-lg bg-white"
                 >
                   <div
                     className="w-full h-full flex flex-col justify-between py-5 px-6"
@@ -222,7 +215,8 @@ const Navbar = () => {
                     </div>
                   </div>
                 </div>
-              )}
+              </Dialog>
+
             </div>
           </div>
         </div>
