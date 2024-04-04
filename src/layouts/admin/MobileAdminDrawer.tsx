@@ -1,24 +1,21 @@
-
 import useAdminMenuItem from "@/hooks/useMenuItems";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { Fragment, useState } from "react";
-import { AiOutlineLogout } from "react-icons/ai";
+import { Fragment, useState } from "react";
 import { BiLogOutCircle } from "react-icons/bi";
-import { CgProfile } from "react-icons/cg";
-import { MdDashboard, MdContactPage, MdExpandLess, MdExpandMore } from "react-icons/md";
-import { toast } from "react-toastify";
+import { MdExpandLess, MdExpandMore } from "react-icons/md";
 
-const AdminDrawer = () => {
+
+const MobileAdminDrawer = () => {
     const [selectedSubMenu, setSelectedSubMenu] = useState("");
     const router = useRouter();
     const MenuItems = useAdminMenuItem();
     return (
         <>
-            <Link href={`/admin`} className=" w-full flex justify-center p-3">
+            <Link href={`/admin`} className=" w-full flex justify-center">
                 <img
                     src="/logo.png"
-                    className=" w-full h-fit object-fill"
+                    className=" w-40 h-24 object-fill"
                     alt=""
                 />
             </Link>
@@ -107,4 +104,4 @@ const AdminDrawer = () => {
     );
 };
 
-export default AdminDrawer;
+export default MobileAdminDrawer;

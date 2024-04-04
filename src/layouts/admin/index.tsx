@@ -1,18 +1,40 @@
 import Head from "next/head";
-import Navbar from "./Navbar";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { CgMenuLeftAlt } from "react-icons/cg";
+import { FaXmark } from "react-icons/fa6";
 import AdminDrawer from "./AdminDrawer";
+import Header from "./Header";
+import MobileAdminDrawer from "./MobileAdminDrawer";
+import useAppContext from "@/context";
+import useAuth from "@/hooks/useAuth";
+import { toast } from "react-toastify";
 
-export default function AdminLayout({
-  title = "Welcome To Admin Panel",
-  children = <></>,
-  description,
-  ogImage,
-}: {
+type Props = {
   children: React.ReactNode;
   title?: string;
   description?: string;
   ogImage?: string;
-}) {
+};
+
+const AdminLayout = ({
+  children = <></>,
+  title = "Terracotta Admin Panel",
+  description,
+  ogImage,
+}: Props) => {
+  const [adminMenuOpen, setAdminMenuOpen] = useState(false);
+  const { setIsLogin } = useAppContext()
+  const router = useRouter()
+  const { user, logout } = useAuth();
+  useEffect(() => {
+    if (!user?._id || user?.isActive === false || user?.isOnline === false) {
+      router.push("/");
+      logout()
+      setIsLogin(false);
+    }
+  }, [user?._id, user?.isActive, user?.isOnline]);
+
   return (
     <>
       <Head>
@@ -20,20 +42,44 @@ export default function AdminLayout({
         <meta property="og:type" content="website" />
         <title>{title}</title>
         <meta name="description" content={description} />
-        <meta property="og:image" content={ogImage} />
+        <meta
+          property="og:image"
+          content={"https://terracotta-seven.vercel.app/logo1.png"}
+        />
       </Head>
-      <section className="w-full h-screen bg-slate-50 bg-center bg-cover bg-no-repeat overflow-hidden">
-        <div className="relative w-full flex items-start justify-between gap-2 p-2 h-full">
+      <main className=" w-full h-full flex overflow-hidden relative ">
+        <article className=" hidden  w-80 h-screen bg-gray-800 lg:flex flex-col gap-5">
           <AdminDrawer />
-
-          <aside className="w-full px-2 flex flex-col gap-2">
-            <Navbar />
-            <article className="h-[calc(100vh-100px)] w-full">
-              {children}
-            </article>
-          </aside>
-        </div>
-      </section>
+        </article>
+        <article
+          className={`lg:hidden  w-80 h-screen bg-gray-800 flex flex-col gap-5 absolute z-[555]  duration-500
+        ${adminMenuOpen ? "-translate-x-0" : "-translate-x-96"}
+        `}
+        >
+          <p
+            onClick={() => setAdminMenuOpen(!adminMenuOpen)}
+            className=" p-1 bg-teal-50 border border-green-200 rounded-md absolute right-2 top-2 "
+          >
+            {adminMenuOpen ? (
+              <FaXmark className=" text-3xl text-green-500 cursor-pointer" />
+            ) : (
+              <CgMenuLeftAlt className=" text-3xl text-green-500 cursor-pointer" />
+            )}
+          </p>
+          <MobileAdminDrawer />
+        </article>
+        <article className=" w-full h-screen flex flex-col gap-1 overflow-hidden">
+          <Header
+            setAdminMenuOpen={setAdminMenuOpen}
+            adminMenuOpen={adminMenuOpen}
+          />
+          <div className=" w-full h-full bg-slate-100 overflow-y-auto ">
+            {children}
+          </div>
+        </article>
+      </main>
     </>
   );
-}
+};
+
+export default AdminLayout;

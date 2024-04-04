@@ -7,43 +7,40 @@ import {
   BiLayer,
   BiSupport,
   BiUserCircle,
-  BiUserPin,
-  BiUserPlus,
+  BiUserPin
 } from "react-icons/bi";
 import {
-  BsTruck,
-  BsGear,
-  BsChatSquareText,
+  BsBagCheck,
+  BsBagPlus,
   BsBox,
   BsBoxes,
-  BsKey,
-  BsBagCheck,
-  BsCartCheck,
-  BsGearWideConnected,
-  BsChatText,
-  BsMenuApp,
-  BsBagPlus,
   BsCardImage,
+  BsCartCheck,
+  BsChatSquareText,
+  BsChatText,
+  BsGear,
+  BsGearWideConnected,
+  BsKey,
+  BsMenuApp,
+  BsTruck,
 } from "react-icons/bs";
 import { FiShoppingCart } from "react-icons/fi";
 import { GiMoneyStack } from "react-icons/gi";
 import {
+  HiOutlineClipboardDocumentList,
   HiOutlineQuestionMarkCircle,
   HiOutlineShoppingBag,
-  HiOutlineUserCircle,
   HiOutlineUserGroup,
-  HiOutlineUsers,
+  HiOutlineUsers
 } from "react-icons/hi2";
-import { HiOutlineClipboardDocumentList } from "react-icons/hi2";
 import { IoAddOutline } from "react-icons/io5";
 import {
   MdOutlineAddPhotoAlternate,
-  MdOutlineCategory,
   MdOutlineFeaturedPlayList,
   MdOutlineInstallMobile,
   MdOutlineLocalOffer,
   MdOutlineMobileFriendly,
-  MdOutlinePrivacyTip,
+  MdOutlinePrivacyTip
 } from "react-icons/md";
 import { PiCoins } from "react-icons/pi";
 import { RxDashboard } from "react-icons/rx";
@@ -66,12 +63,6 @@ const useAdminMenuItem = () => [
     title: "Category",
     route: "/admin/category",
     icon: <BiLayer className="text-xl" />,
-  },
-  {
-    _id: "4",
-    title: "Tags",
-    route: "/admin/tags",
-    icon: <MdOutlineCategory className="text-xl" />,
   },
   {
     _id: "5",

@@ -65,10 +65,10 @@ const Login = () => {
           });
 
           // Redirect user based on their role
-          if (user?.role === "USER") {
+          if (res?.results?.role === "USER") {
             return router.push("/");
 
-          } else {
+          } else if (res?.results?.role === "ADMIN") {
             return router.push("/admin");
           }
 
