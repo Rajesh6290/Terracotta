@@ -34,41 +34,52 @@ const Login = () => {
       });
 
       if (res?.status === 200) {
+        // Fetch user data
         getUser();
-        if (user?.isBlocked === false) {
-          router.push("/");
-          toast.error("User is blocked")
+
+        if (res?.results?.isBlocked === true) {
+          // Redirect to home page if user is blocked
+
+          // Show error message
+          toast.error("User is blocked");
+
+          return;
         } else {
+          // Reset form fields
           resetForm();
-          if (res?.results?._id) {
-            setIsLogin(true);
-          } else {
-            setIsLogin(false);
+
+          // Set login status based on presence of _id
+          setIsLogin(!!res?.results?._id);
+
+          // Save token to local storage if available
+          if (res?.results?.token) {
+            saveToLocalStorage("ACCESS_TOKEN", res?.results?.token);
           }
 
-
-
-          res?.results?.token &&
-            saveToLocalStorage("ACCESS_TOKEN", res?.results?.token);
-          getUser();
-          toast.success("Login SuccessFully");
+          // Update user's online status
           await mutation(`customer/update`, {
             method: "PUT",
             body: {
               isOnline: true,
-
             },
+          });
 
-          })
+          // Redirect user based on their role
           if (user?.role === "USER") {
-            router.push("/")
+            return router.push("/");
+
           } else {
-            router.push("/admin")
+            return router.push("/admin");
           }
+
+          // Show success message
+          toast.success("Login Successfully");
+
+          // Exit function
           return;
         }
-
       }
+
       toast.error(res?.results?.msg);
 
     } catch (error) {

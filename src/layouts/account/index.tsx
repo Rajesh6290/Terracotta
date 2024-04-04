@@ -18,7 +18,6 @@ export default function AccountLayout({
             router.push("/");
             logout()
             setIsLogin(false);
-            toast.error("Not Authenticated")
         }
     }, [user?._id, user?.isActive, user?.isOnline]);
     return (
