@@ -54,12 +54,12 @@ const UserProfile = () => {
                                     </div>
                                 </div>
                                 <div className=" text-center p-6 w-full h-full bg-white  rounded-lg shadow-[0px_0px_6px_1px_#00000024]">
-                                    <div className="flex flex-col items-center  w-full ">
+                                    <div className="flex flex-col items-center  w-full overflow-hidden ">
                                         <MdEmail
                                             className="items-center text-2xl mx-20 mb-3 text-primary"
                                             size={28}
                                         />
-                                        <div className="flex flex-col gap-2 ">
+                                        <div className="flex flex-col gap-2 flex-wrap w-full">
                                             <p>{user?.email}</p>
                                         </div>
                                     </div>
