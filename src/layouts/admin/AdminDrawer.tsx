@@ -2,12 +2,9 @@
 import useAdminMenuItem from "@/hooks/useMenuItems";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { Fragment, useState } from "react";
-import { AiOutlineLogout } from "react-icons/ai";
+import { Fragment, useState } from "react";
 import { BiLogOutCircle } from "react-icons/bi";
-import { CgProfile } from "react-icons/cg";
-import { MdDashboard, MdContactPage, MdExpandLess, MdExpandMore } from "react-icons/md";
-import { toast } from "react-toastify";
+import { MdExpandLess, MdExpandMore } from "react-icons/md";
 
 const AdminDrawer = () => {
     const [selectedSubMenu, setSelectedSubMenu] = useState("");

@@ -1,14 +1,11 @@
 import Head from "next/head";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { CgMenuLeftAlt } from "react-icons/cg";
 import { FaXmark } from "react-icons/fa6";
 import AdminDrawer from "./AdminDrawer";
 import Header from "./Header";
 import MobileAdminDrawer from "./MobileAdminDrawer";
-import useAppContext from "@/context";
-import useAuth from "@/hooks/useAuth";
-import { toast } from "react-toastify";
+import AdminProtected from "@/hooks/adminProtected";
 
 type Props = {
   children: React.ReactNode;
@@ -24,16 +21,7 @@ const AdminLayout = ({
   ogImage,
 }: Props) => {
   const [adminMenuOpen, setAdminMenuOpen] = useState(false);
-  const { setIsLogin } = useAppContext()
-  const router = useRouter()
-  const { user, logout } = useAuth();
-  useEffect(() => {
-    if (!user?._id || user?.isActive === false || user?.isOnline === false) {
-      router.push("/");
-      logout()
-      setIsLogin(false);
-    }
-  }, [user?._id, user?.isActive, user?.isOnline]);
+
 
   return (
     <>
@@ -82,4 +70,4 @@ const AdminLayout = ({
   );
 };
 
-export default AdminLayout;
+export default AdminProtected(AdminLayout);

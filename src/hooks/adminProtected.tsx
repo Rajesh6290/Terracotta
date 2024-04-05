@@ -1,0 +1,35 @@
+import { useRouter } from "next/router";
+import { useEffect, useRef } from "react";
+import useAuth from "./useAuth";
+import useAppContext from "@/context";
+const AdminProtected = (PassedComponent: any) =>
+    function NewComponent(props: any) {
+        const { user, logout, isUserLoading } = useAuth();
+        const { push, asPath } = useRouter();
+        let mounted = useRef<boolean>(false);
+        const { setIsLogin } = useAppContext()
+        useEffect(() => {
+            mounted.current = true;
+            if (!isUserLoading) {
+                if (!user?._id) {
+                    push("/login");
+                    logout();
+                    setIsLogin()
+                }
+                if (user?.role !== "ADMIN") {
+                    push("/login");
+                    logout();
+                    setIsLogin()
+                }
+            }
+
+
+            return () => {
+                mounted.current = false;
+            };
+        }, [user, push, asPath]);
+
+        return <>{user?._id ? <PassedComponent {...props} /> : <p>ADMIN Loading.....</p>}</>;
+    };
+
+export default AdminProtected;

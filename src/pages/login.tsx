@@ -32,55 +32,35 @@ const Login = () => {
         },
         isAlert: true,
       });
-
       if (res?.status === 200) {
-        // Fetch user data
+
         getUser();
-
-        if (res?.results?.isBlocked === true) {
-          // Redirect to home page if user is blocked
-
-          // Show error message
-          toast.error("User is blocked");
-
-          return;
+        res?.results?.token &&
+          saveToLocalStorage("ACCESS_TOKEN", res?.results?.token);
+        getUser();
+        await mutation(`customer/update`, {
+          method: "PUT",
+          isAlert: true,
+          body: {
+            isOnline: true,
+          },
+        })
+        toast.success(res?.results?.msg);
+        if (res?.results?._id) {
+          setIsLogin(true);
         } else {
-          // Reset form fields
-          resetForm();
-
-          // Set login status based on presence of _id
-          setIsLogin(!!res?.results?._id);
-
-          // Save token to local storage if available
-          if (res?.results?.token) {
-            saveToLocalStorage("ACCESS_TOKEN", res?.results?.token);
-          }
-
-          // Update user's online status
-          await mutation(`customer/update`, {
-            method: "PUT",
-            body: {
-              isOnline: true,
-            },
-          });
-
-          // Redirect user based on their role
-          if (res?.results?.role === "USER") {
-            return router.push("/");
-
-          } else if (res?.results?.role === "ADMIN") {
-            return router.push("/admin");
-          }
-
-          // Show success message
-          toast.success("Login Successfully");
-
-          // Exit function
-          return;
+          setIsLogin(false);
         }
+        if (res?.results?.role === "USER") {
+          router.push("/");
+        } else if (res?.results?.role === "ADMIN") {
+          router.push("/admin");
+        } else {
+          toast.error(res?.results?.msg);
+        }
+      } else {
+        toast.error(res?.results?.msg);
       }
-
-      toast.error(res?.results?.msg);
 
     } catch (error) {
       console.log(error);
