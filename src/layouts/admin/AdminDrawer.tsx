@@ -41,7 +41,7 @@ const AdminDrawer = () => {
                         >
                             <div className="flex items-center gap-2">
                                 <span>{menuItem?.icon}</span>
-                                <p className="font-medium whitespace-nowrap">
+                                <p className=" font-normal tracking-wider whitespace-nowrap">
                                     {menuItem?.title}
                                 </p>
                             </div>
@@ -77,7 +77,7 @@ const AdminDrawer = () => {
                                     >
                                         <div className="flex items-center gap-2">
                                             <span>{submenuItem?.icon}</span>
-                                            <p className="font-medium whitespace-nowrap">
+                                            <p className="whitespace-nowrap">
                                                 {submenuItem?.title}
                                             </p>
                                         </div>

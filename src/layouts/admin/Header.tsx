@@ -82,7 +82,7 @@ const Header = ({ adminMenuOpen, setAdminMenuOpen }: AdminProps) => {
         }
     };
     return (
-        <div className=" w-full h-20 shadow-lg flex justify-between items-center px-6">
+        <div className=" w-full h-20 shadow-[0px_0px_5px_1px_#00000024] flex justify-between items-center px-6">
             <div className=" flex items-center gap-3">
                 <p
                     onClick={() => setAdminMenuOpen(!adminMenuOpen)}

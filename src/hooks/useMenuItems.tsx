@@ -71,14 +71,20 @@ const useAdminMenuItem = () => [
     submenus: [
       {
         _id: "5.1",
-        title: "Add New Product",
+        title: "Product List",
+        route: "/admin/products/manage-product",
+        icon: <IoAddOutline className="text-xl" />,
+      },
+      {
+        _id: "5.1",
+        title: "Create Product",
         route: "/admin/products/add-product",
         icon: <IoAddOutline className="text-xl" />,
       },
       {
         _id: "5.2",
-        title: "Manage Products",
-        route: "/admin/products/manage-product",
+        title: "Product Review",
+        route: "/admin/products/review-product",
         icon: <BiBox className="text-xl" />,
       },
     ],
