@@ -1,8 +1,9 @@
+import useMutation from '@/hooks/useMutation'
 import useSwr from '@/hooks/useSwr'
 import { AdminLayout } from '@/layouts'
 import { MuiTblOptions } from '@/utils'
 import MaterialTable from '@material-table/core'
-import { Paper } from '@mui/material'
+import { Paper, Switch, Tooltip } from '@mui/material'
 import Link from 'next/link'
 import React from 'react'
 import { BiAddToQueue } from 'react-icons/bi'
@@ -11,7 +12,20 @@ import { IoMdSearch } from 'react-icons/io'
 import { MdEdit, MdDelete } from 'react-icons/md'
 
 const ManageProduct = () => {
-    const { data, isValidating } = useSwr(`product`)
+    const { mutation, isLoading } = useMutation()
+    const { data, isValidating } = useSwr(`product`);
+    const UpdateProduct = async (item: any) => {
+        try {
+            const res = await mutation(``, {
+                method: "PUT",
+                body: {
+                    isPublished: item?.isPublished === true ? false : true
+                }
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
     return (
         <AdminLayout title="Product List | Terracotta">
             <div className=' w-full p-5 flex flex-col gap-5'>
@@ -27,7 +41,7 @@ const ManageProduct = () => {
                 </div>
                 <MaterialTable
 
-                    // isLoading={isLoading || isValidating}
+                    isLoading={isLoading || isValidating}
                     components={{
                         Container: (props: any) => (
                             <Paper {...props} className="!shadow-none" />
@@ -50,7 +64,8 @@ const ManageProduct = () => {
                                 discount: item?.discount,
                                 stock: item?.stock,
                                 images: item?.images,
-                                category: item?.categoryName
+                                category: item?.categoryName,
+                                isPublished: item?.isPublished
 
                             }))
                             : []
@@ -123,6 +138,25 @@ const ManageProduct = () => {
                             field: "published",
                             editable: "never",
                             width: "5%",
+                            render: (item: any) => {
+                                return (
+                                    <>
+                                        <div className="flex gap-3">
+                                            <Tooltip
+                                                title={
+                                                    item?.isPublished === true ? "Published" : "Not Published"
+                                                }
+                                            >
+                                                <Switch
+                                                    checked={item?.isPublished === true ? true : false}
+                                                    onChange={(e) => UpdateProduct(item)}
+                                                    inputProps={{ "aria-label": "controlled" }}
+                                                />
+                                            </Tooltip>
+                                        </div>
+                                    </>
+                                );
+                            },
                         },
 
 
