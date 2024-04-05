@@ -54,7 +54,7 @@ const useAdminMenuItem = () => [
   },
   {
     _id: "2",
-    title: "Users",
+    title: "Customers",
     route: "/admin/users/customers",
     icon: <HiOutlineUsers className="text-xl" />
   },
