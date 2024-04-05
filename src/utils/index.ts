@@ -3,7 +3,7 @@
 
 import { Options } from "@material-table/core";
 
-export const BASE_URL = "https://terracotta.onrender.com/api/v1";
+export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 //? SET To LocalStorage
 export const saveToLocalStorage = (key: string, value: string) => {
