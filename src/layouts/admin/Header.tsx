@@ -147,7 +147,7 @@ const Header = ({ adminMenuOpen, setAdminMenuOpen }: AdminProps) => {
                     <AiOutlineUser className="hover:text-green-400 text-2xl duration-300" />
                     <div
 
-                        className=" absolute top-full right-0 h-[30rem] w-[23rem] scale-0 origin-top-right  bg-white py-3 rounded-md shadow-[0_3px_10px_rgb(0,0,0,0.2)] z-10 group-hover:scale-100 transition-all duration-200 ease-in-out flex flex-col gap-2"
+                        className=" absolute top-full right-0 h-[30rem] w-[23rem] scale-0 origin-top-right  bg-white py-3 rounded-md shadow-[0_3px_10px_rgb(0,0,0,0.2)] z-20 group-hover:scale-100 transition-all duration-200 ease-in-out flex flex-col gap-2"
                     >
                         <div
                             className="w-full h-full flex flex-col justify-between py-5 px-6"
