@@ -1,3 +1,4 @@
+import CustomLoader from "@/components/core/CustomLoader";
 import CategoryCreate from "@/components/form/CategoryCreate";
 import CategoryUpdate from "@/components/form/CategoryUpdate";
 import useMutation from "@/hooks/useMutation";
@@ -80,7 +81,7 @@ const Category = () => {
               Container: (props) => (
                 <Paper {...props} className="!shadow-none" />
               ),
-
+              OverlayLoading: () => <CustomLoader />,
             }}
 
             data={

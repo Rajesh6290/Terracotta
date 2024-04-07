@@ -134,7 +134,7 @@ const AccountMenu = () => {
     <aside className="lg:sticky lg:top-[96px] w-full lg:w-1/4 flex flex-col bg-white shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] rounded-md">
       <div className="w-full flex items-center gap-5 border-b border-primary p-4 md:p-6">
         <img
-          src={user?.image || "/home/profile-pic.svg"}
+          src={user?.image || "/favicon.png"}
           className="w-14 h-14 min-w-[3.5rem] min-h-[3.5rem] rounded-full border"
         />
         <div className="tracking-wide  w-full overflow-hidden">

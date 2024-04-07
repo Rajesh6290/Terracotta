@@ -11,6 +11,7 @@ import { BsViewList } from 'react-icons/bs';
 import { FaEye } from 'react-icons/fa';
 import useMutation from '@/hooks/useMutation';
 import { toast } from 'react-toastify';
+import CustomLoader from '@/components/core/CustomLoader';
 
 const Customers = () => {
   const { data, isValidating, mutate } = useSwr(`customer`)
@@ -59,6 +60,7 @@ const Customers = () => {
               Container: (props) => (
                 <Paper {...props} className="!shadow-none" />
               ),
+              OverlayLoading: () => <CustomLoader />,
 
             }}
 
