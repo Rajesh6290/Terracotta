@@ -1,4 +1,6 @@
 import MenuCollapse from "@/components/common/MenuCollapse";
+import LoginForm from "@/components/form/loginForm";
+import useAppContext from "@/context";
 import { Collapse, Drawer } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -134,13 +136,16 @@ export const MENU_ARR = [
   },
 ];
 const MobileNavbar = () => {
+  const { isLogin } = useAppContext();
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
   const router = useRouter();
+  const [loginOpen, setLoginOpen] = useState(false);
 
   return (
     <>
+      <LoginForm open={loginOpen} setOpen={() => setLoginOpen(false)} />
       <section className="block xl:hidden main-container py-4  bg-gradient-to-bl from-rose-400 to-orange-600 text-white">
         <div className="flex justify-between items-center">
           <div className=" flex gap-5 items-center">
@@ -174,11 +179,17 @@ const MobileNavbar = () => {
                 <HiOutlineShoppingCart className=" text-2xl  text-orange-500/50 cursor-pointer" />
               </p>
             </Link>
-            <Link href="/login">
+            <div onClick={() => {
+              if (isLogin) {
+                router.push('/my-account');
+              } else {
+                setLoginOpen(true);
+              }
+            }} >
               <p className=" w-10 h-10 rounded-lg duration-300 bg-white cursor-pointer p-1 flex items-center justify-center">
                 <AiOutlineUser className="  text-2xl  text-orange-500/50 cursor-pointer" />
               </p>
-            </Link>
+            </div>
           </div>
         </div>
 

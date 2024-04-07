@@ -73,7 +73,7 @@ const Header = ({ adminMenuOpen, setAdminMenuOpen }: AdminProps) => {
             },
         });
         if (res?.status === 200) {
-            router.push("/login");
+            router.push("/");
             toast.success("Logout Successful");
             logout();
             setIsLogin(false);

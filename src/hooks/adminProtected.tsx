@@ -13,12 +13,12 @@ const AdminProtected = (PassedComponent: any) =>
             mounted.current = true;
             if (!isUserLoading) {
                 if (!user?._id) {
-                    push("/login");
+                    push("/");
                     logout();
                     setIsLogin()
                 }
                 if (user?.role !== "ADMIN") {
-                    push("/login");
+                    push("/");
                     logout();
                     setIsLogin()
                 }
