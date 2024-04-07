@@ -152,7 +152,7 @@ const ManageProduct = () => {
                                 search: false,
                                 exportMenu: [],
                                 toolbar: false,
-                                pageSize: 10
+                                pageSize: data?.data?.data ? data?.data?.data?.length : 2
 
                             }}
                             columns={[
