@@ -1,5 +1,6 @@
 import MenuCollapse from "@/components/common/MenuCollapse";
 import LoginForm from "@/components/form/loginForm";
+import RegisterForm from "@/components/form/RegisterForm";
 import useAppContext from "@/context";
 import { Collapse, Drawer } from "@mui/material";
 import Link from "next/link";
@@ -142,10 +143,11 @@ const MobileNavbar = () => {
   const [searchText, setSearchText] = useState("");
   const router = useRouter();
   const [loginOpen, setLoginOpen] = useState(false);
-
+  const [registerOpen, setRegisterOpen] = useState(false);
   return (
     <>
-      <LoginForm open={loginOpen} setOpen={() => setLoginOpen(false)} />
+      <LoginForm open={loginOpen} setOpen={() => setLoginOpen(false)} setRegisterOpen={setRegisterOpen} />
+      <RegisterForm open={registerOpen} setOpen={() => setRegisterOpen(false)} />
       <section className="block xl:hidden main-container py-4  bg-gradient-to-bl from-rose-400 to-orange-600 text-white">
         <div className="flex justify-between items-center">
           <div className=" flex gap-5 items-center">
