@@ -84,14 +84,6 @@ const AccountMenu = () => {
         <BiWallet className="text-2xl text-gray-500 mr-2 group-hover:text-primary" />
       ),
     },
-    {
-      id: "6",
-      title: "My Referral Code",
-      path: "/my-account/referral",
-      icon: (
-        <PiHandCoins className="text-2xl text-gray-500 mr-2 group-hover:text-primary" />
-      ),
-    },
 
     {
       id: "6",
@@ -111,24 +103,7 @@ const AccountMenu = () => {
     },
   ];
 
-  const INFLUENCER_MENU_ARR = [
-    {
-      id: "1",
-      title: "Add Product",
-      icon: (
-        <AiOutlineFolderAdd className="text-2xl text-gray-500 mr-2 group-hover:text-primary" />
-      ),
-      path: "/my-account/add-product",
-    },
-    {
-      id: "2",
-      title: "Manage Products",
-      icon: (
-        <AiOutlineFolderView className="text-2xl text-gray-500 mr-2 group-hover:text-primary" />
-      ),
-      path: "/my-account/view-products",
-    },
-  ];
+
 
   return (
     <aside className="lg:sticky lg:top-[96px] w-full lg:w-1/4 flex flex-col bg-white shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] rounded-md">
@@ -161,7 +136,7 @@ const AccountMenu = () => {
           </Link>
         ))}
 
-        <div
+        {/* <div
           className="w-full border-y py-3 text-gray-800 cursor-pointer"
           onClick={() => setOpen(!open)}
         >
@@ -187,7 +162,7 @@ const AccountMenu = () => {
               ))}
             </div>
           </div>
-        </div>
+        </div> */}
         <p
           onClick={handleLogout}
           className="group hover:text-red-500 flex items-center gap-1 rounded-md p-3 hover:bg-red-500/5 font-medium cursor-pointer common-transition"
