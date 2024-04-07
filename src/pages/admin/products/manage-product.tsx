@@ -6,7 +6,7 @@ import useSwr from '@/hooks/useSwr'
 import { AdminLayout } from '@/layouts'
 import { MuiTblOptions } from '@/utils'
 import MaterialTable from '@material-table/core'
-import { Paper, Switch, Tooltip } from '@mui/material'
+import { Pagination, Paper, Switch, Tooltip } from '@mui/material'
 import Link from 'next/link'
 import React, { useState } from 'react'
 import { AiFillHeart, AiFillEye } from 'react-icons/ai'
@@ -19,12 +19,14 @@ import { PiCardsBold } from 'react-icons/pi'
 
 const ManageProduct = () => {
     const { mutation, isLoading } = useMutation()
-    const { data, isValidating, mutate } = useSwr(`product`);
     const [view, setView] = useState("Table")
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState<any>();
     const [imageOpen, setImageOpen] = useState(false);
+    const [pageNumber, setPageNumber] = useState<number>(1);
 
+
+    const { data, isValidating, mutate, pagination } = useSwr(`product?page=${pageNumber}&limit=10`);
     const UpdateProduct = async (item: any) => {
         try {
             const res = await mutation(`product/${item?.id}`, {
@@ -88,6 +90,22 @@ const ManageProduct = () => {
                                     <Paper {...props} className="!shadow-none" />
                                 ),
                                 OverlayLoading: () => <CustomLoader />,
+                                Pagination: (props) => {
+                                    return (
+                                        <div className="w-full flex items-center justify-center py-4">
+                                            <Pagination
+                                                count={Math.ceil(
+                                                    Number(pagination?.totalCount || 1) /
+                                                    Number(pagination?.limit || 1)
+                                                )}
+                                                onChange={(e, v: number) => setPageNumber(v)}
+                                                variant="outlined"
+                                                color="primary"
+                                                page={pageNumber}
+                                            />
+                                        </div>
+                                    );
+                                },
 
                             }}
 
@@ -95,7 +113,7 @@ const ManageProduct = () => {
                                 data
                                     ? data?.data?.data?.map((item: any, i: number) => ({
                                         ...item,
-                                        sl: i + 1,
+                                        sl: i + 1 + 10 * (pageNumber! - 1),
                                         id: item?._id,
                                         name: item?.name,
                                         slug: item?.slug,
@@ -119,6 +137,7 @@ const ManageProduct = () => {
                                 search: false,
                                 exportMenu: [],
                                 toolbar: false,
+                                pageSize: 10
 
                             }}
                             columns={[

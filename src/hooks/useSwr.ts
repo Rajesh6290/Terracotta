@@ -47,6 +47,7 @@ const useSwr = (url: string | null, options?: SWRConfiguration) => {
     isValidating,
 
     mutate,
+    pagination: data?.data?.pagination,
   };
 };
 
