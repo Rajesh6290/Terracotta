@@ -111,13 +111,13 @@ const SimilarProduct = () => {
         </div>
         {
           productValidating ? (
-            <>
+            <div className="w-full grid grid-cols-5 gap-5 items-center">
               <Skelton />
               <Skelton />
               <Skelton />
               <Skelton />
               <Skelton />
-            </>
+            </div>
           ) :
             finalData?.length > 5 ? (
               <article className="w-full category-slick-slider industry-slider">
