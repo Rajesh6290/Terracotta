@@ -1,22 +1,20 @@
-import useAppContext from '@/context';
-import useAuth from '@/hooks/useAuth';
 import useMutation from '@/hooks/useMutation';
-import { saveToLocalStorage } from '@/utils';
 import { Dialog } from '@mui/material';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
-import { useRouter } from 'next/router';
 import { Dispatch, SetStateAction } from 'react';
-import { FaFacebookSquare, FaSignInAlt } from 'react-icons/fa';
+import { FaSignInAlt } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import * as Yup from "yup";
-const LoginForm = ({ open, setOpen, setRegisterOpen }: { open: boolean; setOpen: Dispatch<SetStateAction<boolean>>; setRegisterOpen: any }) => {
-    const { isLogin, setIsLogin } = useAppContext();
-    const router = useRouter()
-    const { getUser, user } = useAuth();
+const RegisterForm = ({ open, setOpen }: { open: boolean; setOpen: Dispatch<SetStateAction<boolean>> }) => {
     const { mutation, isLoading } = useMutation();
     const LoginSchema = Yup.object({
-        emailOrUsername: Yup.string().required("This field is required"),
+        name: Yup.string().required("This field is required"),
+        emailOrUsername: Yup.string().email("Invalid email address")
+            .required("Email is required"),
         password: Yup.string().required("This field is required"),
+        confirmPassword: Yup.string()
+            .oneOf([Yup.ref("password"), undefined], "Passwords must match")
+            .required("Confirm Password is required"),
     });
     const handleFormSubmit = async (
         values: any,
@@ -24,50 +22,26 @@ const LoginForm = ({ open, setOpen, setRegisterOpen }: { open: boolean; setOpen:
     ) => {
 
         try {
-            const res = await mutation(`customer/login`, {
+            const res = await mutation(`customer`, {
                 method: "POST",
                 body: {
+                    name: values?.name,
                     email: values?.emailOrUsername,
                     password: values?.password,
                 },
                 isAlert: true,
-            });
+            })
             if (res?.status === 200) {
-                resetForm()
-
-                getUser();
-                res?.results?.token &&
-                    saveToLocalStorage("ACCESS_TOKEN", res?.results?.token);
-                getUser();
-                await mutation(`customer/update`, {
-                    method: "PUT",
-                    isAlert: true,
-                    body: {
-                        isOnline: true,
-                    },
-                })
+                resetForm();
                 toast.success(res?.results?.msg);
-                if (res?.results?._id) {
-                    setIsLogin(true);
-                } else {
-                    setIsLogin(false);
-                }
-                if (res?.results?.role === "USER") {
-                    router.push("/");
-                    setOpen(false)
-                } else if (res?.results?.role === "ADMIN") {
-                    router.push("/admin");
-                    setOpen(false)
-                } else {
-                    toast.error(res?.results?.msg);
-                }
+                setOpen(false)
             } else {
                 toast.error(res?.results?.msg);
             }
-
         } catch (error) {
-            console.log(error);
+            console.log(error)
         }
+
     };
     return (
         <Dialog open={open} onClose={() => setOpen(false)} maxWidth="xl"
@@ -80,14 +54,14 @@ const LoginForm = ({ open, setOpen, setRegisterOpen }: { open: boolean; setOpen:
 
             <div className='w-full h-full flex items-center md:px-3 relative rounded-xl '>
 
-                <div className='w-[50%] h-full py-3 md:flex hidden  items-center justify-center'>
-                    <img src="/login.svg" className='w-full h-full object-fill' alt="" />
-                </div>
+
                 <div className='md:w-[50%] w-full h-full '>
                     <Formik
                         initialValues={{
+                            name: "",
                             emailOrUsername: "",
                             password: "",
+                            confirmPassword: "",
                             rememberMe: false,
                         }}
                         validationSchema={LoginSchema}
@@ -97,34 +71,62 @@ const LoginForm = ({ open, setOpen, setRegisterOpen }: { open: boolean; setOpen:
                             <Form className='bg-white md:rounded-2xl shadow-[0px_0px_4px_1px_#00000024] w-full h-full flex flex-col justify-between gap-5 md:p-10 p-5'>
                                 <img src="/logo.png" className='w-72 h-fit' alt="" />
                                 <div className='flex flex-col gap-1'>
-                                    <p className='text-gray-600 md:block hidden text-3xl font-bold'>Welcome back...</p>
-                                    <p className='md:text-sm text-xs text-gray-500 font-normal'>{`Start your website in seconds. Don’t have an account?`} <span onClick={() => setRegisterOpen(true)} className=' text-blue-500 md:text-base text-sm cursor-pointer'> Sign Up</span>. </p>
+                                    <p className='text-gray-600 md:block hidden text-3xl font-bold'>Welcome To Our Services...</p>
+                                    <p onClick={() => setOpen(false)} className='md:text-sm text-xs cursor-pointer text-blue-500 underline font-normal'>Back To Login</p>
                                 </div>
 
-                                <div className='w-full flex md:flex-row flex-col items-center gap-5'>
+                                <div className='w-full flex md:flex-row flex-col items-start gap-5'>
+                                    <div className='w-full flex flex-col gap-2'>
+                                        <p className='text-gray-800 font-medium tracking-wide pl-1 capitalize  font-sans '>Full Name</p>
+                                        <Field type="text"
+                                            name="name" autoComplete='off' className={`outline-none border   rounded-lg py-2 px-4 bg-transparent placeholder:text-sm h-12 placeholder:text-gray-400  placeholder:font-normal font-normal ${touched.name && errors.name
+                                                ? "border-red-500"
+                                                : "border-gray-300"
+                                                } text-gray-400`} placeholder='Enter your name' id="" />
+                                        {touched.name && errors.name && (
+                                            <p className="text-red-500 text-xs mt-1">
+                                                {errors.name}
+                                            </p>
+                                        )}
+                                    </div>
                                     <div className='w-full flex flex-col gap-2'>
                                         <p className='text-gray-800 font-medium tracking-wide pl-1 capitalize  font-sans '>Email</p>
                                         <Field type="text"
-                                            name="emailOrUsername" autoComplete='off' className={`outline-none border   rounded-lg py-2 px-4 bg-transparent placeholder:text-sm h-12 placeholder:text-gray-400  placeholder:font-normal font-normal ${touched.emailOrUsername && errors.emailOrUsername
+                                            name="emailOrUsername" autoComplete="new-emailOrUsername" className={` outline-none border   rounded-lg py-2 px-4 bg-transparent placeholder:text-sm h-12 placeholder:text-gray-400  placeholder:font-normal font-normal text-gray-400  ${touched.emailOrUsername && errors.emailOrUsername
                                                 ? "border-red-500"
                                                 : "border-gray-300"
-                                                } text-gray-400`} placeholder='example@gmail.com' id="" />
+                                                }`} placeholder='Enter your emailOrUsername...' id="" />
                                         {touched.emailOrUsername && errors.emailOrUsername && (
                                             <p className="text-red-500 text-xs mt-1">
                                                 {errors.emailOrUsername}
                                             </p>
                                         )}
                                     </div>
+                                </div>
+                                <div className='w-full flex md:flex-row flex-col items-start gap-5'>
                                     <div className='w-full flex flex-col gap-2'>
-                                        <p className='text-gray-800 font-medium tracking-wide pl-1 capitalize  font-sans '>password</p>
+                                        <p className='text-gray-800 font-medium tracking-wide pl-1 capitalize  font-sans '>Password</p>
                                         <Field type="password"
-                                            name="password" autoComplete="new-password" className={` outline-none border   rounded-lg py-2 px-4 bg-transparent placeholder:text-sm h-12 placeholder:text-gray-400  placeholder:font-normal font-normal text-gray-400  ${touched.password && errors.password
+                                            name="password" autoComplete='off' className={`outline-none border   rounded-lg py-2 px-4 bg-transparent placeholder:text-sm h-12 placeholder:text-gray-400  placeholder:font-normal font-normal ${touched.password && errors.password
                                                 ? "border-red-500"
                                                 : "border-gray-300"
-                                                }`} placeholder='Enter your password...' id="" />
+                                                } text-gray-400`} placeholder='Enter your password' id="" />
                                         {touched.password && errors.password && (
                                             <p className="text-red-500 text-xs mt-1">
                                                 {errors.password}
+                                            </p>
+                                        )}
+                                    </div>
+                                    <div className='w-full flex flex-col gap-2'>
+                                        <p className='text-gray-800 font-medium tracking-wide pl-1 capitalize  font-sans '>Confirm Password</p>
+                                        <Field type="password"
+                                            name="confirmPassword" autoComplete="new-confirmPassword" className={` outline-none border   rounded-lg py-2 px-4 bg-transparent placeholder:text-sm h-12 placeholder:text-gray-400  placeholder:font-normal font-normal text-gray-400  ${touched.confirmPassword && errors.confirmPassword
+                                                ? "border-red-500"
+                                                : "border-gray-300"
+                                                }`} placeholder='Enter your confirmPassword...' id="" />
+                                        {touched.confirmPassword && errors.confirmPassword && (
+                                            <p className="text-red-500 text-xs mt-1">
+                                                {errors.confirmPassword}
                                             </p>
                                         )}
                                     </div>
@@ -141,29 +143,8 @@ const LoginForm = ({ open, setOpen, setRegisterOpen }: { open: boolean; setOpen:
                                         <p className=' md:text-sm text-xs font-medium text-gray-900'>Sign in with Google</p>
                                     </div>
                                 </div>
-                                <div className='w-full border md:flex p-3 flex hover:scale-105 items-center justify-center rounded-xl hover:bg-gray-100 duration-200 cursor-pointer'>
-                                    <div className='flex items-center gap-2'>
-                                        <FaFacebookSquare className=' text-facebook text-2xl' />
-                                        <p className=' md:text-sm text-xs font-medium text-gray-900'>Sign in with FaceBook</p>
-                                    </div>
-                                </div>
-                                <div className='w-full flex md:flex-row flex-col gap-2 items-center justify-between'>
-                                    <p className="flex items-center gap-2 px-1">
-                                        <input
-                                            type="checkbox"
-                                            className=" outline-none w-4 h-4 border border-primary  shadow shadow-primary"
-                                            name=""
-                                            id="check"
-                                        />
-                                        <label
-                                            htmlFor="check"
-                                            className="text-sm cursor-pointer text-gray-500 font-medium"
-                                        >
-                                            Remember me
-                                        </label>
-                                    </p>
-                                    <p className='text-blue-500 font-normal cursor-pointer'>Forgot password?</p>
-                                </div>
+
+
                                 <button disabled={isLoading} type='submit' className='w-full p-3 cursor-pointer flex items-center justify-center bg-blue-500 rounded-xl hover:bg-blue-600 duration-200 hover:scale-105 '>
                                     {isLoading ? (
                                         <div role="status">
@@ -195,7 +176,9 @@ const LoginForm = ({ open, setOpen, setRegisterOpen }: { open: boolean; setOpen:
                         )}
                     </Formik>
                 </div>
-
+                <div className='w-[50%] h-full py-3 md:flex hidden  items-center justify-center'>
+                    <img src="/login.svg" className='w-full h-full object-fill' alt="" />
+                </div>
 
             </div>
 
@@ -203,4 +186,4 @@ const LoginForm = ({ open, setOpen, setRegisterOpen }: { open: boolean; setOpen:
     )
 }
 
-export default LoginForm
+export default RegisterForm

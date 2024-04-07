@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import useAppContext from "@/context";
 import LoginForm from "@/components/form/loginForm";
+import RegisterForm from "@/components/form/RegisterForm";
 interface IProduct {
   id: string;
   image: string;
@@ -88,6 +89,7 @@ const Navbar = () => {
   const [searchText, setSearchText] = useState("");
   const [filterProduct, setFilterProduct] = useState<IProduct[]>([]);
   const [loginOpen, setLoginOpen] = useState(false);
+  const [registerOpen, setRegisterOpen] = useState(false);
   const router = useRouter();
   const { isLogin } = useAppContext();
   const handelSearch = (data: string) => {
@@ -117,7 +119,8 @@ const Navbar = () => {
   }, []);
   return (
     <>
-      <LoginForm open={loginOpen} setOpen={() => setLoginOpen(false)} />
+      <LoginForm open={loginOpen} setOpen={() => setLoginOpen(false)} setRegisterOpen={setRegisterOpen} />
+      <RegisterForm open={registerOpen} setOpen={() => setRegisterOpen(false)} />
       <nav className="w-full h-fit bg-gray-50 flex flex-col sticky top-0 z-[999]">
         <div className=" xl:block hidden flex    gap-2  flex-col w-full">
           <div className="w-full bg-gradient-to-bl from-rose-400 to-orange-600">
