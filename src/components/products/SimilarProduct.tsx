@@ -4,14 +4,15 @@ import ProductCard from "../home/ProductCard";
 import { useRef } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
 import useSwr from "@/hooks/useSwr";
+import { Skelton } from "../home/MostPoular";
 
 const SimilarProduct = () => {
   const router = useRouter();
   const { data, isValidating } = useSwr(`product/getById/${router?.query?.id}`)
-  const { data: category } = useSwr(`category/${data?.data?.data?.category}`);
-  const { data: similarProduct } = useSwr(`product?category=${category?.data?.data?.name}`)
+  const { data: category, isValidating: categoryValidate } = useSwr(isValidating ? `` : `category/${data?.data?.data?.category}`);
+  const { data: similarProduct, isValidating: productValidating } = useSwr(categoryValidate ? `` : `product?category=${category?.data?.data?.name}`)
   const item = similarProduct?.data?.data
-  const finalData = item?.filter((pre: any) => pre._id !== router?.query?.id)
+  const finalData = item?.filter((pre: any) => pre?._id !== router?.query?.id)
 
   const settings = {
     dots: false,
@@ -109,30 +110,39 @@ const SimilarProduct = () => {
 
         </div>
         {
-          finalData?.length > 5 ? (
-            <article className="w-full category-slick-slider industry-slider">
-              <Slider ref={navigationRef} {...settings}>
-                {finalData?.map((curEle: any, index: number) => {
-                  return (
-                    <article
-                      className="mx-auto !flex items-center px-2 pb-4 pt-5"
-                      key={index}
-                    >
-                      <ProductCard item={curEle} key={curEle.id} />
-                    </article>
-                  );
-                })}
-              </Slider>
-            </article>
-          ) : (
-            <div className="w-full items-center grid grid-cols-5 gap-5 place-items-center">
-              {
-                finalData?.map((item: any, i: number) => (
-                  <ProductCard item={item} key={i} />
-                ))
-              }
-            </div>
-          )
+          productValidating ? (
+            <>
+              <Skelton />
+              <Skelton />
+              <Skelton />
+              <Skelton />
+              <Skelton />
+            </>
+          ) :
+            finalData?.length > 5 ? (
+              <article className="w-full category-slick-slider industry-slider">
+                <Slider ref={navigationRef} {...settings}>
+                  {finalData?.map((curEle: any, index: number) => {
+                    return (
+                      <article
+                        className="mx-auto !flex items-center px-2 pb-4 pt-5"
+                        key={index}
+                      >
+                        <ProductCard item={curEle} key={curEle.id} />
+                      </article>
+                    );
+                  })}
+                </Slider>
+              </article>
+            ) : (
+              <div className="w-full items-center grid grid-cols-5 gap-5 place-items-center">
+                {
+                  finalData?.map((item: any, i: number) => (
+                    <ProductCard item={item} key={i} />
+                  ))
+                }
+              </div>
+            )
         }
 
       </main>
