@@ -1,69 +1,11 @@
+import useSwr from "@/hooks/useSwr";
 import Link from "next/link";
 import ProductCard from "./ProductCard";
-interface IProduct {
-  id: string;
-  image: string;
-  name: string;
-}
-const PRODUCT_ARR: IProduct[] = [
-  {
-    id: "1",
-    image: "/product/p1.webp",
-    name: "Digital BP Machine",
-  },
-  {
-    id: "1",
-    image: "/product/p2.webp",
-    name: "Digital BP Machine",
-  },
-  {
-    id: "1",
-    image: "/product/p3.webp",
-    name: "Digital BP Machine",
-  },
-  {
-    id: "1",
-    image: "/product/p4.webp",
-    name: "Digital BP Machine",
-  },
-  {
-    id: "1",
-    image: "/product/p5.webp",
-    name: "Digital BP Machine",
-  },
-  {
-    id: "1",
-    image: "/product/p6.webp",
-    name: "Digital BP Machine",
-  },
-  {
-    id: "1",
-    image: "/product/p7.webp",
-    name: "Digital BP Machine",
-  },
-  {
-    id: "1",
-    image: "/product/p7.webp",
-    name: "Digital BP Machine",
-  },
-  {
-    id: "1",
-    image: "/product/p8.webp",
-    name: "Digital BP Machine",
-  },
-  {
-    id: "1",
-    image: "/product/p9.webp",
-    name: "Digital BP Machine",
-  },
-  {
-    id: "1",
-    image: "/product/p10.webp",
-    name: "Digital BP Machine",
-  },
-];
+
 
 const MostPopular = () => {
+  const { data, isValidating } = useSwr(`product`);
+  const item = data?.data?.data
   return (
     <section className=" bg-slate-50  w-full top-spacing py-10">
       <div className="main-container  flex flex-col gap-10 w-full ">
@@ -77,7 +19,7 @@ const MostPopular = () => {
           <p className="h-1 w-48 bg-primary rounded-full"></p>
         </article>
         <div className=" w-full h-full grid 2xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2  gap-5 ">
-          {PRODUCT_ARR.slice(0, 10).map((curEle: IProduct) => (
+          {item.slice(0, 10).map((curEle: any) => (
             <ProductCard item={curEle} key={curEle.id} />
           ))}
         </div>
