@@ -78,7 +78,7 @@ const LoginForm = ({ open, setOpen }: { open: boolean; setOpen: Dispatch<SetStat
             }}
         >
 
-            <div className='w-full h-full flex items-center md:px-5 relative rounded-xl '>
+            <div className='w-full h-full flex items-center md:px-3 relative rounded-xl '>
 
                 <div className='w-[50%] h-full py-3 md:flex hidden  items-center justify-center'>
                     <img src="/login.svg" className='w-full h-full object-fill' alt="" />
