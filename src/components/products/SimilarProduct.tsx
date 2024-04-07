@@ -3,9 +3,15 @@ import { useRouter } from "next/router";
 import ProductCard from "../home/ProductCard";
 import { useRef } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
+import useSwr from "@/hooks/useSwr";
 
 const SimilarProduct = () => {
   const router = useRouter();
+  const { data, isValidating } = useSwr(`product/getById/${router?.query?.id}`)
+  const { data: category } = useSwr(`category/${data?.data?.data?.category}`);
+  const { data: similarProduct } = useSwr(`product?category=${category?.data?.data?.name}`)
+  const item = similarProduct?.data?.data
+  const finalData = item?.filter((pre: any) => pre._id !== router?.query?.id)
 
   const settings = {
     dots: false,
@@ -63,63 +69,7 @@ const SimilarProduct = () => {
       },
     ],
   };
-  const PRODUCT_ARR = [
-    {
-      id: "1",
-      image: "/product/p1.webp",
-      name: "Digital BP Machine",
-    },
-    {
-      id: "1",
-      image: "/product/p2.webp",
-      name: "Digital BP Machine",
-    },
-    {
-      id: "1",
-      image: "/product/p3.webp",
-      name: "Digital BP Machine",
-    },
-    {
-      id: "1",
-      image: "/product/p4.webp",
-      name: "Digital BP Machine",
-    },
-    {
-      id: "1",
-      image: "/product/p5.webp",
-      name: "Digital BP Machine",
-    },
-    {
-      id: "1",
-      image: "/product/p6.webp",
-      name: "Digital BP Machine",
-    },
-    {
-      id: "1",
-      image: "/product/p7.webp",
-      name: "Digital BP Machine",
-    },
-    {
-      id: "1",
-      image: "/product/p7.webp",
-      name: "Digital BP Machine",
-    },
-    {
-      id: "1",
-      image: "/product/p8.webp",
-      name: "Digital BP Machine",
-    },
-    {
-      id: "1",
-      image: "/product/p9.webp",
-      name: "Digital BP Machine",
-    },
-    {
-      id: "1",
-      image: "/product/p10.webp",
-      name: "Digital BP Machine",
-    },
-  ];
+
   const navigationRef = useRef<any>(null);
   const handlePrev = () => {
     navigationRef?.current?.slickPrev();
@@ -140,35 +90,51 @@ const SimilarProduct = () => {
 
             <p className="h-0.5 w-24 bg-primary rounded-full"></p>
           </article>
-          <div className=" flex items-center gap-5">
-            <p
-              onClick={handlePrev}
-              className=" w-10 h-10 p-2 cursor-pointer rounded-full bg-primary flex items-center justify-center"
-            >
-              <FaArrowLeft className="text-lg text-white" />
-            </p>
-            <p
-              onClick={handleNext}
-              className=" w-10 h-10 p-2 cursor-pointer rounded-full bg-primary flex items-center justify-center"
-            >
-              <FaArrowRight className="text-lg text-white" />
-            </p>
-          </div>
+          {
+            finalData?.length > 5 && <div className=" flex items-center gap-5">
+              <p
+                onClick={handlePrev}
+                className=" w-10 h-10 p-2 cursor-pointer rounded-full bg-primary flex items-center justify-center"
+              >
+                <FaArrowLeft className="text-lg text-white" />
+              </p>
+              <p
+                onClick={handleNext}
+                className=" w-10 h-10 p-2 cursor-pointer rounded-full bg-primary flex items-center justify-center"
+              >
+                <FaArrowRight className="text-lg text-white" />
+              </p>
+            </div>
+          }
+
         </div>
-        <article className="w-full category-slick-slider industry-slider">
-          <Slider ref={navigationRef} {...settings}>
-            {PRODUCT_ARR.map((curEle: any, index: number) => {
-              return (
-                <article
-                  className="mx-auto !flex items-center px-2 pb-4 pt-5"
-                  key={index}
-                >
-                  <ProductCard item={curEle} key={curEle.id} />
-                </article>
-              );
-            })}
-          </Slider>
-        </article>
+        {
+          finalData?.length > 5 ? (
+            <article className="w-full category-slick-slider industry-slider">
+              <Slider ref={navigationRef} {...settings}>
+                {finalData?.map((curEle: any, index: number) => {
+                  return (
+                    <article
+                      className="mx-auto !flex items-center px-2 pb-4 pt-5"
+                      key={index}
+                    >
+                      <ProductCard item={curEle} key={curEle.id} />
+                    </article>
+                  );
+                })}
+              </Slider>
+            </article>
+          ) : (
+            <div className="w-full items-center grid grid-cols-5 gap-5 place-items-center">
+              {
+                finalData?.map((item: any, i: number) => (
+                  <ProductCard item={item} key={i} />
+                ))
+              }
+            </div>
+          )
+        }
+
       </main>
     </section>
   );

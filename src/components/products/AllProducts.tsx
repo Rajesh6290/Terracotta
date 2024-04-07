@@ -1,3 +1,4 @@
+import useSwr from "@/hooks/useSwr";
 import ProductCard from "../home/ProductCard";
 
 const AllProducts = () => {
@@ -58,11 +59,13 @@ const AllProducts = () => {
       name: "Digital BP Machine",
     },
   ];
+  const { data, isValidating } = useSwr('product');
+  console.log(data)
   return (
     <main className=" flex flex-col justify-between items-center gap-10 w-full">
       <div className="h-fit w-full grid lg:grid-cols-4 md:grid-cols-2 grid-cols-2 gap-3">
-        {PRODUCT_ARR.map((item: any, index: number) => {
-          return <ProductCard key={item.id} item={item} />;
+        {data?.data?.data?.map((item: any, index: number) => {
+          return <ProductCard key={item._id} item={item} />;
         })}
       </div>
     </main>
