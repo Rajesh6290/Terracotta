@@ -94,65 +94,80 @@ const CustomerProductDetails = () => {
           <div className="w-full flex">
             <div className="flex flex-col gap-2 w-full items-center justify-center">
               <div className="w-full h-[26rem] overflow-hidden border-2 p-2 rounded-lg">
-                <img
-                  src={data?.data?.data?.images?.[activeImg].imageUrl}
-                  className="w-full h-full object-contain"
-                  alt=""
-                />
-              </div>
-              {data?.data?.data?.images?.length > 5 ? (
-                <div className="w-full relative">
-                  <p
-                    onClick={handlePrev}
-                    className=" absolute top-6 -left-4 hover:bg-slate-200 duration-300 cursor-pointer z-10  w-8 h-8  bg-gray-100 rounded-full flex items-center justify-center"
-                  >
-                    <IoIosArrowBack className="text-primary" />
-                  </p>
-                  <p
-                    onClick={handleNext}
-                    className=" w-8 h-8  absolute top-6 hover:bg-slate-200 duration-300  cursor-pointer z-10 -right-3 bg-gray-100 rounded-full flex items-center justify-center"
-                  >
-                    <IoIosArrowForward className="text-primary" />
-                  </p>
+                {
+                  isValidating ? <div className="w-full h-full bg-slate-200 animate-pulse"></div> :
 
-                  <Slider ref={navigationRef} {...settings}>
-                    {data?.data?.data?.images?.map((item: any, index: number) => (
-                      <article
-                        className="mx-auto !flex items-center px-2 pb-4 w-full "
-                        key={index}
+                    <img
+                      src={data?.data?.data?.images?.[activeImg].imageUrl}
+                      className="w-full h-full object-contain"
+                      alt=""
+                    />}
+              </div>
+              {
+
+                isValidating ? (<>
+                  <div className="w-full flex items-center gap-5 justify-center">
+                    <p className="w-24 h-20 rounded-md bg-slate-200 animate-pulse"></p>
+                    <p className="w-24 h-20 rounded-md bg-slate-200 animate-pulse"></p>
+                    <p className="w-24 h-20 rounded-md bg-slate-200 animate-pulse"></p>
+                    <p className="w-24 h-20 rounded-md bg-slate-200 animate-pulse"></p>
+                    <p className="w-24 h-20 rounded-md bg-slate-200 animate-pulse"></p>
+                  </div>
+                </>) :
+
+                  data?.data?.data?.images?.length > 5 ? (
+                    <div className="w-full relative">
+                      <p
+                        onClick={handlePrev}
+                        className=" absolute top-6 -left-4 hover:bg-slate-200 duration-300 cursor-pointer z-10  w-8 h-8  bg-gray-100 rounded-full flex items-center justify-center"
                       >
-                        <img
-                          src={item?.imageUrl}
-                          className={`w-24 h-20 object-contain border-2 p-2 cursor-pointer rounded-lg ${activeImg === index ? "border-blue-500" : ""
-                            }`}
-                          onClick={() => setActiveImg(item?._id)}
-                          alt=""
-                        />
-                      </article>
-                    ))}
-                  </Slider>
-                </div>
-              ) : (
-                <div className="w-full grid grid-cols-5 gap-3 justify-center">
-                  {data?.data?.data?.images?.map((item: any, index: number) => (
-                    <article
-                      key={index}
-                      onClick={() => handleActiveImage(index)}
-                      className="mx-auto !flex items-center px-2 pb-4 w-full  "
-                    >
-                      <img
-                        src={item?.imageUrl}
-                        className={`w-24 h-20 object-contain border-2 p-2 cursor-pointer rounded-lg ${activeImg === index
-                          ? "border-cyan-500"
-                          : ""
-                          }`}
-                        onClick={() => setActiveImg(Number(item?._id))}
-                        alt=""
-                      />
-                    </article>
-                  ))}
-                </div>
-              )}
+                        <IoIosArrowBack className="text-primary" />
+                      </p>
+                      <p
+                        onClick={handleNext}
+                        className=" w-8 h-8  absolute top-6 hover:bg-slate-200 duration-300  cursor-pointer z-10 -right-3 bg-gray-100 rounded-full flex items-center justify-center"
+                      >
+                        <IoIosArrowForward className="text-primary" />
+                      </p>
+
+                      <Slider ref={navigationRef} {...settings}>
+                        {data?.data?.data?.images?.map((item: any, index: number) => (
+                          <article
+                            className="mx-auto !flex items-center px-2 pb-4 w-full "
+                            key={index}
+                          >
+                            <img
+                              src={item?.imageUrl}
+                              className={`w-24 h-20 object-contain border-2 p-2 cursor-pointer rounded-lg ${activeImg === index ? "border-blue-500" : ""
+                                }`}
+                              onClick={() => setActiveImg(item?._id)}
+                              alt=""
+                            />
+                          </article>
+                        ))}
+                      </Slider>
+                    </div>
+                  ) : (
+                    <div className="w-full grid grid-cols-5 gap-3 justify-center">
+                      {data?.data?.data?.images?.map((item: any, index: number) => (
+                        <article
+                          key={index}
+                          onClick={() => handleActiveImage(index)}
+                          className="mx-auto !flex items-center px-2 pb-4 w-full  "
+                        >
+                          <img
+                            src={item?.imageUrl}
+                            className={`w-24 h-20 object-contain border-2 p-2 cursor-pointer rounded-lg ${activeImg === index
+                              ? "border-cyan-500"
+                              : ""
+                              }`}
+                            onClick={() => setActiveImg(Number(item?._id))}
+                            alt=""
+                          />
+                        </article>
+                      ))}
+                    </div>
+                  )}
             </div>
           </div>
         </article>
@@ -198,7 +213,7 @@ const CustomerProductDetails = () => {
                 </span>
               </p>
             </div>
-            <h2 className="text-xl font-semibold">{item?.name}</h2>
+            <h2 className="text-xl font-semibold"> {isValidating ? <p className="w-52 px-2 py-3 rounded bg-slate-200 animate-pulse"></p> : item?.name}</h2>
             <Link href="#ReviewAndRating" className="flex items-center gap-2">
               <p className="flex items-center gap-1 text-sm font-bold px-2 py-0.5 text-white bg-green-600 rounded-md">
                 <span>3.7</span>
@@ -208,20 +223,29 @@ const CustomerProductDetails = () => {
                 3.716,808 ratings and 765 reviews
               </p>
             </Link>
-            <p className="text-green-600 text-sm font-semibold">
-              Extra ₹{item?.discount} off
-            </p>
-            <p className="flex items-end gap-2">
-              <span className="font-semibold text-2xl">₹{item?.salePrice}</span>
-              <span className="font-semibold text-gray-600  line-through justify-end">
-                ₹{item?.price}
-              </span>
-              <span className="text-green-600 font-semibold">{item?.discount}% off</span>
-            </p>
+            <div className="text-green-600 text-sm font-semibold w-full">
+              {isValidating ? <p className="w-20 p-2 rounded bg-slate-200 animate-pulse"></p> : `Extra ₹${item?.discount} off`}
+            </div>
+            <div className="flex items-end gap-2">
+              {
+                isValidating ? <p className="w-44 py-4 rounded-md bg-slate-200 animate-pulse"></p> : (
+                  <>
+                    <span className="font-semibold text-2xl">₹{item?.salePrice}</span>
+                    <span className="font-semibold text-gray-600  line-through justify-end">
+                      ₹{item?.price}
+                    </span>
+                    <span className="text-green-600 font-semibold">{item?.discount}% off</span>
+                  </>
+                )
+              }
+            </div>
             <div className="flex gap-20 font-semibold  items-center">
               <p>
                 Color:{"  "}
-                <span className=" uppercase">{item?.color}</span>{" "}
+                {
+                  isValidating ? <p className="w-32 p-2 rounded bg-slate-200 animate-pulse"></p> : <span className=" uppercase">{item?.color}</span>
+                }
+
               </p>
               {/* <span>See All Availbale Colors</span> */}
             </div>
@@ -244,14 +268,14 @@ const CustomerProductDetails = () => {
                 );
               })}
             </div> */}
-            <div className="flex gap-3 items-center flex-wrap">
+            {/* <div className="flex gap-3 items-center flex-wrap">
               <span className="font-semibold">Size :</span>
               <p className="flex gap-5 items-center flex-wrap"></p>
 
               <span className="py-2 uppercase cursor-pointer px-3 text-sm rounded font-semibold border">
                 XL
               </span>
-            </div>
+            </div> */}
             <div className="flex items-end gap-5 py-2">
               <div className="flex items-center gap-5">
                 <button
@@ -343,9 +367,13 @@ const CustomerProductDetails = () => {
             <div className="flex flex-col md:flex-row justify-between gap-10 py-3 w-full ">
               <div className="flex flex-col gap-4 w-full items-start">
                 <h2 className="text-sm font-bold text-gray-700">Description</h2>
-                <span className="text-sm text-gray-600">
-                  {item?.description}
-                </span>
+                {
+                  isValidating ? <p className="w-full h-20 bg-slate-200 rounded-md animate-pulse"></p> :
+
+                    <span className="text-sm text-gray-600">
+                      {item?.description}
+                    </span>
+                }
                 {/* <span className="flex flex-col gap-2">
                   <h3 className="flex items-center gap-3">
                     <p className="p-[0.2rem] bg-gray-400 rounded-full"></p>
