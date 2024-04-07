@@ -74,11 +74,26 @@ const ManageProduct = () => {
                 </div>
                 {
                     view === "Card" ? (
-                        <div className='w-full grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 grid-cols-2 items-center gap-5'>
-                            {data?.data?.data?.map((item: any, i: number) => (
-                                <ProductCardView item={item} mutate={mutate} key={i} />
-                            ))}
+                        <div className='w-full flex flex-col gap-10'>
+                            <div className='w-full grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 grid-cols-2 items-center gap-5'>
+                                {data?.data?.data?.map((item: any, i: number) => (
+                                    <ProductCardView item={item} mutate={mutate} key={i} />
+                                ))}
+                            </div>
+                            <div className="w-full flex items-center justify-center py-4">
+                                <Pagination
+                                    count={Math.ceil(
+                                        Number(pagination?.totalCount || 1) /
+                                        Number(pagination?.limit || 1)
+                                    )}
+                                    onChange={(e, v: number) => setPageNumber(v)}
+                                    variant="outlined"
+                                    color="primary"
+                                    page={pageNumber}
+                                />
+                            </div>
                         </div>
+
 
                     ) :
 
