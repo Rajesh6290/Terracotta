@@ -63,7 +63,7 @@ const HeroSection = () => {
       <div className=" absolute w-full h-full flex items-center md:px-20 px-10  z-[1]">
         <div className="flex flex-col md:gap-7 gap-3">
           <p className=" uppercase md:text-7xl text-lg font-bold text-white tracking-wide">
-            Welcom to,
+            Welcome to,
           </p>
           <p className=" uppercase md:text-7xl text-lg font-bold text-white tracking-wide">
             Terracotta Craft
