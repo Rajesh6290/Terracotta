@@ -15,50 +15,13 @@ import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import ReviewAndRating from "./ReviewRatings";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-interface Image {
-  id: string;
-  image: string;
-}
-export const IMAGE_ARR: Image[] = [
-  {
-    id: "1",
-    image: "/product/p1.webp",
-  },
-  {
-    id: "2",
-    image: "/product/p2.webp",
-  },
-  {
-    id: "3",
-    image: "/product/p3.webp",
-  },
-  {
-    id: "4",
-    image: "/product/p4.webp",
-  },
-  {
-    id: "3",
-    image: "/product/p5.webp",
-  },
-  {
-    id: "6",
-    image: "/product/p6.webp",
-  },
-  {
-    id: "7",
-    image: "/product/p7.webp",
-  },
+import useSwr from "@/hooks/useSwr";
 
-  // Add other images
-];
 const CustomerProductDetails = () => {
   const router = useRouter();
   const { id } = router.query;
-  // const [variantID, setVariantID] = useState(router?.query?.variantId);
-
-  //   const allColors = parentProduct?.variants?.map((i: any) => i?.color);
-  // const allColors = ["red", "green", "red", "yellow", "green"];
-  //   const uniqueColors = [...(new Set(allColors) as any)];
+  const { data, isValidating } = useSwr(`product/getById/${router?.query?.id}`)
+  const item = data?.data?.data
 
   var settings = {
     infinite: true,
@@ -113,11 +76,7 @@ const CustomerProductDetails = () => {
     ],
   };
 
-  //   const variantImages = parentProduct?.variants?.find(
-  //     (item: any) => item?._id?.$oid === router?.query?.variantId
-  //   );
-  // console.log("quNTITY CHECK M===>", variantData);
-  const [activeImg, setActiveImg] = useState(1);
+  const [activeImg, setActiveImg] = useState(0);
   const handleActiveImage = (id: number) => {
     setActiveImg(id);
   };
@@ -135,67 +94,80 @@ const CustomerProductDetails = () => {
           <div className="w-full flex">
             <div className="flex flex-col gap-2 w-full items-center justify-center">
               <div className="w-full h-[26rem] overflow-hidden border-2 p-2 rounded-lg">
-                <img
-                  src={`/product/p${activeImg}.webp`}
-                  className="w-full h-full object-contain"
-                  alt=""
-                />
-              </div>
-              {IMAGE_ARR.length > 5 ? (
-                <div className="w-full relative">
-                  <p
-                    onClick={handlePrev}
-                    className=" absolute top-6 -left-4 hover:bg-slate-200 duration-300 cursor-pointer z-10  w-8 h-8  bg-gray-100 rounded-full flex items-center justify-center"
-                  >
-                    <IoIosArrowBack className="text-primary" />
-                  </p>
-                  <p
-                    onClick={handleNext}
-                    className=" w-8 h-8  absolute top-6 hover:bg-slate-200 duration-300  cursor-pointer z-10 -right-3 bg-gray-100 rounded-full flex items-center justify-center"
-                  >
-                    <IoIosArrowForward className="text-primary" />
-                  </p>
+                {
+                  isValidating ? <div className="w-full h-full bg-slate-200 animate-pulse"></div> :
 
-                  <Slider ref={navigationRef} {...settings}>
-                    {IMAGE_ARR?.map((item: any, index: number) => (
-                      <article
-                        className="mx-auto !flex items-center px-2 pb-4 w-full "
-                        key={index}
+                    <img
+                      src={data?.data?.data?.images?.[activeImg].imageUrl}
+                      className="w-full h-full object-contain"
+                      alt=""
+                    />}
+              </div>
+              {
+
+                isValidating ? (<>
+                  <div className="w-full flex items-center gap-5 justify-center">
+                    <p className="w-24 h-20 rounded-md bg-slate-200 animate-pulse"></p>
+                    <p className="w-24 h-20 rounded-md bg-slate-200 animate-pulse"></p>
+                    <p className="w-24 h-20 rounded-md bg-slate-200 animate-pulse"></p>
+                    <p className="w-24 h-20 rounded-md bg-slate-200 animate-pulse"></p>
+                    <p className="w-24 h-20 rounded-md bg-slate-200 animate-pulse"></p>
+                  </div>
+                </>) :
+
+                  data?.data?.data?.images?.length > 5 ? (
+                    <div className="w-full relative">
+                      <p
+                        onClick={handlePrev}
+                        className=" absolute top-6 -left-4 hover:bg-slate-200 duration-300 cursor-pointer z-10  w-8 h-8  bg-gray-100 rounded-full flex items-center justify-center"
                       >
-                        <img
-                          src={item?.image}
-                          className={`w-24 h-20 object-contain border-2 p-2 cursor-pointer rounded-lg ${
-                            activeImg === item?.id ? "border-blue-500" : ""
-                          }`}
-                          onClick={() => setActiveImg(item?.id)}
-                          alt=""
-                        />
-                      </article>
-                    ))}
-                  </Slider>
-                </div>
-              ) : (
-                <div className="w-full grid grid-cols-5 gap-3 justify-center">
-                  {IMAGE_ARR?.map((item, index) => (
-                    <article
-                      key={index}
-                      onClick={() => handleActiveImage(index)}
-                      className="mx-auto !flex items-center px-2 pb-4 w-full  "
-                    >
-                      <img
-                        src={item?.image}
-                        className={`w-24 h-20 object-contain border-2 p-2 cursor-pointer rounded-lg ${
-                          activeImg === Number(item?.id)
-                            ? "border-cyan-500"
-                            : ""
-                        }`}
-                        onClick={() => setActiveImg(Number(item?.id))}
-                        alt=""
-                      />
-                    </article>
-                  ))}
-                </div>
-              )}
+                        <IoIosArrowBack className="text-primary" />
+                      </p>
+                      <p
+                        onClick={handleNext}
+                        className=" w-8 h-8  absolute top-6 hover:bg-slate-200 duration-300  cursor-pointer z-10 -right-3 bg-gray-100 rounded-full flex items-center justify-center"
+                      >
+                        <IoIosArrowForward className="text-primary" />
+                      </p>
+
+                      <Slider ref={navigationRef} {...settings}>
+                        {data?.data?.data?.images?.map((item: any, index: number) => (
+                          <article
+                            className="mx-auto !flex items-center px-2 pb-4 w-full "
+                            key={index}
+                          >
+                            <img
+                              src={item?.imageUrl}
+                              className={`w-24 h-20 object-contain border-2 p-2 cursor-pointer rounded-lg ${activeImg === index ? "border-blue-500" : ""
+                                }`}
+                              onClick={() => setActiveImg(item?._id)}
+                              alt=""
+                            />
+                          </article>
+                        ))}
+                      </Slider>
+                    </div>
+                  ) : (
+                    <div className="w-full grid grid-cols-5 gap-3 justify-center">
+                      {data?.data?.data?.images?.map((item: any, index: number) => (
+                        <article
+                          key={index}
+                          onClick={() => handleActiveImage(index)}
+                          className="mx-auto !flex items-center px-2 pb-4 w-full  "
+                        >
+                          <img
+                            src={item?.imageUrl}
+                            className={`w-24 h-20 object-contain border-2 p-2 cursor-pointer rounded-lg ${activeImg === index
+                              ? "border-cyan-500"
+                              : ""
+                              }`}
+                            onClick={() => setActiveImg(Number(item?._id))}
+                            alt=""
+                          />
+                        </article>
+                      ))}
+                    </div>
+                  )}
             </div>
           </div>
         </article>
@@ -209,11 +181,11 @@ const CustomerProductDetails = () => {
                 <FaChevronRight className=" text-[0.5rem]" />
               </Link>
               <Link
-                href="products/Electronics"
+                href="/products"
                 className="flex gap-2 items-center"
               >
                 <span className=" text-[0.75rem] hover:text-blue-500  text-gray-400">
-                  Clothing
+                  Products
                 </span>{" "}
                 <FaChevronRight className=" text-[0.5rem]" />
               </Link>
@@ -237,11 +209,11 @@ const CustomerProductDetails = () => {
               </Link>
               <p className="flex gap-2 items-center">
                 <span className=" text-[0.6rem]  text-gray-400">
-                  NB NICKY BOY...{id}
+                  {item?.name}...{id}
                 </span>
               </p>
             </div>
-            <h2 className="text-xl font-semibold">sljdfkjshfkjshfi</h2>
+            <h2 className="text-xl font-semibold"> {isValidating ? <p className="w-52 px-2 py-3 rounded bg-slate-200 animate-pulse"></p> : item?.name}</h2>
             <Link href="#ReviewAndRating" className="flex items-center gap-2">
               <p className="flex items-center gap-1 text-sm font-bold px-2 py-0.5 text-white bg-green-600 rounded-md">
                 <span>3.7</span>
@@ -251,20 +223,29 @@ const CustomerProductDetails = () => {
                 3.716,808 ratings and 765 reviews
               </p>
             </Link>
-            <p className="text-green-600 text-sm font-semibold">
-              Extra ₹130 off
-            </p>
-            <p className="flex items-end gap-2">
-              <span className="font-semibold text-2xl">₹3434</span>
-              <span className="font-semibold text-gray-600  line-through justify-end">
-                ₹3434
-              </span>
-              <span className="text-green-600 font-semibold">17% off</span>
-            </p>
+            <div className="text-green-600 text-sm font-semibold w-full">
+              {isValidating ? <p className="w-20 p-2 rounded bg-slate-200 animate-pulse"></p> : `Extra ₹${item?.discount} off`}
+            </div>
+            <div className="flex items-end gap-2">
+              {
+                isValidating ? <p className="w-44 py-4 rounded-md bg-slate-200 animate-pulse"></p> : (
+                  <>
+                    <span className="font-semibold text-2xl">₹{item?.salePrice}</span>
+                    <span className="font-semibold text-gray-600  line-through justify-end">
+                      ₹{item?.price}
+                    </span>
+                    <span className="text-green-600 font-semibold">{item?.discount}% off</span>
+                  </>
+                )
+              }
+            </div>
             <div className="flex gap-20 font-semibold  items-center">
               <p>
                 Color:{"  "}
-                <span className=" uppercase">red</span>{" "}
+                {
+                  isValidating ? <p className="w-32 p-2 rounded bg-slate-200 animate-pulse"></p> : <span className=" uppercase">{item?.color}</span>
+                }
+
               </p>
               {/* <span>See All Availbale Colors</span> */}
             </div>
@@ -287,14 +268,14 @@ const CustomerProductDetails = () => {
                 );
               })}
             </div> */}
-            <div className="flex gap-3 items-center flex-wrap">
+            {/* <div className="flex gap-3 items-center flex-wrap">
               <span className="font-semibold">Size :</span>
               <p className="flex gap-5 items-center flex-wrap"></p>
 
               <span className="py-2 uppercase cursor-pointer px-3 text-sm rounded font-semibold border">
                 XL
               </span>
-            </div>
+            </div> */}
             <div className="flex items-end gap-5 py-2">
               <div className="flex items-center gap-5">
                 <button
@@ -332,32 +313,9 @@ const CustomerProductDetails = () => {
                 Go to Cart
               </Link>
 
-              <p
-                //   onClick={handleAddToCart}
-                className=" cursor-pointer font-semibold border border-primary text-primary rounded-full px-5 py-2 relative overflow-hidden group"
-              >
-                <span className="absolute top-0 -left-36 flex items-center justify-center bg-black group-hover:left-0 duration-500 z-50 w-full h-full rounded-full">
-                  <div
-                    className="w-7 h-7 rounded-full animate-spin
-                    border-y border-solid border-green-500 border-t-transparent shadow-md"
-                  ></div>
 
-                  <FaArrowRight className=" text-white text-xl font-bold" />
-                </span>
-                Add to Cart
-              </p>
             </div>
             <p className="flex items-center gap-3">
-              <Link
-                href={`/customization/${id}`}
-                className=" py-2 px-5 overflow-hidden relative group cursor-pointer border-2 border-primary text-primary  font-semibold rounded-xl"
-              >
-                <span className="absolute w-64 h-0 transition-all duration-300 origin-center rotate-45 -translate-x-20 bg-gradient-to-r from-cyan-500 to-blue-500 top-1/2 group-hover:h-64 group-hover:-translate-y-32 ease"></span>
-                <span className="relative text-primary transition duration-300 group-hover:text-white ease font-semibold">
-                  Customize Product
-                </span>
-              </Link>
-
               <Link
                 href={`/checkout?productId=#`}
                 className="rounded-full py-2 md:px-10 px-5 overflow-hidden relative group cursor-pointer border-2 font-medium bg-primary text-white"
@@ -409,13 +367,13 @@ const CustomerProductDetails = () => {
             <div className="flex flex-col md:flex-row justify-between gap-10 py-3 w-full ">
               <div className="flex flex-col gap-4 w-full items-start">
                 <h2 className="text-sm font-bold text-gray-700">Description</h2>
-                <span className="text-sm text-gray-600">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Molestias illo distinctio magnam nulla ipsam eligendi harum!
-                  Exercitationem quis distinctio veritatis et, voluptas
-                  temporibus eius fuga! Sit, consectetur velit? Nesciunt,
-                  veritatis.
-                </span>
+                {
+                  isValidating ? <p className="w-full h-20 bg-slate-200 rounded-md animate-pulse"></p> :
+
+                    <span className="text-sm text-gray-600">
+                      {item?.description}
+                    </span>
+                }
                 {/* <span className="flex flex-col gap-2">
                   <h3 className="flex items-center gap-3">
                     <p className="p-[0.2rem] bg-gray-400 rounded-full"></p>

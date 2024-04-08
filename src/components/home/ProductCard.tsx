@@ -6,19 +6,19 @@ import { HiOutlinePlusSm } from "react-icons/hi";
 import { MdOutlineShoppingCart } from "react-icons/md";
 
 interface IProduct {
-  id: string;
+  _id: string;
   image: string;
   name: string;
 }
 
-const ProductCard = ({ item }: { item: IProduct }) => {
+const ProductCard = ({ item }: { item: any }) => {
   return (
     <div
       className="relative h-full group overflow-hidden  w-full flex flex-col gap-2 justify-between items-center  bg-white shadow-[0px_0px_4px_0px_#00000024] rounded-lg p-4"
-      key={item?.id}
+      key={item?._id}
     >
       <p className=" absolute z-10 top-2 left-2 text-xs bg-orange-500/50 text-white font-medium px-4 py-1 rounded-md">
-        10% off
+        {item?.discount}% off
       </p>
       <Link href="/wishlist">
         <p className=" absolute z-10 top-2  group-hover:right-2 -right-14  duration-200 w-8 h-8 cursor-pointer  rounded-lg flex items-center justify-center bg-orange-500/50 bg-opacity-60">
@@ -33,9 +33,9 @@ const ProductCard = ({ item }: { item: IProduct }) => {
       </Link>
 
       <div className=" w-full flex  flex-col gap-4">
-        <Link href={`/products/${item?.id}`}>
+        <Link href={`/products/${item?._id}`}>
           <img
-            src={item?.image}
+            src={item?.images?.[0]?.imageUrl}
             className=" w-full object-contain md:h-36 h-24 object-fil rounded-lg cursor-pointer group-hover:scale-105 duration-300 "
             alt=""
           />
@@ -44,15 +44,22 @@ const ProductCard = ({ item }: { item: IProduct }) => {
           <div className=" flex md:flex-row flex-col md:items-center items-start justify-between">
             <p className=" flex items-center  gap-1">
               <span className="uppercase text-primary/80 font-medium text-sm">
-                brand:
+                Category:
               </span>
               <span className=" text-xs capitalize text-gray-600">
-                Alive Core
+                {item?.categoryName}
               </span>
             </p>
-            <p className=" text-xs font-medium px-4 py-1 bg-green-500/50 text-white rounded-md">
-              Instock
-            </p>
+            {
+              item?.sold === false ?
+                <p className=" text-xs font-medium px-4 py-1 bg-green-500/50 text-white rounded-md">
+                  InStock
+                </p> : <p className=" text-xs font-medium px-4 py-1 bg-red-500/50 text-white rounded-md">
+                  Out Of Stock
+                </p>
+
+            }
+
           </div>
           <p className="  md:font-semibold font-medium md:text-base text-sm  text-gray-700">
             {item?.name}
@@ -66,9 +73,9 @@ const ProductCard = ({ item }: { item: IProduct }) => {
           </p>
           <div className=" flex justify-between items-center  ">
             <p className=" flex flex-col sm:flex-row items-center gap-1">
-              <span className="text-gray-800 font-semibold">₹999.12</span>
+              <span className="text-gray-800 font-semibold">₹{item?.salePrice}</span>
               <span className="line-through text-xs  text-gray-400">
-                ₹2999.00
+                ₹{item?.price}
               </span>
             </p>
             <Link href="/cart">

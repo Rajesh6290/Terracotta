@@ -88,8 +88,7 @@ const SideMenu = () => {
   const [sideMenu, setSideMenu] = useState(false);
   const [selectedRating, setSelectedRating] = useState(null);
   const [ratingData, setRatingData] = useState<number>();
-  const { data, isValidating } = useSwr("categories");
-  // console.log("Category data check ====>", data?.data?.data);
+  const { data, isValidating } = useSwr(`category`);
   const handleRatingChange = (value: any) => {
     setSelectedRating(value);
   };
@@ -124,47 +123,46 @@ const SideMenu = () => {
               </span>
               <span className=" h-[0.1rem] w-20 bg-primary rounded-full"></span>
             </p>
-            {CATEGORY_ARR.map((item: any, index: number) => {
-              return (
-                <>
-                  <p
-                    key={index}
-                    className={`w-full flex gap-3 items-center cursor-pointer hover:pl-6 px-4 border-b group  common-transition ${
-                      selectedCategory === index
-                        ? "bg-primary"
-                        : "hover:bg-sky-200"
-                    }`}
-                    onClick={() => handleCategoryClick(index)}
-                  >
-                    <span
-                      className={`text-xs 
+            {
+              isValidating ? (<div className="flex flex-col gap-1">
+                <p className="w-full h-14 bg-slate-200 animate-pulse"></p>
+                <p className="w-full h-14 bg-slate-200 animate-pulse"></p>
+                <p className="w-full h-14 bg-slate-200 animate-pulse"></p>
+                <p className="w-full h-14 bg-slate-200 animate-pulse"></p>
+                <p className="w-full h-14 bg-slate-200 animate-pulse"></p>
+                <p className="w-full h-14 bg-slate-200 animate-pulse"></p>
+                <p className="w-full h-14 bg-slate-200 animate-pulse"></p>
+              </div>) :
+                data?.data?.data?.map((item: any, index: number) => {
+                  return (
+                    <>
+                      <p
+                        key={index}
+                        className={`w-full flex gap-3 items-center cursor-pointer hover:pl-6 px-4 border-b group  common-transition ${selectedCategory === index
+                          ? "bg-primary"
+                          : "hover:bg-sky-200"
+                          }`}
+                        onClick={() => handleCategoryClick(index)}
+                      >
+                        <span
+                          className={`text-xs 
           ${selectedCategory === index ? "text-white" : "text-gray-800"}
           `}
-                    >
-                      <FaChevronRight />
-                    </span>
-                    <span
-                      className={`uppercase text-[0.95rem] py-3  font-medium common-transition
+                        >
+                          <FaChevronRight />
+                        </span>
+                        <span
+                          className={`uppercase text-[0.95rem] py-3  font-medium common-transition
           ${selectedCategory === index ? "text-white" : "text-gray-800"}
           `}
-                    >
-                      {item?.title}
-                    </span>
-                  </p>
-                </>
-              );
-            })}
+                        >
+                          {item?.name}
+                        </span>
+                      </p>
+                    </>
+                  );
+                })}
           </div>
-          {/* <div className="flex flex-col gap-4">
-          <p className="flex flex-col px-4">
-            <span className=" uppercase text-primary font-semibold text-lg cursor-pointer">
-              Influencer Products
-            </span>
-            <span className="h-[0.2rem] w-32 bg-secondary rounded-full"></span>
-          </p>
-          
-          <hr />
-        </div> */}
           <div className="flex flex-col gap-4">
             <p className="flex flex-col px-4">
               <span className=" uppercase text-primary font-medium tracking-wider text-[1rem]">

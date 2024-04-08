@@ -8,6 +8,8 @@ import { Collapse, Drawer } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import useAppContext from "@/context";
+import LoginForm from "@/components/form/loginForm";
+import RegisterForm from "@/components/form/RegisterForm";
 interface IProduct {
   id: string;
   image: string;
@@ -86,6 +88,8 @@ const Navbar = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [filterProduct, setFilterProduct] = useState<IProduct[]>([]);
+  const [loginOpen, setLoginOpen] = useState(false);
+  const [registerOpen, setRegisterOpen] = useState(false);
   const router = useRouter();
   const { isLogin } = useAppContext();
   const handelSearch = (data: string) => {
@@ -115,6 +119,8 @@ const Navbar = () => {
   }, []);
   return (
     <>
+      <LoginForm open={loginOpen} setOpen={() => setLoginOpen(false)} setRegisterOpen={setRegisterOpen} />
+      <RegisterForm open={registerOpen} setOpen={() => setRegisterOpen(false)} />
       <nav className="w-full h-fit bg-gray-50 flex flex-col sticky top-0 z-[999]">
         <div className=" xl:block hidden flex    gap-2  flex-col w-full">
           <div className="w-full bg-gradient-to-bl from-rose-400 to-orange-600">
@@ -175,12 +181,17 @@ const Navbar = () => {
                   </p>
                   <AiOutlineHeart className="text-gray-600 text-xl " />
                 </Link>
-                <Link
-                  href={isLogin ? `/my-account` : `/login`}
+                <div onClick={() => {
+                  if (isLogin) {
+                    router.push('/my-account');
+                  } else {
+                    setLoginOpen(true);
+                  }
+                }}
                   className="w-11 h-11 bg-slate-100 cursor-pointer rounded-full flex items-center justify-center"
                 >
                   <FaRegUser className="text-gray-600 text-lg " />
-                </Link>
+                </div>
                 <Link
                   href="/contact"
                   className="flex shake items-center gap-2 shake py-2 px-3 rounded-lg bg-primary  shadow-md shadow-primary/70 cursor-pointer"

@@ -7,6 +7,8 @@ import AccountLayout from "@/layouts/account";
 import { use, useState } from "react";
 import { BiPhoneCall, BiSolidPencil } from "react-icons/bi";
 import { CgGenderFemale } from "react-icons/cg";
+import { FaFemale, FaMale } from "react-icons/fa";
+import { IoMaleFemaleSharp } from "react-icons/io5";
 import { MdEmail, MdOutlineAccountCircle } from "react-icons/md";
 
 const UserProfile = () => {
@@ -34,7 +36,7 @@ const UserProfile = () => {
                                 <div className="text-center">
                                     <label htmlFor="profileImage">
                                         <img
-                                            src={user?.image || "/profile-pic.svg"}
+                                            src={user?.image || "/favicon.png"}
                                             alt="profilepic"
                                             className="w-32 h-32 mx-auto rounded-full bg-slate-200 mb-4 text-white text-4xl cursor-pointer"
                                         />
@@ -54,12 +56,12 @@ const UserProfile = () => {
                                     </div>
                                 </div>
                                 <div className=" text-center p-6 w-full h-full bg-white  rounded-lg shadow-[0px_0px_6px_1px_#00000024]">
-                                    <div className="flex flex-col items-center  w-full ">
+                                    <div className="flex flex-col items-center  w-full overflow-hidden ">
                                         <MdEmail
                                             className="items-center text-2xl mx-20 mb-3 text-primary"
                                             size={28}
                                         />
-                                        <div className="flex flex-col gap-2 ">
+                                        <div className="flex flex-col gap-2 flex-wrap w-full">
                                             <p>{user?.email}</p>
                                         </div>
                                     </div>
@@ -77,10 +79,16 @@ const UserProfile = () => {
                                 </div>
                                 <div className=" text-center  p-6 w-full h-full bg-white rounded-md shadow-[0px_0px_6px_1px_#00000024]">
                                     <div className="flex flex-col items-center  w-full">
-                                        <CgGenderFemale
+                                        {user?.gender === "male" ? < FaMale
                                             className="text-2xl mb-3 text-primary"
                                             size={28}
-                                        />
+                                        /> : user?.gender === "female" ? < FaFemale
+                                            className="text-2xl mb-3 text-primary"
+                                            size={28}
+                                        /> : < IoMaleFemaleSharp
+                                            className="text-2xl mb-3 text-primary"
+                                            size={28}
+                                        />}
                                         <div className="flex flex-col gap-2 capitalize">
                                             <p>{user?.gender ? user?.gender : `Not Provided`}</p>
                                         </div>

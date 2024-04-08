@@ -1,7 +1,11 @@
-// import { useAppContext } from "contexts";
 import Head from "next/head";
-import Navbar from "./Navbar";
 import { useState } from "react";
+import { CgMenuLeftAlt } from "react-icons/cg";
+import { FaXmark } from "react-icons/fa6";
+import AdminDrawer from "./AdminDrawer";
+import Header from "./Header";
+import MobileAdminDrawer from "./MobileAdminDrawer";
+import AdminProtected from "@/hooks/adminProtected";
 
 type Props = {
   children: React.ReactNode;
@@ -9,37 +13,61 @@ type Props = {
   description?: string;
   ogImage?: string;
 };
-export default function AdminLayout({
+
+const AdminLayout = ({
   children = <></>,
-  title = "Dashboard Layout",
+  title = "Terracotta Admin Panel",
   description,
   ogImage,
-}: Props) {
+}: Props) => {
+  const [adminMenuOpen, setAdminMenuOpen] = useState(false);
+
+
   return (
     <>
       <Head>
-        <meta property="og:url" content="https://printbrix-web.vercel.app/" />
+        <meta property="og:url" content="https://terracotta-seven.vercel.app/" />
         <meta property="og:type" content="website" />
         <title>{title}</title>
         <meta name="description" content={description} />
         <meta
           property="og:image"
-          content={ogImage || "https://printbrix-web.vercel.app/logo.png"}
+          content={"https://terracotta-seven.vercel.app/logo1.png"}
         />
       </Head>
-      <section className=" w-full  h-screen ">
-        <div className=" relative w-full h-full flex items-start  justify-between ">
-          {/* <AdminDrawer isFull={isFull} setIsFull={setIsFull} /> */}
-          <div
-            className="h-full w-full  duration-500 transition-all ease-out"
+      <main className=" w-full h-full flex overflow-hidden relative ">
+        <article className=" hidden  w-80 h-screen bg-gray-800 lg:flex flex-col gap-5">
+          <AdminDrawer />
+        </article>
+        <article
+          className={`lg:hidden  w-80 h-screen bg-gray-800 flex flex-col gap-5 absolute z-[555]  duration-500
+        ${adminMenuOpen ? "-translate-x-0" : "-translate-x-96"}
+        `}
+        >
+          <p
+            onClick={() => setAdminMenuOpen(!adminMenuOpen)}
+            className=" p-1 bg-teal-50 border border-green-200 rounded-md absolute right-2 top-2 "
           >
-            <Navbar />
-            <article className="w-full h-[calc(100vh-78px)] overflow-y-scroll px-3 py-2 ">
-              {children}
-            </article>
+            {adminMenuOpen ? (
+              <FaXmark className=" text-3xl text-green-500 cursor-pointer" />
+            ) : (
+              <CgMenuLeftAlt className=" text-3xl text-green-500 cursor-pointer" />
+            )}
+          </p>
+          <MobileAdminDrawer />
+        </article>
+        <article className=" w-full h-screen flex flex-col gap-1 overflow-hidden">
+          <Header
+            setAdminMenuOpen={setAdminMenuOpen}
+            adminMenuOpen={adminMenuOpen}
+          />
+          <div className=" w-full h-full bg-slate-100 overflow-y-auto ">
+            {children}
           </div>
-        </div>
-      </section>
+        </article>
+      </main>
     </>
   );
-}
+};
+
+export default AdminProtected(AdminLayout);

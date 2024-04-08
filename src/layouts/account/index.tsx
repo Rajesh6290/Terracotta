@@ -1,10 +1,12 @@
+import AccessProtected from "@/hooks/accessProtected";
 import AccountMenu from "./AccountMenu";
 
-export default function AccountLayout({
+const AccountLayout = ({
     children,
 }: {
     children: React.ReactNode;
-}) {
+}) => {
+
     return (
         <article className="bg-gray-100 py-8">
             <section className="relative main-container">
@@ -19,3 +21,4 @@ export default function AccountLayout({
         </article>
     );
 }
+export default AccessProtected(AccountLayout)
