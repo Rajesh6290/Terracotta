@@ -229,7 +229,6 @@ const Footer = () => {
                   {item.subMenu.map((subItem: any, index: number) => {
                     return (
                       // <Link key={index} className=" duration-500 text-gray-200  " href={subItem.link}>
-
                       // <li className="capitalize list-none w-fit text-gray-300 border-b border-transparent hover:border-secondary hover:text-white hover:pl-1.5 duration-500 common-transition">{subItem.name}</li>
                       // </Link>
                       <span key={index} className="flex items-center gap-1 ">
