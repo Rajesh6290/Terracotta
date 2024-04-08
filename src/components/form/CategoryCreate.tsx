@@ -11,6 +11,17 @@ const CategoryCreate = ({ openDialog, setOpenDialog, mutate }: any) => {
         {
             key: "1",
             label:
+                "Category Image",
+            name: "file",
+            type: "file-with-preview",
+
+            initialValue: "",
+            className: "col-span-12",
+            validationSchema: Yup.string().required("Required"),
+        },
+        {
+            key: "1",
+            label:
                 "Category Name",
             name: "name",
             type: "text",
@@ -32,11 +43,13 @@ const CategoryCreate = ({ openDialog, setOpenDialog, mutate }: any) => {
     }, {});
     const handleOperation = async (values: any, { resetForm }: FormikHelpers<any>) => {
         try {
+            const formData = new FormData()
+            formData.append("name", values?.name);
+            formData.append("file", values?.file)
             const res = await mutation(`category`, {
                 method: "POST",
-                body: {
-                    name: values?.name,
-                },
+                body: formData,
+                isFormData: true,
                 isAlert: true,
             })
             if (res?.status === 200) {

@@ -6,10 +6,9 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
 import useSwr from "@/hooks/useSwr";
 import { Skelton } from "../home/MostPoular";
 
-const SimilarProduct = () => {
+const SimilarProduct = ({ id, isValidating }: any) => {
   const router = useRouter();
-  const { data, isValidating } = useSwr(`product/getById/${router?.query?.id}`)
-  const { data: category, isValidating: categoryValidate } = useSwr(isValidating ? `` : `category/${data?.data?.data?.category}`);
+  const { data: category, isValidating: categoryValidate } = useSwr(isValidating ? `` : `category/${id}`);
   const { data: similarProduct, isValidating: productValidating } = useSwr(categoryValidate ? `` : `product?category=${category?.data?.data?.name}`)
   const item = similarProduct?.data?.data
   const finalData = item?.filter((pre: any) => pre?._id !== router?.query?.id)

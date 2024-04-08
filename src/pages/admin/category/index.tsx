@@ -91,7 +91,8 @@ const Category = () => {
                   sl: i + 1,
                   id: item?._id,
                   category: item?.name,
-                  catId: item?.catId,
+                  catId: item?._id.slice(0, 7),
+                  image: item?.imageUrl,
                   timestamp: moment(new Date(item?.createdAt)).format("lll"),
 
                 }))
@@ -113,6 +114,18 @@ const Category = () => {
                 width: "1%",
               },
 
+              {
+                title: "Category Image",
+                tooltip: "Category Image",
+                field: "image",
+                editable: "never",
+                width: "5%",
+                render: (item: any) => (
+                  <div>
+                    <img src={item?.image || "/NotImage.jpg"} alt="Category Image" className="w-16 h-16 rounded-full" />
+                  </div>
+                )
+              },
               {
                 title: "Category Name",
                 tooltip: "Category Name",

@@ -1,6 +1,6 @@
 import Link from "next/link";
-import Slider from "react-slick";
-import React, { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/router";
+import { useRef, useState } from "react";
 import { AiFillStar } from "react-icons/ai";
 import { BiWorld } from "react-icons/bi";
 import { FaShippingFast } from "react-icons/fa";
@@ -10,18 +10,13 @@ import {
   FaChevronRight,
 } from "react-icons/fa6";
 import { HiOutlineMinusSmall, HiOutlinePlusSmall } from "react-icons/hi2";
-import { RiRefund2Line } from "react-icons/ri";
-import { useRouter } from "next/router";
-import { toast } from "react-toastify";
-import ReviewAndRating from "./ReviewRatings";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-import useSwr from "@/hooks/useSwr";
+import { RiRefund2Line } from "react-icons/ri";
+import Slider from "react-slick";
+import ReviewAndRating from "./ReviewRatings";
 
-const CustomerProductDetails = () => {
+const CustomerProductDetails = ({ item, isValidating }: any) => {
   const router = useRouter();
-  const { id } = router.query;
-  const { data, isValidating } = useSwr(`product/getById/${router?.query?.id}`)
-  const item = data?.data?.data
 
   var settings = {
     infinite: true,
@@ -98,7 +93,7 @@ const CustomerProductDetails = () => {
                   isValidating ? <div className="w-full h-full bg-slate-200 animate-pulse"></div> :
 
                     <img
-                      src={data?.data?.data?.images?.[activeImg].imageUrl}
+                      src={item?.images?.[activeImg].imageUrl}
                       className="w-full h-full object-contain"
                       alt=""
                     />}
@@ -115,7 +110,7 @@ const CustomerProductDetails = () => {
                   </div>
                 </>) :
 
-                  data?.data?.data?.images?.length > 5 ? (
+                  item?.images?.length > 5 ? (
                     <div className="w-full relative">
                       <p
                         onClick={handlePrev}
@@ -131,7 +126,7 @@ const CustomerProductDetails = () => {
                       </p>
 
                       <Slider ref={navigationRef} {...settings}>
-                        {data?.data?.data?.images?.map((item: any, index: number) => (
+                        {item?.images?.map((item: any, index: number) => (
                           <article
                             className="mx-auto !flex items-center px-2 pb-4 w-full "
                             key={index}
@@ -149,7 +144,7 @@ const CustomerProductDetails = () => {
                     </div>
                   ) : (
                     <div className="w-full grid grid-cols-5 gap-3 justify-center">
-                      {data?.data?.data?.images?.map((item: any, index: number) => (
+                      {item?.images?.map((item: any, index: number) => (
                         <article
                           key={index}
                           onClick={() => handleActiveImage(index)}
@@ -209,7 +204,7 @@ const CustomerProductDetails = () => {
               </Link>
               <p className="flex gap-2 items-center">
                 <span className=" text-[0.6rem]  text-gray-400">
-                  {item?.name}...{id}
+                  {item?.name}...{item?._id}
                 </span>
               </p>
             </div>

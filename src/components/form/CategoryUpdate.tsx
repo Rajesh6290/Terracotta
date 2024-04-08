@@ -11,6 +11,17 @@ const CategoryUpdate = ({ openDialog, setOpenDialog, data, mutate }: any) => {
         {
             key: "1",
             label:
+                "Category Image",
+            name: "file",
+            type: "file=with-preview",
+
+            initialValue: "",
+            className: "col-span-12",
+            validationSchema: Yup.string().required("Required"),
+        },
+        {
+            key: "1",
+            label:
                 "Category Name",
             name: "name",
             type: "text",
@@ -60,6 +71,7 @@ const CategoryUpdate = ({ openDialog, setOpenDialog, data, mutate }: any) => {
                 >
                     <div className="w-[30rem] bg-white rounded-xl flex flex-col gap-5 items-center p-4">
                         <p className="text-xl font-semibold">Category Update Form</p>
+                        <img src={data?.imageUrl} alt="" className="w-20 h-20 rounded-full" />
                         <div className="w-full p-4 ">
                             <Formik
                                 initialValues={initialValues}
