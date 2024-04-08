@@ -124,14 +124,14 @@ const SideMenu = () => {
               <span className=" h-[0.1rem] w-20 bg-primary rounded-full"></span>
             </p>
             {
-              isValidating ? (<div className="flex flex-col gap-1">
-                <p className="w-full h-14 bg-slate-200 animate-pulse"></p>
-                <p className="w-full h-14 bg-slate-200 animate-pulse"></p>
-                <p className="w-full h-14 bg-slate-200 animate-pulse"></p>
-                <p className="w-full h-14 bg-slate-200 animate-pulse"></p>
-                <p className="w-full h-14 bg-slate-200 animate-pulse"></p>
-                <p className="w-full h-14 bg-slate-200 animate-pulse"></p>
-                <p className="w-full h-14 bg-slate-200 animate-pulse"></p>
+              isValidating ? (<div className="flex flex-col gap-1 px-2">
+                <p className="w-full h-12 bg-slate-200 animate-pulse rounded"></p>
+                <p className="w-full h-12 bg-slate-200 animate-pulse rounded"></p>
+                <p className="w-full h-12 bg-slate-200 animate-pulse rounded"></p>
+                <p className="w-full h-12 bg-slate-200 animate-pulse rounded"></p>
+                <p className="w-full h-12 bg-slate-200 animate-pulse rounded"></p>
+                <p className="w-full h-12 bg-slate-200 animate-pulse rounded"></p>
+                <p className="w-full h-12 bg-slate-200 animate-pulse rounded"></p>
               </div>) :
                 data?.data?.data?.map((item: any, index: number) => {
                   return (
