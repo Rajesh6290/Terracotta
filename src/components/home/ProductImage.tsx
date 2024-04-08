@@ -92,7 +92,7 @@ const Category = () => {
                   {item?.map((curElm: any, index: number) => (
                     <article className="mx-auto !flex items-center px-2 " key={index}>
                       <div className="w-full">
-                        <CategoryCard item={curElm} index={index} />
+                        <CategoryCard item={curElm} index={index} key={index} />
                       </div>
                     </article>
                   ))}
@@ -101,7 +101,7 @@ const Category = () => {
               : <div className=" w-full grid grid-cols-5 items-center gap-5">
                 {
                   item?.map((pre: any) => (
-                    <CategoryCard item={pre} index={pre._id} />
+                    <CategoryCard item={pre} index={pre._id} key={pre._id} />
                   ))
                 }
               </div>
