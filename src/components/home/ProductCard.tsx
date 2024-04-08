@@ -35,7 +35,7 @@ const ProductCard = ({ item }: { item: any }) => {
       <div className=" w-full flex  flex-col gap-4">
         <Link href={`/products/${item?._id}`}>
           <img
-            src={item?.images?.[0]?.imageUrl}
+            src={item?.images?.[0]?.imageUrl || "NotImage.jpg"}
             className=" w-full object-contain md:h-36 h-24 object-fil rounded-lg cursor-pointer group-hover:scale-105 duration-300 "
             alt=""
           />
