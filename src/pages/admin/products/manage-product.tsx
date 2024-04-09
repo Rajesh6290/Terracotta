@@ -8,13 +8,12 @@ import { MuiTblOptions } from '@/utils'
 import MaterialTable from '@material-table/core'
 import { Pagination, Paper, Switch, Tooltip } from '@mui/material'
 import Link from 'next/link'
-import React, { useState } from 'react'
-import { AiFillHeart, AiFillEye } from 'react-icons/ai'
-import { BiAddToQueue } from 'react-icons/bi'
+import { useState } from 'react'
+import { AiFillEye } from 'react-icons/ai'
 import { BsEye } from 'react-icons/bs'
 import { FaStar } from 'react-icons/fa'
 import { IoMdSearch } from 'react-icons/io'
-import { MdEdit, MdDelete, MdTableRows, MdOutlineShoppingCart, MdDeleteOutline } from 'react-icons/md'
+import { MdDelete, MdDeleteOutline, MdEdit, MdTableRows } from 'react-icons/md'
 import { PiCardsBold } from 'react-icons/pi'
 
 const ManageProduct = () => {
@@ -26,7 +25,7 @@ const ManageProduct = () => {
     const [pageNumber, setPageNumber] = useState<number>(1);
 
 
-    const { data, isValidating, mutate, pagination } = useSwr(`product?page=${pageNumber}&limit=10`);
+    const { data, isValidating, mutate, pagination } = useSwr(`product?page=${pageNumber}&limit=10`, { revalidateOnFocus: true });
     const UpdateProduct = async (item: any) => {
         try {
             const res = await mutation(`product/${item?.id}`, {
@@ -186,6 +185,9 @@ const ManageProduct = () => {
                                     field: "category",
                                     editable: "never",
                                     width: "10%",
+                                    render: (item: any) => (
+                                        <p className=" font-medium capitalize ">{item?.category}</p>
+                                    )
                                 },
                                 {
                                     title: "₹ Mrp",

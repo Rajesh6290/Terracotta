@@ -21,14 +21,14 @@ const CustomSlider = styled(Slider)(({ theme }) => ({
   },
 }));
 
-const PriceRangeSlider = () => {
-  const [value, setValue] = React.useState<number[]>([0, 20000]);
+const PriceRangeSlider = ({ setMinPrice, setMaxPrice, value, setValue }: any) => {
 
   const handleChange = (event: Event, newValue: number | number[]) => {
     setValue(newValue as number[]);
+    setMinPrice(value[0])
+    setMaxPrice(value[1])
   };
 
-  // Fetch product details using productId
 
   return (
     <>

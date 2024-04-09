@@ -184,24 +184,14 @@ const CustomerProductDetails = ({ item, isValidating }: any) => {
                 </span>{" "}
                 <FaChevronRight className=" text-[0.5rem]" />
               </Link>
-              <Link
-                href="products/Electronics/Laptops"
+              <p
                 className="flex gap-2 items-center"
               >
                 <span className=" text-[0.75rem] hover:text-blue-500  text-gray-400">
-                  T-Shirt
+                  {item?.categoryName}
                 </span>{" "}
                 <FaChevronRight className=" text-[0.5rem]" />
-              </Link>
-              <Link
-                href="products/Electronics/Laptops/APPLE"
-                className="flex gap-2 items-center"
-              >
-                <span className=" text-[0.75rem] hover:text-blue-500  text-gray-400">
-                  NB NICKY BOY Printed Men
-                </span>{" "}
-                <FaChevronRight className=" text-[0.5rem]" />
-              </Link>
+              </p>
               <p className="flex gap-2 items-center">
                 <span className=" text-[0.6rem]  text-gray-400">
                   {item?.name}...{item?._id}

@@ -2,16 +2,10 @@
 import Link from "next/link";
 import { AiFillEye, AiFillHeart } from "react-icons/ai";
 import { FaStar } from "react-icons/fa";
-import { HiOutlinePlusSm } from "react-icons/hi";
 import { MdOutlineShoppingCart } from "react-icons/md";
 
-interface IProduct {
-  _id: string;
-  image: string;
-  name: string;
-}
 
-const ProductCard = ({ item }: { item: any }) => {
+const ProductCard = ({ item }: { item: Product }) => {
   return (
     <div
       className="relative h-full group overflow-hidden  w-full flex flex-col gap-2 justify-between items-center  bg-white shadow-[0px_0px_4px_0px_#00000024] rounded-lg p-4"
@@ -40,27 +34,27 @@ const ProductCard = ({ item }: { item: any }) => {
             alt=""
           />
         </Link>
-        <div className=" flex w-full flex-col gap-2">
-          <div className=" flex md:flex-row flex-col md:items-center items-start justify-between">
-            <p className=" flex items-center  gap-1">
-              <span className="uppercase text-primary/80 font-medium text-sm">
-                Category:
-              </span>
-              <span className=" text-xs capitalize text-gray-600">
-                {item?.categoryName}
-              </span>
-            </p>
-            {
-              item?.sold === false ?
-                <p className=" text-xs font-medium px-4 py-1 bg-green-500/50 text-white rounded-md">
-                  InStock
-                </p> : <p className=" text-xs font-medium px-4 py-1 bg-red-500/50 text-white rounded-md">
-                  Out Of Stock
-                </p>
+        <div className=" flex w-full flex-col gap-2 relative">
+          {
+            item?.sold === false ?
+              <p className=" absolute md:top-0 -top-[0.2rem] md:right-1 -right-2 text-xs font-medium px-4 py-1 bg-green-500/50 text-white rounded-md">
+                InStock
+              </p> : <p className=" absolute md:top-0 -top-[0.2rem] md:right-1 -right-2 text-xs font-medium px-4 py-1 bg-red-500/50 text-white rounded-md">
+                Out Of Stock
+              </p>
 
-            }
+          }
 
-          </div>
+          <p className=" flex flex-col gap-1 w-full" >
+            <span className="uppercase text-primary/80 font-medium text-sm">
+              Category:
+            </span>
+            <span className=" text-xs capitalize text-gray-600">
+              {item?.categoryName}
+            </span>
+          </p>
+
+
           <p className="  md:font-semibold font-medium md:text-base text-sm  text-gray-700">
             {item?.name}
           </p>

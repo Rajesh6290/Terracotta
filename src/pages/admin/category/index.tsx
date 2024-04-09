@@ -6,7 +6,7 @@ import useSwr from "@/hooks/useSwr";
 import { AdminLayout } from "@/layouts";
 import { MuiTblOptions } from "@/utils";
 import MaterialTable from "@material-table/core";
-import { Paper } from "@mui/material";
+import { Pagination, Paper } from "@mui/material";
 import moment from "moment";
 import { useState } from "react";
 import { BiAddToQueue, BiEdit } from "react-icons/bi";
@@ -17,7 +17,8 @@ const Category = () => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState<any>();
   const [editOpen, setEditOpen] = useState(false);
-  const { data, mutate, isValidating } = useSwr("category");
+  const [pageNumber, setPageNumber] = useState<number>(1);
+  const { data, mutate, isValidating, pagination } = useSwr(`category?page=${pageNumber}&limit=10`);
 
   const deleteOperation = async (id: string) => {
     try {
@@ -82,6 +83,23 @@ const Category = () => {
                 <Paper {...props} className="!shadow-none" />
               ),
               OverlayLoading: () => <CustomLoader />,
+              Pagination: (props) => {
+                return (
+                  <div className="w-full flex items-center justify-center py-4">
+                    <Pagination
+                      count={Math.ceil(
+                        Number(pagination?.totalCount || 1) /
+                        Number(pagination?.limit || 1)
+                      )}
+                      onChange={(e, v: number) => setPageNumber(v)}
+                      variant="outlined"
+                      color="primary"
+                      page={pageNumber}
+                    />
+                  </div>
+                );
+              },
+
             }}
 
             data={
@@ -103,7 +121,8 @@ const Category = () => {
             options={{
               ...MuiTblOptions(),
               search: false,
-              exportMenu: []
+              exportMenu: [],
+              pageSize: data?.data?.data ? data?.data?.data?.length : 2
 
             }}
             columns={[
@@ -131,6 +150,9 @@ const Category = () => {
                 tooltip: "Category Name",
                 field: "category",
                 editable: "never",
+                render: (item: any) => (
+                  <p className=" font-medium capitalize ">{item?.category}</p>
+                )
               },
 
               {

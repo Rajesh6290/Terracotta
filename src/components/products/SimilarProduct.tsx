@@ -6,12 +6,10 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
 import useSwr from "@/hooks/useSwr";
 import { Skelton } from "../home/MostPoular";
 
-const SimilarProduct = ({ id, isValidating }: any) => {
+const SimilarProduct = ({ finalData, isValidating }: any) => {
   const router = useRouter();
-  const { data: category, isValidating: categoryValidate } = useSwr(isValidating ? `` : `category/${id}`);
-  const { data: similarProduct, isValidating: productValidating } = useSwr(categoryValidate ? `` : `product?category=${category?.data?.data?.name}`)
-  const item = similarProduct?.data?.data
-  const finalData = item?.filter((pre: any) => pre?._id !== router?.query?.id)
+
+
 
   const settings = {
     dots: false,
@@ -109,7 +107,7 @@ const SimilarProduct = ({ id, isValidating }: any) => {
 
         </div>
         {
-          isValidating || categoryValidate || productValidating ? (
+          isValidating ? (
             <div className="w-full grid grid-cols-5 gap-5 items-center">
               <Skelton />
               <Skelton />
