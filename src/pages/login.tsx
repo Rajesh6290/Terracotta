@@ -68,7 +68,7 @@ const LoginForm = () => {
     };
     return (
 
-        <div className='w-full h-screen flex items-center justify-center md:px-10 md:py-10 px-5 py-20'>
+        <div className='w-full h-screen flex items-center justify-center md:px-10 md:py-10 px-5 py-10'>
             <div className='lg:w-[80%] w-full h-full flex items-center md:px-3 relative rounded-xl '>
 
                 <div className='w-[50%] h-full py-3 lg:flex hidden  items-center justify-center'>
