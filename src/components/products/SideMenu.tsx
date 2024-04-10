@@ -69,7 +69,7 @@ const SideMenu = (
   }
   return (
     <>
-      <aside className="hidden md:flex md:w-[20%] lg:w-1/4 gap-5 w-full h-full  flex-col  justify-center py-4 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] bg-white rounded-md">
+      <aside className="hidden lg:flex  lg:w-1/4 gap-5 w-full h-full  flex-col  justify-center py-4 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] bg-white rounded-md">
         <div className="px-4">
           <p className="w-full flex justify-between items-center">
             <span className="uppercase font-semibold text-black text-lg">
@@ -191,7 +191,7 @@ const SideMenu = (
         </article>
       </aside>
       {/* Mobile View */}
-      <aside className="md:hidden flex flex-col  bg-white shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] p-3 rounded-md">
+      <aside className="lg:hidden flex flex-col  bg-white shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] p-3 rounded-md">
         <div className="w-full flex justify-between items-center py-2">
           <p className="w-full flex justify-between items-center ">
             <span className="uppercase font-semibold text-black text-xl">

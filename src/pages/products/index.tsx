@@ -65,7 +65,7 @@ const Products = () => {
               />
             </div>
           </article>
-          <main className="w-full flex md:flex-row flex-col gap-5 ">
+          <main className="w-full flex lg:flex-row flex-col gap-5 ">
             <SideMenu category={category} setCategory={setCategory} minPrice={minPrice} setMinPrice={setMinPrice} maxPrice={maxPrice} setMaxPrice={setMaxPrice} setSort={setSort} sort={sort} />
             <AllProducts item={data?.data?.data} isValidating={isValidating} pagination={pagination} pageNumber={pageNumber} setPageNumber={setPageNumber} />
           </main>

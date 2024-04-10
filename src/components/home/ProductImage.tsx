@@ -78,13 +78,19 @@ const Category = () => {
         </article>
         {
           isValidating ? (
-            <div className="w-full items-center grid grid-cols-5 gap-5 pt-3">
-              <CategorySkelton />
-              <CategorySkelton />
-              <CategorySkelton />
-              <CategorySkelton />
-              <CategorySkelton />
-            </div>
+            <>
+              <div className="w-full items-center grid md:hidden  grid-cols-2 gap-5 pt-3">
+                <CategorySkelton />
+                <CategorySkelton />
+              </div>
+              <div className="w-full items-center md:grid hidden grid-cols-5  gap-5 pt-3">
+                <CategorySkelton />
+                <CategorySkelton />
+                <CategorySkelton />
+                <CategorySkelton />
+                <CategorySkelton />
+              </div>
+            </>
           ) :
             item?.length > 5 ?
               <div className="w-full category-slick-slider industry-slider pt-8 lg:pt-16">

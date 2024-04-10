@@ -22,7 +22,7 @@ const AllProducts = ({
 }) => {
   return (
     <main className=" flex flex-col justify-start items-center gap-10 w-full">
-      <div className={`${isValidating ? "h-fit w-full grid lg:grid-cols-4 md:grid-cols-2 grid-cols-2 gap-3" : item?.length > 0 ? "h-fit w-full grid lg:grid-cols-4 md:grid-cols-2 grid-cols-2 gap-3" : "w-full h-full "}`}>
+      <div className={`${isValidating ? "h-fit w-full grid lg:grid-cols-4  grid-cols-2 gap-3" : item?.length > 0 ? "h-fit w-full grid lg:grid-cols-4 md:grid-cols-2 grid-cols-2 gap-3" : "w-full h-full "}`}>
         {isValidating ? (
           <>
             <Skelton />

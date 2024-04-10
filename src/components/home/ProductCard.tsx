@@ -37,9 +37,9 @@ const ProductCard = ({ item }: { item: Product }) => {
         <div className=" flex w-full flex-col gap-2 relative">
           {
             item?.sold === false ?
-              <p className=" absolute md:top-0 -top-[0.2rem] md:right-1 -right-2 text-xs font-medium px-4 py-1 bg-green-500/50 text-white rounded-md">
+              <p className=" absolute md:top-0 -top-[0.2rem] md:right-1 -right-2 text-xs font-medium md:px-4 px-2 py-1 bg-green-500/50 text-white rounded-md">
                 InStock
-              </p> : <p className=" absolute md:top-0 -top-[0.2rem] md:right-1 -right-2 text-xs font-medium px-4 py-1 bg-red-500/50 text-white rounded-md">
+              </p> : <p className=" absolute md:top-0 -top-[0.2rem] md:right-1 -right-2 text-xs font-medium md:px-4 px-2 py-1 bg-red-500/50 text-white rounded-md">
                 Out Of Stock
               </p>
 

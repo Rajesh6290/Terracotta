@@ -37,7 +37,7 @@ const SimilarProduct = ({ finalData, isValidating }: any) => {
         settings: {
           autoplay: true,
           autoplaySpeed: 3000,
-          slidesToShow: 3,
+          slidesToShow: 2,
           slidesToScroll: 1,
           infinite: true,
           arrows: true,
@@ -132,13 +132,30 @@ const SimilarProduct = ({ finalData, isValidating }: any) => {
                 </Slider>
               </article>
             ) : (
-              <div className="w-full items-center grid grid-cols-5 gap-5 place-items-center">
-                {
-                  finalData?.map((item: any, i: number) => (
-                    <ProductCard item={item} key={i} />
-                  ))
-                }
-              </div>
+              <>
+                <article className="w-full lg:hidden block category-slick-slider industry-slider">
+                  <Slider ref={navigationRef} {...settings}>
+                    {finalData?.map((curEle: any, index: number) => {
+                      return (
+                        <article
+                          className="mx-auto !flex items-center px-2 pb-4 pt-5"
+                          key={index}
+                        >
+                          <ProductCard item={curEle} key={curEle.id} />
+                        </article>
+                      );
+                    })}
+                  </Slider>
+                </article>
+                <div className="w-full items-center lg:grid hidden grid-cols-5 gap-5 place-items-center">
+                  {
+                    finalData?.map((item: any, i: number) => (
+                      <ProductCard item={item} key={i} />
+                    ))
+                  }
+                </div>
+              </>
+
             )
         }
 

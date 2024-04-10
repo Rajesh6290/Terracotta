@@ -68,7 +68,7 @@ const HeroSection = () => {
           <p className=" uppercase md:text-7xl text-lg font-bold text-white tracking-wide">
             Terracotta Craft
           </p>
-          <p className="  text-justify md:text-xl text-xs  font-medium md:w-[40%] w-full text-white tracking-wide">
+          <p className="  text-justify md:text-xl text-xs  font-medium lg:w-[40%] w-full text-white tracking-wide">
             {` "We are a leading manufacturer and exporter of clay and ceramic
             products based in Balasore, Odisha, India (756042). Our diverse
             range includes health-conscious clay cookware, crafted without any

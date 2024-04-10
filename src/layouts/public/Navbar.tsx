@@ -1,16 +1,12 @@
+import useAuth from "@/hooks/useAuth";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { AiOutlineHeart } from "react-icons/ai";
 import { FaRegUser } from "react-icons/fa6";
 import { IoCall, IoSearchSharp } from "react-icons/io5";
 import { MdClose, MdOutlineShoppingCart } from "react-icons/md";
 import MobileNavbar from "./MobileNavbar";
-import { Collapse, Drawer } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import useAppContext from "@/context";
-import LoginForm from "@/components/form/loginForm";
-import RegisterForm from "@/components/form/RegisterForm";
-import useAuth from "@/hooks/useAuth";
 interface IProduct {
   id: string;
   image: string;
@@ -89,11 +85,8 @@ const Navbar = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [filterProduct, setFilterProduct] = useState<IProduct[]>([]);
-  const [loginOpen, setLoginOpen] = useState(false);
-  const [registerOpen, setRegisterOpen] = useState(false);
   const router = useRouter();
   const { user } = useAuth()
-  const { isLogin } = useAppContext();
   const handelSearch = (data: string) => {
     setSearchText(data);
     const filterData = PRODUCT_ARR?.filter((item) =>
@@ -121,8 +114,6 @@ const Navbar = () => {
   }, []);
   return (
     <>
-      <LoginForm open={loginOpen} setOpen={() => setLoginOpen(false)} setRegisterOpen={setRegisterOpen} />
-      <RegisterForm open={registerOpen} setOpen={() => setRegisterOpen(false)} />
       <nav className="w-full h-fit bg-gray-50 flex flex-col sticky top-0 z-[999]">
         <div className=" xl:block hidden flex    gap-2  flex-col w-full">
           <div className="w-full bg-gradient-to-bl from-rose-400 to-orange-600">
@@ -183,22 +174,11 @@ const Navbar = () => {
                   </p>
                   <AiOutlineHeart className="text-gray-600 text-xl " />
                 </Link>
-                <div onClick={() => {
-                  if (isLogin) {
-                    if (user?.role === "ADMIN") {
-                      router?.push("/admin")
-                    } else {
-
-                      router.push('/my-account');
-                    }
-                  } else {
-                    setLoginOpen(true);
-                  }
-                }}
+                <Link href={!user?._id ? `/login` : user?.role === "ADMIN" ? `/admin` : `/my-account`}
                   className="w-11 h-11 bg-slate-100 cursor-pointer rounded-full flex items-center justify-center"
                 >
                   <FaRegUser className="text-gray-600 text-lg " />
-                </div>
+                </Link>
                 <Link
                   href="/contact"
                   className="flex shake items-center gap-2 shake py-2 px-3 rounded-lg bg-primary  shadow-md shadow-primary/70 cursor-pointer"
