@@ -111,8 +111,8 @@ const ReviewAndRating = ({ productId, rating, mutate }: { productId: string; rat
               }} className=" absolute top-1 right-0 w-16 h-16 bg-black rounded-md bg-opacity-70 cursor-pointer lg:hidden flex items-center justify-center text-white font-semibold tracking-wide text-xs ">View</span>
             }
             {
-              finalImages?.slice(0, 2)?.map((item: string) => (
-                <div className="w-full h-fit p-2 rounded-lg flex border items-center justify-center">
+              finalImages?.slice(0, 2)?.map((item: string, i: number) => (
+                <div key={i} className="w-full h-fit p-2 rounded-lg flex border items-center justify-center">
                   <img src={item} className="w-full h-full object-fill" alt="" />
                 </div>
               ))
@@ -126,8 +126,8 @@ const ReviewAndRating = ({ productId, rating, mutate }: { productId: string; rat
               }} className=" absolute top-1 right-0 w-20 h-20 bg-black rounded-md bg-opacity-70 cursor-pointer hidden lg:flex items-center justify-center text-white font-semibold tracking-wide text-xs ">View</span>
             }
             {
-              finalImages?.slice(0, 6)?.map((item: string) => (
-                <div className="w-full h-fit p-2 rounded-lg flex border items-center justify-center">
+              finalImages?.slice(0, 6)?.map((item: string, i: number) => (
+                <div key={i} className="w-full h-fit p-2 rounded-lg flex border items-center justify-center">
                   <img src={item} className="w-full h-full object-fill" alt="" />
                 </div>
               ))
@@ -281,8 +281,8 @@ const AllImages = ({ open, close, item }: any) => {
         <p className="text-xl font-medium text-gray-800">Review All Images</p>
         <div className="w-full grid grid-cols-4 gap-5 items-center">
           {
-            item?.map((pre: any) => (
-              <div className="w-full h-14 rounded-lg border flex items-center justify-center p-2">
+            item?.map((pre: any, i: number) => (
+              <div key={i} className="w-full h-14 rounded-lg border flex items-center justify-center p-2">
 
                 <img src={pre?.imageUrl} className="w-full h-full object-fill" alt="" />
               </div>
@@ -304,8 +304,8 @@ const ImagesAll = ({ open, close, item }: any) => {
         <p className="text-xl font-medium text-gray-800">Review All Images</p>
         <div className="w-full grid grid-cols-4 gap-5 items-center">
           {
-            item?.map((pre: any) => (
-              <div className="w-full h-20 rounded-lg border flex items-center justify-center p-2">
+            item?.map((pre: any, i: number) => (
+              <div key={i} className="w-full h-20 rounded-lg border flex items-center justify-center p-2">
 
                 <img src={pre} className="w-full h-full object-fill" alt="" />
               </div>
