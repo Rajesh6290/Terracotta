@@ -3,6 +3,8 @@ import LoginForm from "@/components/form/loginForm";
 import RegisterForm from "@/components/form/RegisterForm";
 import useAppContext from "@/context";
 import useAuth from "@/hooks/useAuth";
+import useMutation from "@/hooks/useMutation";
+import useSwr from "@/hooks/useSwr";
 import { Collapse, Drawer } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -16,133 +18,105 @@ import { MdClose, MdContacts } from "react-icons/md";
 import { PiUserFill } from "react-icons/pi";
 import { RiMenu3Fill } from "react-icons/ri";
 import { TbLogout2, TbSitemap } from "react-icons/tb";
-export const MENU_ARR = [
-  {
-    id: "1",
-    name: "Home",
-    path: "/",
-    haveList: false,
-    icon: <FaHome className=" text-3xl text-orange-500/40" />,
-  },
-  {
-    id: "2",
-    name: "All Category",
-    haveList: true,
-    path: "/category",
-    icon: <TbSitemap className=" text-3xl text-orange-500/40" />,
-    list: [
-      {
-        id: 1,
-        name: "Imaging",
-        image: "/asset/category/imaging.png",
-        path: "/category",
-      },
-      {
-        id: 2,
-        name: "Laboratory",
-        image: "/asset/category/laboratory.png",
-        path: "/category",
-      },
-      {
-        id: 3,
-        name: "Surgery",
-        image: "/asset/category/surgery-room.png",
-        path: "/category",
-      },
-      {
-        id: 4,
-        name: "Monitoring",
-        image: "/asset/category/monitoring.png",
-        path: "/category",
-      },
-      {
-        id: 5,
-        name: "Respiratory",
-        image: "/asset/category/respiratory.png",
-        path: "/category",
-      },
-      {
-        id: 6,
-        name: "Dental",
-        image: "/asset/category/dental.png",
-        path: "/category",
-      },
-      {
-        id: 7,
-        name: "Cardiology",
-        image: "/asset/category/cardiology.png",
-        path: "/category",
-      },
-      {
-        id: 8,
-        name: "Rehabilitation",
-        image: "/asset/category/regabiliatition.png",
-        path: "/category",
-      },
-      {
-        id: 9,
-        name: "Emergency",
-        image: "/asset/category/emergency.png",
-        path: "/category",
-      },
-      {
-        id: 10,
-        name: "Orthopedics",
-        image: "/asset/category/joint.png",
-        path: "/category",
-      },
-    ],
-  },
-  {
-    id: "3",
-    name: "Products",
-    path: "/products",
-    haveList: false,
-    icon: <BsFillHandbagFill className=" text-3xl text-orange-500/40" />,
-  },
-  {
-    id: "4",
-    name: "About Us",
-    haveList: false,
-    icon: <FaUserTie className=" text-3xl text-orange-500/40" />,
-    path: "/",
-  },
-  {
-    id: "5",
-    name: "Contact Us",
-    haveList: false,
-    icon: <MdContacts className=" text-3xl text-orange-500/40" />,
-    path: "/contact",
-  },
+import { toast } from "react-toastify";
 
-  {
-    id: "7",
-    name: "My Wishlist",
-    haveList: false,
-    icon: <MdContacts className=" text-3xl text-orange-500/40" />,
-    path: "/wishlist",
-  },
-  {
-    id: "8",
-    name: "My Account",
-    haveList: false,
-    icon: <PiUserFill className=" text-3xl text-orange-500/40" />,
-    path: "/my-account",
-  },
-  {
-    id: "9",
-    name: "SignIn",
-    haveList: false,
-    icon: <FaSignInAlt className=" text-3xl text-orange-500/40" />,
-    path: "/login",
-  },
-];
 const MobileNavbar = () => {
-  const { user } = useAuth()
+  const { user, logout } = useAuth()
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
+  const { data } = useSwr(`category`);
+  const { mutation } = useMutation()
+  const item = data?.data?.data
+  const MENU_ARR = [
+    {
+      id: "1",
+      name: "Home",
+      path: "/",
+      haveList: false,
+      icon: <FaHome className=" text-3xl text-orange-500/40" />,
+    },
+    {
+      id: "2",
+      name: "All Category",
+      haveList: true,
+      path: "/category",
+      icon: <TbSitemap className=" text-3xl text-orange-500/40" />,
+      list: item && item?.length > 0 ?
+        item?.map((pre: any) => {
+          return {
+            id: String(pre._id),
+            name: pre.name,
+            image: pre?.imageUrl,
+            path: `/products?category=${pre?.name}`,
+
+          }
+        }) : [],
+    },
+    {
+      id: "3",
+      name: "Products",
+      path: "/products",
+      haveList: false,
+      icon: <BsFillHandbagFill className=" text-3xl text-orange-500/40" />,
+    },
+    {
+      id: "4",
+      name: "About Us",
+      haveList: false,
+      icon: <FaUserTie className=" text-3xl text-orange-500/40" />,
+      path: "/",
+    },
+    {
+      id: "5",
+      name: "Contact Us",
+      haveList: false,
+      icon: <MdContacts className=" text-3xl text-orange-500/40" />,
+      path: "/contact",
+    },
+
+    {
+      id: "7",
+      name: "My Wishlist",
+      haveList: false,
+      icon: <MdContacts className=" text-3xl text-orange-500/40" />,
+      path: "/wishlist",
+    },
+    ...(user?._id ? [{
+      id: "8",
+      name: "My Account",
+      haveList: false,
+      icon: <PiUserFill className=" text-3xl text-orange-500/40" />,
+      path: "/my-account",
+    }] : [
+      {
+        id: "9",
+        name: "SignIn",
+        haveList: false,
+        icon: <FaSignInAlt className=" text-3xl text-orange-500/40" />,
+        path: "/login",
+      }
+    ]),
+
+  ];
   const router = useRouter();
+  const handleLogout = async () => {
+    const res = await mutation("customer/update", {
+      method: "PUT",
+      isAlert: true,
+      body: {
+        isOnline: false,
+      },
+    });
+    if (res?.status === 200) {
+      router.push("/");
+      toast.success("Logout Successful");
+      logout();
+    } else {
+      toast.error(res?.results?.msg);
+    }
+  };
+
   return (
     <>
       <section className="block xl:hidden main-container py-4  bg-gradient-to-bl from-rose-400 to-orange-600 text-white">
@@ -241,7 +215,7 @@ const MobileNavbar = () => {
                     icon={item?.icon}
                   >
                     <div className=" w-full flex flex-col gap-2 ">
-                      {item?.list?.map((data) => (
+                      {item?.list?.map((data: any) => (
                         <div
                           onClick={() => router.push(data?.path)}
                           key={data?.id}
@@ -274,24 +248,28 @@ const MobileNavbar = () => {
             </div>
           </div>
           <div className=" w-full  h-fit bg-gradient-to-bl from-rose-400 to-orange-600 flex items-center">
-            <div className=" w-full  py-5 px-3 flex items-center justify-between gap-5">
-              <div className="flex items-center gap-4">
-                <img
-                  src="/asset/house.png"
-                  className=" w-12 h-12 rounded-lg object-contain"
-                  alt=""
-                />
-                <p className=" flex flex-col">
-                  <span className=" text-lg md:text-2xl font-bold text-white">
-                    Rajesh Kumar Behera
-                  </span>
-                  <span className=" text-sm md:text-xl text-white">
-                    beherarabi881@gmail.com
-                  </span>
-                </p>
+            {
+              user?._id &&
+
+              <div className=" w-full  py-5 px-3 flex items-center justify-between gap-5">
+                <div className="flex items-center gap-4">
+                  <img
+                    src={user?.image}
+                    className=" w-12 h-12 rounded-lg object-contain"
+                    alt=""
+                  />
+                  <p className=" flex flex-col">
+                    <span className=" text-lg md:text-2xl font-bold text-white">
+                      {user?.name}
+                    </span>
+                    <span className=" text-sm md:text-xl text-white">
+                      {user?.email}
+                    </span>
+                  </p>
+                </div>
+                <TbLogout2 onClick={() => handleLogout()} className=" text-3xl md:text-5xl cursor-pointer text-white" />
               </div>
-              <TbLogout2 className=" text-3xl md:text-5xl cursor-pointer text-white" />
-            </div>
+            }
           </div>
         </div>
       </Drawer>

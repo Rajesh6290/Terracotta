@@ -23,11 +23,10 @@ const MenuCollapse: React.FC<AccordionProps> = ({ title, children, icon }) => {
       >
         <div
           className={`w-full p-5 common-transition  capitalize font-semibold tracking-wide flex items-center justify-between
-        ${
-          isOpen
-            ? " bg-primary/6  0 bg-opacity-70 text-gray-700 rounded-t-xl"
-            : "text-gray-600 rounded-xl  bg-white shadow-[0px_0px_6px_0px_#00000024] hover:bg-orange-500/10 "
-        }
+        ${isOpen
+              ? " text-gray-600 rounded-t-xl  bg-white shadow-[0px_0px_6px_0px_#00000024] hover:bg-orange-500/10 "
+              : "text-gray-600 rounded-xl  bg-white shadow-[0px_0px_6px_0px_#00000024] hover:bg-orange-500/10 "
+            }
         `}
         >
           <div className=" flex items-center gap-5">
@@ -42,9 +41,8 @@ const MenuCollapse: React.FC<AccordionProps> = ({ title, children, icon }) => {
           )}
         </div>
         <div
-          className={`animate-collapse grid common-transition ease-in-out ${
-            isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr] "
-          }`}
+          className={`animate-collapse grid common-transition ease-in-out ${isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr] "
+            }`}
         >
           <div className="overflow-hidden description text-sm md:text-base">
             <Link href="">
