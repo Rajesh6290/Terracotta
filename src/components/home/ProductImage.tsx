@@ -93,7 +93,7 @@ const Category = () => {
             </>
           ) :
             item?.length > 5 ?
-              <div className="w-full category-slick-slider industry-slider pt-8 lg:pt-16">
+              <div className="w-full category-slick-slider industry-slider pt-8 lg:pt-16 overflow-hidden">
                 <Slider {...settings}>
                   {item?.map((curElm: any, index: number) => (
                     <article className="mx-auto !flex items-center px-2 " key={index}>
