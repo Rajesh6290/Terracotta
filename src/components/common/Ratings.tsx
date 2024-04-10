@@ -7,7 +7,7 @@ import CustomInputField from '../core/CustomInputField';
 import { Formik, Form, Field, FieldProps, FormikProps, FormikHelpers } from 'formik';
 import useMutation from '@/hooks/useMutation';
 import { toast } from 'react-toastify';
-const Ratings = ({ open, close, productId }: { open: boolean; close: Dispatch<SetStateAction<boolean>>; productId: string }) => {
+const Ratings = ({ open, close, productId, mutate }: { open: boolean; close: Dispatch<SetStateAction<boolean>>; productId: string; mutate: () => void }) => {
     const [value, setValue] = useState<number | null>(3);
     const { mutation, isLoading } = useMutation()
     const [files, setFiles] = useState<File[]>([]);
@@ -120,6 +120,7 @@ const Ratings = ({ open, close, productId }: { open: boolean; close: Dispatch<Se
                 isAlert: true,
             })
             if (res?.status === 200) {
+                mutate()
                 resetForm();
                 toast.success(res?.results?.msg)
                 close(false)
@@ -130,6 +131,8 @@ const Ratings = ({ open, close, productId }: { open: boolean; close: Dispatch<Se
             }
         } catch (error) {
             console.log(error)
+        } finally {
+            mutate()
         }
     }
     return (

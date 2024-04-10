@@ -15,7 +15,7 @@ import { RiRefund2Line } from "react-icons/ri";
 import Slider from "react-slick";
 import ReviewAndRating from "./ReviewRatings";
 
-const CustomerProductDetails = ({ item, isValidating }: any) => {
+const CustomerProductDetails = ({ item, isValidating, mutate }: any) => {
   console.log(item)
   const router = useRouter();
 
@@ -330,7 +330,7 @@ const CustomerProductDetails = ({ item, isValidating }: any) => {
 
             </div>
 
-            <ReviewAndRating productId={item?._id} rating={item} />
+            <ReviewAndRating productId={item?._id} rating={item} mutate={mutate} />
           </div>
         </article>
       </div>

@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import ExpandText from "../common/ExpandText";
 import Ratings from "../common/Ratings";
 
-const ReviewAndRating = ({ productId, rating }: { productId: string; rating: any }) => {
+const ReviewAndRating = ({ productId, rating, mutate }: { productId: string; rating: any; mutate: () => void }) => {
   const [open, setOpen] = useState(false)
   const { user } = useAuth()
   const IMAGE_ARR = [
@@ -144,7 +144,7 @@ const ReviewAndRating = ({ productId, rating }: { productId: string; rating: any
 
   return (
     <>
-      <Ratings open={open} close={() => setOpen(false)} productId={productId} />
+      <Ratings open={open} close={() => setOpen(false)} productId={productId} mutate={mutate} />
       <div
         id="ReviewAndRating"
         className="w-full h-full border flex flex-col gap-5 rounded-md"
