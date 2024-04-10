@@ -1,5 +1,6 @@
 
 import ExpandTitle from "@/components/common/ExpandTitle";
+import Ratings from "@/components/common/Ratings";
 import { PublicLayout } from "@/layouts";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -194,56 +195,8 @@ const Orders = () => {
                         })}
 
                         {/* Rating modals */}
-                        {ratingOpen && (
-                            <div
 
-                                className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-80 z-[9999]">
-                                <div className="p-4 rounded-md  w-[25rem] h-fit  relative">
-                                    <p
-                                        onClick={() => setRatingOpen(!ratingOpen)}
-                                        className=" absolute md:-top-3 -top-8 md:-right-7 -right-0 cursor-pointer "
-                                    >
-                                        <FaX className=" font-bold p-2 rounded-full border-2 border-white text-white text-4xl" />
-                                    </p>
-                                    <div className=" w-full h-full bg-white   rounded-lg gap-4 flex flex-col overflow-y-auto scroll p-6">
-                                        <p className=" text-gray-500 font-light ">
-                                            Required fields are marked{" "}
-                                            <span className=" text-red-600">*</span>{" "}
-                                        </p>
-
-                                        <p className=" text-gray-500 font-light ">
-                                            Your rating <span className=" text-red-600">*</span>{" "}
-                                        </p>
-
-                                        <form action="" className="flex flex-col gap-3">
-                                            <div className="relative">
-                                                <input
-                                                    type="text"
-                                                    id="floating_outlined"
-                                                    className="block p-4  w-full ring-1 ring-gray-400 rounded text-gray-900 bg-transparent appearance-none  focus:outline-none   peer"
-                                                    placeholder=" "
-                                                />
-                                                <label
-                                                    htmlFor="floating_outlined"
-                                                    className="absolute text-sm text-gray-500  duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-125 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-90 peer-focus:-translate-y-4 left-1"
-                                                >
-                                                    Title
-                                                </label>
-                                            </div>
-                                            <textarea
-                                                rows={4}
-                                                cols={0}
-                                                placeholder={"Your Review"}
-                                                className=" outline-none ring-1 rounded ring-gray-400 p-4"
-                                            />
-                                            <button className=" w-full bg-primary text-center text-white rounded-md p-3">
-                                                SUBMIT
-                                            </button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
+                        <Ratings open={ratingOpen} close={() => setRatingOpen(false)} />
                     </div>
                 </main>
             </section>

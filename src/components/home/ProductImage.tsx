@@ -136,7 +136,7 @@ const CategoryCard = ({ item, index }: { item: any; index: number }) => {
             className=" group-hover:scale-110 duration-500 w-36 h-36 rounded-lg object-contain"
             alt=""
           />
-          <p className=" uppercase font-semibold text-gray-800">{item.name}</p>
+          <p className=" uppercase font-semibold text-gray-800 flex w-full items-center justify-center">{item.name}</p>
         </div>
       </div>
     </motion.div>

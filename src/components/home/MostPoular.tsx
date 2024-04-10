@@ -3,7 +3,7 @@ import Link from "next/link";
 import ProductCard from "./ProductCard";
 
 const MostPopular = () => {
-  const { data, isValidating } = useSwr(`product`);
+  const { data, isValidating } = useSwr(`product?sortBy=desc`);
   const item = data?.data?.data;
   return (
     <section className=" bg-slate-50  w-full top-spacing py-10">

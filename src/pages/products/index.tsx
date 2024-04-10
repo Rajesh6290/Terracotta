@@ -2,11 +2,9 @@ import CustomInputField from "@/components/core/CustomInputField";
 import { AllProducts, SideMenu } from "@/components/products";
 import useSwr from "@/hooks/useSwr";
 import { PublicLayout } from "@/layouts";
-import { useRouter } from "next/router";
-import React, { useState } from "react";
+import { useState } from "react";
 
 const Products = () => {
-  const router = useRouter()
   const [sort, setSort] = useState<string>("desc")
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [category, setCategory] = useState<string>("");
@@ -21,7 +19,6 @@ const Products = () => {
   maxPrice && (url += `&maxPrice=${Number(maxPrice)}`)
 
   const { data, isValidating, pagination } = useSwr(url, { revalidateOnFocus: true });
-  console.log(data)
   return (
     <PublicLayout title="Products | Terracotta Craft">
       <section className="bg-slate-100">

@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import useAppContext from "@/context";
 import LoginForm from "@/components/form/loginForm";
 import RegisterForm from "@/components/form/RegisterForm";
+import useAuth from "@/hooks/useAuth";
 interface IProduct {
   id: string;
   image: string;
@@ -91,6 +92,7 @@ const Navbar = () => {
   const [loginOpen, setLoginOpen] = useState(false);
   const [registerOpen, setRegisterOpen] = useState(false);
   const router = useRouter();
+  const { user } = useAuth()
   const { isLogin } = useAppContext();
   const handelSearch = (data: string) => {
     setSearchText(data);
@@ -183,7 +185,12 @@ const Navbar = () => {
                 </Link>
                 <div onClick={() => {
                   if (isLogin) {
-                    router.push('/my-account');
+                    if (user?.role === "ADMIN") {
+                      router?.push("/admin")
+                    } else {
+
+                      router.push('/my-account');
+                    }
                   } else {
                     setLoginOpen(true);
                   }

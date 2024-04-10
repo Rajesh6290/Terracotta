@@ -16,6 +16,7 @@ import Slider from "react-slick";
 import ReviewAndRating from "./ReviewRatings";
 
 const CustomerProductDetails = ({ item, isValidating }: any) => {
+  console.log(item)
   const router = useRouter();
 
   var settings = {
@@ -225,42 +226,17 @@ const CustomerProductDetails = ({ item, isValidating }: any) => {
               }
             </div>
             <div className="flex gap-20 font-semibold  items-center">
-              <p>
+              <div>
                 Color:{"  "}
                 {
                   isValidating ? <p className="w-32 p-2 rounded bg-slate-200 animate-pulse"></p> : <span className=" uppercase">{item?.color}</span>
                 }
 
-              </p>
+              </div>
               {/* <span>See All Availbale Colors</span> */}
             </div>
-            {/* <div className="flex flex-wrap gap-3 items-center">
-              {parentProduct?.variants?.map((item: any, index: number) => {
-                return (
-                  <p
-                    key={index}
-                    onClick={() => handleChangeVariantId(item?.id)}
-                    className={`py-2  capitalize cursor-pointer  px-3 text-sm rounded-xl hover:text-primary text-black font-semibold border-2
-                   ${
-                     router?.query?.variantId === item?.id
-                       ? "border-cyan-500"
-                       : ""
-                   }
-                    `}
-                  >
-                    {item?.color}
-                  </p>
-                );
-              })}
-            </div> */}
-            {/* <div className="flex gap-3 items-center flex-wrap">
-              <span className="font-semibold">Size :</span>
-              <p className="flex gap-5 items-center flex-wrap"></p>
 
-              <span className="py-2 uppercase cursor-pointer px-3 text-sm rounded font-semibold border">
-                XL
-              </span>
-            </div> */}
+
             <div className="flex items-end gap-5 py-2">
               <div className="flex items-center gap-5">
                 <button
@@ -289,19 +265,6 @@ const CustomerProductDetails = ({ item, isValidating }: any) => {
               </div>
 
               <Link
-                href={`/cart`}
-                className=" cursor-pointer font-semibold border border-primary text-primary rounded-full px-5 py-2 relative overflow-hidden group"
-              >
-                <span className="absolute top-0 -left-36 flex items-center justify-center bg-black group-hover:left-0 duration-500 z-50 w-full h-full rounded-full">
-                  <FaArrowRight className=" text-white text-xl font-bold" />
-                </span>
-                Go to Cart
-              </Link>
-
-
-            </div>
-            <p className="flex items-center gap-3">
-              <Link
                 href={`/checkout?productId=#`}
                 className="rounded-full py-2 md:px-10 px-5 overflow-hidden relative group cursor-pointer border-2 font-medium bg-primary text-white"
               >
@@ -310,7 +273,10 @@ const CustomerProductDetails = ({ item, isValidating }: any) => {
                   Buy Now
                 </span>
               </Link>
-            </p>
+
+
+            </div>
+
             <div className=" grid grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 items-center gap-3 py-2">
               <p className="flex flex-col gap-1 p-4 rounded-2xl bg-red-50">
                 <span>
@@ -359,56 +325,12 @@ const CustomerProductDetails = ({ item, isValidating }: any) => {
                       {item?.description}
                     </span>
                 }
-                {/* <span className="flex flex-col gap-2">
-                  <h3 className="flex items-center gap-3">
-                    <p className="p-[0.2rem] bg-gray-400 rounded-full"></p>
-                    <p className="text-sm">Round Neck</p>
-                  </h3>
-                  <h3 className="flex items-center gap-3">
-                    <p className="p-[0.2rem] bg-gray-400 rounded-full"></p>
-                    <p className="text-sm">All RBCPON SKY-One</p>
-                  </h3>
-                  <h3 className="flex items-center gap-3">
-                    <p className="p-[0.2rem] bg-gray-400 rounded-full"></p>
-                    <p className="text-sm">Full Sleeve</p>
-                  </h3>
-                </span> */}
+
               </div>
-              {/* <span className="flex gap-10 w-full items-start">
-                <h2 className="text-sm font-semibold text-gray-500">Seller</h2>
-                <span className="flex flex-col gap-2">
-                  <h3 className=" text-blue-500 uppercase font-semibold">
-                    Printbrix Howrah Online
-                  </h3>
-                  <h3 className="flex items-center gap-3">
-                    <p className="p-[0.2rem] bg-gray-400 rounded-full"></p>
-                    <p className="text-sm">No Returns Applicable</p>
-                  </h3>
-                  <h3 className="flex items-center gap-3">
-                    <p className="p-[0.2rem] bg-gray-400 rounded-full"></p>
-                    <p className="text-sm">GST invoice available</p>
-                  </h3>
-                </span>
-              </span> */}
+
             </div>
-            {/* <p className=" w-full flex md:flex-row flex-col items- start md:gap-10 gap-2 justify-start">
-              <span className="text-sm font-semibold text-gray-500 ">
-                Description
-              </span>
-              <span className="text-sm text-justify">
-                This Apple Macbook is powered by the Apple M1 chip and is easily
-                portable so that you can carry it with you anywhere you want.
-                This thin and light notebook is equipped with an 8-core CPU to
-                handle all your tasks more efficiently. The 8-core GPU of this
-                notebook takes graphic-intensive games and apps to a whole new
-                level. It also comes with a 16-core Neural Engine to do machine
-                learning tasks more effectively. Its fan-less design offers
-                silent operations and has a long-lasting battery life which can
-                last up to 18 hours on a single charge.
-              </span>
-            </p> */}
-            {/* <ProductSpecification/> */}
-            <ReviewAndRating />
+
+            <ReviewAndRating productId={item?._id} rating={item} />
           </div>
         </article>
       </div>
