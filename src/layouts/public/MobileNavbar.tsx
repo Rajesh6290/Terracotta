@@ -231,7 +231,7 @@ const MobileNavbar = () => {
               <RiMenu3Fill className="  text-2xl md:text-3xl   text-orange-500/50 cursor-pointer" />
             </p>
           </div>
-          <div className="w-full h-fit overflow-y-auto ">
+          <div className="w-full h-full overflow-y-auto ">
             <div className=" w-full h-full flex flex-col gap-3 py-3 px-5">
               {MENU_ARR.map((item) =>
                 item?.haveList ? (
