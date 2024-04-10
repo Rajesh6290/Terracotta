@@ -176,7 +176,7 @@ const ReviewAndRating = ({ productId, rating, mutate }: { productId: string; rat
                       setAllImages(item?.images)
                     }} className=" absolute top-1 right-0 w-14 h-14 bg-black rounded-md bg-opacity-70 cursor-pointer hidden lg:flex items-center justify-center text-white font-semibold tracking-wide text-xs ">View</span>
                   }
-                  {item?.images?.map((imgItem: any) => {
+                  {item?.images?.slice(0, 12)?.map((imgItem: any) => {
                     return (
                       <img
                         key={imgItem._id}
