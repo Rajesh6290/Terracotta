@@ -74,7 +74,7 @@ const LoginForm = () => {
                 <div className='w-[50%] h-full py-3 lg:flex hidden  items-center justify-center'>
                     <img src="/login.svg" className='w-full h-full object-fill' alt="" />
                 </div>
-                <div className='lg:w-[50%] w-full h-full '>
+                <div className='lg:w-[50%] w-full h-full flex items-center justify-center '>
                     <Formik
                         initialValues={{
                             emailOrUsername: "",
@@ -85,7 +85,7 @@ const LoginForm = () => {
                         onSubmit={handleFormSubmit}
                     >
                         {({ errors, touched }) => (
-                            <Form className='bg-white rounded-2xl shadow-[0px_0px_4px_1px_#00000024] w-full h-full flex flex-col justify-between gap-1 md:p-10 p-5'>
+                            <Form className='bg-white rounded-2xl shadow-[0px_0px_4px_1px_#00000024] w-full md:h-full h-fit flex flex-col md:justify-between justify-center gap-5 md:p-10 p-5'>
                                 <img src="/logo.png" className='w-72 h-fit' alt="" />
                                 <div className='flex flex-col gap-1'>
                                     <p className='text-gray-600 md:block hidden text-3xl font-bold'>Welcome back...</p>
