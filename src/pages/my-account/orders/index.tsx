@@ -196,7 +196,7 @@ const Orders = () => {
 
                         {/* Rating modals */}
 
-                        <Ratings open={ratingOpen} close={() => setRatingOpen(false)} />
+                        {/* <Ratings open={ratingOpen} close={() => setRatingOpen(false)} /> */}
                     </div>
                 </main>
             </section>
