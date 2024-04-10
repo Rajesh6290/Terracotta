@@ -15,12 +15,12 @@ const AdminProtected = (PassedComponent: any) =>
                 if (!user?._id) {
                     push("/");
                     logout();
-                    setIsLogin()
+                    setIsLogin(false)
                 }
                 if (user?.role !== "ADMIN") {
                     push("/");
                     logout();
-                    setIsLogin()
+                    setIsLogin(false)
                 }
             }
 

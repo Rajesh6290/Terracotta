@@ -49,8 +49,6 @@ const LoginForm = ({ open, setOpen, setRegisterOpen }: { open: boolean; setOpen:
                 toast.success(res?.results?.msg);
                 if (res?.results?._id) {
                     setIsLogin(true);
-                } else {
-                    setIsLogin(false);
                 }
                 if (res?.results?.role === "USER") {
                     router.push("/");

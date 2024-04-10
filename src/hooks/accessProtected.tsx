@@ -15,7 +15,7 @@ const AccessProtected = (PassedComponent: any) =>
                 if (!user?._id) {
                     push("/");
                     logout();
-                    setIsLogin()
+                    setIsLogin(false)
                 }
             }
 
