@@ -85,7 +85,7 @@ const LoginForm = () => {
                         onSubmit={handleFormSubmit}
                     >
                         {({ errors, touched }) => (
-                            <Form className='bg-white rounded-2xl shadow-[0px_0px_4px_1px_#00000024] w-full h-full flex flex-col justify-between gap-5 md:p-10 p-5'>
+                            <Form className='bg-white rounded-2xl shadow-[0px_0px_4px_1px_#00000024] w-full h-full flex flex-col justify-between gap-1 md:p-10 p-5'>
                                 <img src="/logo.png" className='w-72 h-fit' alt="" />
                                 <div className='flex flex-col gap-1'>
                                     <p className='text-gray-600 md:block hidden text-3xl font-bold'>Welcome back...</p>
