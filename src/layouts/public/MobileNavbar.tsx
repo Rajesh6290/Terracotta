@@ -2,6 +2,7 @@ import MenuCollapse from "@/components/common/MenuCollapse";
 import LoginForm from "@/components/form/loginForm";
 import RegisterForm from "@/components/form/RegisterForm";
 import useAppContext from "@/context";
+import useAuth from "@/hooks/useAuth";
 import { Collapse, Drawer } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -137,17 +138,13 @@ export const MENU_ARR = [
   },
 ];
 const MobileNavbar = () => {
-  const { isLogin } = useAppContext();
+  const { user } = useAuth()
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
   const router = useRouter();
-  const [loginOpen, setLoginOpen] = useState(false);
-  const [registerOpen, setRegisterOpen] = useState(false);
   return (
     <>
-      <LoginForm open={loginOpen} setOpen={() => setLoginOpen(false)} setRegisterOpen={setRegisterOpen} />
-      <RegisterForm open={registerOpen} setOpen={() => setRegisterOpen(false)} />
       <section className="block xl:hidden main-container py-4  bg-gradient-to-bl from-rose-400 to-orange-600 text-white">
         <div className="flex justify-between items-center">
           <div className=" flex gap-5 items-center">
@@ -181,17 +178,11 @@ const MobileNavbar = () => {
                 <HiOutlineShoppingCart className=" text-2xl  text-orange-500/50 cursor-pointer" />
               </p>
             </Link>
-            <div onClick={() => {
-              if (isLogin) {
-                router.push('/my-account');
-              } else {
-                setLoginOpen(true);
-              }
-            }} >
+            <Link href={!user?._id ? `/login` : user?.role === "ADMIN" ? `/admin` : `/my-account`}  >
               <p className=" w-10 h-10 rounded-lg duration-300 bg-white cursor-pointer p-1 flex items-center justify-center">
                 <AiOutlineUser className="  text-2xl  text-orange-500/50 cursor-pointer" />
               </p>
-            </div>
+            </Link>
           </div>
         </div>
 
@@ -226,8 +217,8 @@ const MobileNavbar = () => {
         )}
       </section>
       <Drawer open={open} onClose={() => setOpen(false)} anchor={"left"}>
-        <div className="w-full h-full flex flex-col justify-between">
-          <div className=" w-full h-[10%] justify-between items-center flex bg-gradient-to-bl from-rose-400 to-orange-600 p-4 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
+        <div className="w-full h-full flex flex-col justify-between ">
+          <div className=" w-full h-fit justify-between items-center flex bg-gradient-to-bl from-rose-400 to-orange-600 p-4 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
             <img
               src="/logo1.png"
               className=" w-fit h-10 object-contain"
@@ -240,7 +231,7 @@ const MobileNavbar = () => {
               <RiMenu3Fill className="  text-2xl md:text-3xl   text-orange-500/50 cursor-pointer" />
             </p>
           </div>
-          <div className="w-full h-[80%] overflow-y-auto ">
+          <div className="w-full h-fit overflow-y-auto ">
             <div className=" w-full h-full flex flex-col gap-3 py-3 px-5">
               {MENU_ARR.map((item) =>
                 item?.haveList ? (
@@ -282,7 +273,7 @@ const MobileNavbar = () => {
               )}
             </div>
           </div>
-          <div className=" w-full  h-[10%] bg-gradient-to-bl from-rose-400 to-orange-600 flex items-center">
+          <div className=" w-full  h-fit bg-gradient-to-bl from-rose-400 to-orange-600 flex items-center">
             <div className=" w-full  py-5 px-3 flex items-center justify-between gap-5">
               <div className="flex items-center gap-4">
                 <img
