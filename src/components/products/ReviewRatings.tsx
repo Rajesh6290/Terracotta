@@ -149,7 +149,7 @@ const ReviewAndRating = ({ productId, rating, mutate }: { productId: string; rat
         id="ReviewAndRating"
         className="w-full h-full border flex flex-col gap-5 rounded-md"
       >
-        <p className="px-4 py-2 flex justify-between items-center">
+        <div className="px-4 py-2 flex justify-between items-center">
           <span className="text-xl font-semibold text-gray-800">
             Ratings & Reviews
           </span>
@@ -165,7 +165,7 @@ const ReviewAndRating = ({ productId, rating, mutate }: { productId: string; rat
           >
             Rate Product
           </p>
-        </p>
+        </div>
         <div className="w-full px-4 grid lg:flex grid-cols-2 gap-5 items-center">
           <div className="flex flex-col gap-2 md:w-[30%] items-center ">
             <p className="flex items-center gap-1 text-3xl text-gray-800 font-semibold">
@@ -284,8 +284,26 @@ const ReviewAndRating = ({ productId, rating, mutate }: { productId: string; rat
                   <span className=" font-semibold text-sm">{item.title}</span>
                 </p>
                 <ExpandText text={item.msg} limit={20} />
-                <p className=" flex gap-1 items-center">
-                  {item.images.map((imgItem: any) => {
+                <p className=" flex gap-1 items-center relative md:hidden">
+                  {
+                    item?.images && item?.images?.length > 4 && <span className=" absolute top-1 right-5 w-14 h-14 bg-black rounded-md bg-opacity-70 cursor-pointer md:hidden flex items-center justify-center text-white font-semibold tracking-wide text-xs ">View</span>
+                  }
+
+                  {item?.images?.slice(0, 4)?.map((imgItem: any) => {
+                    return (
+                      <img
+                        key={imgItem._id}
+                        src={imgItem.imageUrl}
+                        className=" w-16 h-16 object-contain p-2 border rounded-md"
+                        alt=""
+                      />
+                    );
+                  })}
+                </p>
+                <p className=" md:flex hidden gap-1 items-center ">
+
+
+                  {item?.images?.map((imgItem: any) => {
                     return (
                       <img
                         key={imgItem._id}

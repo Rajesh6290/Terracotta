@@ -144,12 +144,12 @@ const CustomerProductDetails = ({ item, isValidating, mutate }: any) => {
                       </Slider>
                     </div>
                   ) : (
-                    <div className="w-full grid grid-cols-5 gap-3 justify-center">
+                    <div className="w-full grid grid-cols-5 gap-1 justify-center">
                       {item?.images?.map((item: any, index: number) => (
                         <article
                           key={index}
                           onClick={() => handleActiveImage(index)}
-                          className="mx-auto !flex items-center px-2 pb-4 w-full  "
+                          className="md:mx-auto !flex items-center md:px-2 pb-4 w-full  "
                         >
                           <img
                             src={item?.imageUrl}

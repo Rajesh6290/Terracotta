@@ -140,7 +140,7 @@ const Ratings = ({ open, close, productId, mutate }: { open: boolean; close: Dis
 
 
 
-            <div className="w-[35rem] h-full bg-white gap-2   rounded-lg flex flex-col p-4">
+            <div className="md:w-[35rem] w-full h-full bg-white gap-2   rounded-lg flex flex-col p-4">
                 <p className=' text-xl font-medium text-gray-800'>Ratings And Review</p>
                 <Rating
                     name="simple-controlled"
