@@ -1,14 +1,17 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import Link from "next/link";
 import { PublicLayout } from "@/layouts";
 import { HiMinusSmall, HiMiniPlusSmall } from "react-icons/hi2";
 import { toast } from "react-toastify";
 import useSwr from "@/hooks/useSwr";
 import useMutation from "@/hooks/useMutation";
+import useAuth from "@/hooks/useAuth";
+import { useRouter } from "next/router";
 
 const Cart = () => {
-
-  const { data, isValidating, mutate } = useSwr(`cart`)
+  const { user } = useAuth()
+  const router = useRouter()
+  const { data, isValidating, mutate } = useSwr(!user?._id ? `` : `cart`)
   const item = data?.data?.data
   const amountData = item?.map((data: any) => {
     const totalAmount = data?.product?.price * data?.quantity
@@ -22,6 +25,13 @@ const Cart = () => {
   const totalAmount = amountData?.reduce((sum: any, amount: any) => sum + amount.totalAmount, 0)
   const totalSaleAmount = amountData?.reduce((sum: any, amount: any) => sum + amount.totalSaleAmount, 0);
   const totalDiscount = Math.ceil(((totalAmount - totalSaleAmount) / totalAmount) * 100)
+
+
+  useEffect(() => {
+    if (!user?._id) {
+      router.push('/')
+    }
+  }, [user])
   return (
     <PublicLayout title="Cart | Terracotta Craft">
       <section className="main-container py-10 ">

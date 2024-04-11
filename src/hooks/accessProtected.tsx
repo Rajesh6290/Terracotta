@@ -17,6 +17,16 @@ const AccessProtected = (PassedComponent: any) =>
                     logout();
                     setIsLogin(false)
                 }
+                if (!user?.isOnline) {
+                    push("/");
+                    logout();
+                    setIsLogin(false)
+                }
+                if (user?.isBlocked) {
+                    push("/");
+                    logout();
+                    setIsLogin(false)
+                }
             }
 
 
