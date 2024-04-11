@@ -8,7 +8,7 @@ interface Props {
     animeHight?: number;
     animeWidth?: number;
 }
-const Loader = ({ image, animeHight = 250, animeWidth = 200 }: Props) => {
+const Loader = ({ image, animeHight = 150, animeWidth = 150 }: Props) => {
     const defaultOptions = {
         loop: true,
         autoplay: true,

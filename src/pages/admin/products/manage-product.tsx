@@ -8,7 +8,7 @@ import { MuiTblOptions } from '@/utils'
 import MaterialTable from '@material-table/core'
 import { Pagination, Paper, Switch, Tooltip } from '@mui/material'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useDeferredValue, useState } from 'react'
 import { AiFillEye } from 'react-icons/ai'
 import { BsEye } from 'react-icons/bs'
 import { FaStar } from 'react-icons/fa'
@@ -23,9 +23,13 @@ const ManageProduct = () => {
     const [value, setValue] = useState<any>();
     const [imageOpen, setImageOpen] = useState(false);
     const [pageNumber, setPageNumber] = useState<number>(1);
+    const [searchText, setSearchText] = useState<string>("")
+    const query = useDeferredValue(searchText)
+    let url = `product?sortBy=desc&page=${pageNumber}&limit=10`
+    searchText && (url += `&search=${query}`)
 
 
-    const { data, isValidating, mutate, pagination } = useSwr(`product?sortBy=desc&page=${pageNumber}&limit=10`, { revalidateOnFocus: true });
+    const { data, isValidating, mutate, pagination } = useSwr(url, { revalidateOnFocus: true });
     const UpdateProduct = async (item: any) => {
         try {
             const res = await mutation(`product/${item?.id}`, {
@@ -61,7 +65,7 @@ const ManageProduct = () => {
                 <div className="w-full flex items-center  justify-between">
                     <div className=' relative w-[20rem] flex items-center gap-2 bg-white rounded-md px-3'>
                         <IoMdSearch className='text-gray-400 text-xl ' />
-                        <input type="text" name="searchProduct" placeholder='Search Product...' className=' bg-transparent text-gray-500 font-normal p-2 outline-none placeholder:text-gray-300 w-full placeholder:font-normal placeholder:text-sm' />
+                        <input value={searchText} onChange={(e) => setSearchText(e?.target?.value)} type="text" name="searchProduct" placeholder='Search Product...' className=' bg-transparent text-gray-500 font-normal p-2 outline-none placeholder:text-gray-300 w-full placeholder:font-normal placeholder:text-sm' />
                     </div>
                     <div className='flex items-center gap-4'>
                         <p onClick={() => setView("Card")} className={`text-2xl cursor-pointer text-gray-700 ${view === "Card" ? ` bg-primary/10 p-1 rounded-md text-secondary duration-200 transition-all` : `hover:text-primary`} `}><PiCardsBold /></p>
@@ -322,13 +326,13 @@ const ProductCardView = ({ item, mutate }: { item: any; mutate: () => void }) =>
                 </div>
 
                 <div className=" w-full flex  flex-col gap-4">
-                    <Link href={`/products/${item?._id}`}>
+                    <div>
                         <img
                             src={item?.images[0].imageUrl}
                             className=" w-full object-contain md:h-36 h-24 object-fil rounded-lg cursor-pointer group-hover:scale-105 duration-300 "
                             alt=""
                         />
-                    </Link>
+                    </div>
                     <div className=" flex w-full flex-col gap-2">
                         <div className=" flex md:flex-row flex-col md:items-center items-start justify-between">
                             <p className=" flex items-center  gap-1">
