@@ -1,3 +1,4 @@
+import useSwr from "@/hooks/useSwr";
 import Link from "next/link";
 import React from "react";
 import { BiWorld } from "react-icons/bi";
@@ -14,7 +15,7 @@ import { IoHelpCircleOutline } from "react-icons/io5";
 import { RiRefund2Line } from "react-icons/ri";
 
 const Footer = () => {
-  // const { data, mutate, isValidating } = useSwr("categories");
+  const { data, mutate, isValidating } = useSwr("category");
   const QUICKLINKS = [
     {
       id: "4",
@@ -40,17 +41,6 @@ const Footer = () => {
           name: "Testimonials",
           link: "/#testimonial",
         },
-
-        // {
-        //   id: 5,
-        //   name: "Order in Bulk",
-        //   link: "/products",
-        // },
-        // {
-        //   id: 6,
-        //   name: "Create a Pack",
-        //   link: "/products",
-        // },
       ],
     },
   ];
@@ -95,7 +85,7 @@ const Footer = () => {
   return (
     <footer className="bg-gray-900 pt-[5rem] pb-[2rem]">
       <section className="main-container pb-5 flex flex-col gap-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 justify-center w-full">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 justify-center w-full">
           <div className="flex flex-col gap-5 w-full">
             <span className=" w-52 h-24">
               <img
@@ -172,16 +162,12 @@ const Footer = () => {
               Categories
             </p>
             <ul className="flex flex-col gap-2">
-              {/* {data?.data?.data?.map((subItem: any, index: number) => {
+              {data?.data?.data?.slice(0, 3)?.map((subItem: any, index: number) => {
                 return (
-                  // <Link key={index} className=" duration-500 text-gray-200  " href={subItem.link}>
-
-                  // <li className="capitalize list-none w-fit text-gray-300 border-b border-transparent hover:border-secondary hover:text-white hover:pl-1.5 duration-500 common-transition">{subItem.name}</li>
-                  // </Link>
                   <span key={index} className="flex items-center gap-1 ">
                     <FaAngleRight className="text-[1rem] text-white group-hover:text-violet-600" />
                     <Link
-                      href={`/products?categoryId=${subItem?.id}`}
+                      href={`/products?category=${subItem?.name}`}
                       className="group relative inline-block overflow-hidden  w-fit text-gray-300 py-1  hover:pl-2 duration-300  focus:outline-none focus:ring active:bg-indigo-600 active:text-white"
                     >
                       <span className="ease absolute bottom-0 right-0 h-0 w-0 border-b-2 border-secondary transition-all duration-300 group-hover:w-full"></span>
@@ -190,35 +176,21 @@ const Footer = () => {
                     </Link>
                   </span>
                 );
-              })} */}
+              })}
+              <span className="flex items-center gap-1 ">
+                <FaAngleRight className="text-[1rem] text-white group-hover:text-violet-600" />
+                <Link
+                  href="/#category"
+                  className="group relative inline-block overflow-hidden  w-fit text-gray-300 py-1  hover:pl-2 duration-300  focus:outline-none focus:ring active:bg-indigo-600 active:text-white"
+                >
+                  <span className="ease absolute bottom-0 right-0 h-0 w-0 border-b-2 border-secondary transition-all duration-300 group-hover:w-full"></span>
+
+                  View More
+                </Link>
+              </span>
             </ul>
           </div>
-          <div className="flex gap-4 flex-col">
-            <p className=" text-lg md:text-xl lg:text-2xl capitalize tracking-wide md:font-medium font-bold md:text-white text-secondary">
-              Tags
-            </p>
-            <ul className="flex flex-col gap-2">
-              {/* {data?.data?.data?.map((subItem: any, index: number) => {
-                return (
-                  // <Link key={index} className=" duration-500 text-gray-200  " href={subItem.link}>
 
-                  // <li className="capitalize list-none w-fit text-gray-300 border-b border-transparent hover:border-secondary hover:text-white hover:pl-1.5 duration-500 common-transition">{subItem.name}</li>
-                  // </Link>
-                  <span key={index} className="flex items-center gap-1 ">
-                    <FaAngleRight className="text-[1rem] text-white group-hover:text-violet-600" />
-                    <Link
-                      href={`/products?categoryId=${subItem?.id}`}
-                      className="group relative inline-block overflow-hidden  w-fit text-gray-300 py-1  hover:pl-2 duration-300  focus:outline-none focus:ring active:bg-indigo-600 active:text-white"
-                    >
-                      <span className="ease absolute bottom-0 right-0 h-0 w-0 border-b-2 border-secondary transition-all duration-300 group-hover:w-full"></span>
-
-                      {subItem.name}
-                    </Link>
-                  </span>
-                );
-              })} */}
-            </ul>
-          </div>
           {CONNECT.map((item, index) => {
             return (
               <div key={index} className="flex gap-4 flex-col">

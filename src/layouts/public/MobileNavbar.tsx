@@ -1,7 +1,4 @@
 import MenuCollapse from "@/components/common/MenuCollapse";
-import LoginForm from "@/components/form/loginForm";
-import RegisterForm from "@/components/form/RegisterForm";
-import useAppContext from "@/context";
 import useAuth from "@/hooks/useAuth";
 import useMutation from "@/hooks/useMutation";
 import useSwr from "@/hooks/useSwr";
@@ -28,6 +25,14 @@ const MobileNavbar = () => {
   const { data } = useSwr(`category`);
   const { mutation } = useMutation()
   const item = data?.data?.data
+
+  let url = `product?sortBy=desc`
+  searchText && (url += `&search=${searchText}`)
+
+  const { data: products, isValidating } = useSwr(url)
+
+
+
   const MENU_ARR = [
     {
       id: "1",
@@ -176,7 +181,7 @@ const MobileNavbar = () => {
                 />
 
                 <div
-                  onClick={() => setSearchOpen(false)}
+                  onClick={() => { setSearchOpen(false); setSearchText("") }}
                   className="bg-gray-600 p-2 hover:bg-theme duration-300 cursor-pointer mx-2 rounded-full"
                 >
                   <MdClose className=" text-xl text-white" />
@@ -184,7 +189,81 @@ const MobileNavbar = () => {
               </div>
 
               <Collapse in={searchText?.length > 0}>
-                <div className=" rounded-2xl w-full h-[20rem] bg-white flex items-center flex-col justify-center"></div>
+                <div className=" rounded-2xl w-full h-fit max-h-[35rem] p-2 overflow-hidden bg-white flex items-center flex-col justify-center">
+                  <div className=" w-full h-full  overflow-y-auto flex flex-col gap-5 ">
+                    {
+                      isValidating ? (<>
+                        <div className="w-full h-20 px-5 rounded-xl bg-slate-100 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] flex items-center justify-between">
+                          <div className="flex items-center gap-5">
+                            <p className="w-12 h-12 rounded-lg bg-slate-300 animate-pulse"></p>
+                            <p className="w-44 p-3 rounded-md bg-slate-300 animate-pulse"></p>
+                          </div>
+                          <p className="w-20 p-4 rounded-lg bg-slate-300 animate-pulse"></p>
+                        </div>
+                        <div className="w-full h-20 px-5 rounded-xl bg-slate-100 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] flex items-center justify-between">
+                          <div className="flex items-center gap-5">
+                            <p className="w-12 h-12 rounded-lg bg-slate-300 animate-pulse"></p>
+                            <p className="w-44 p-3 rounded-md bg-slate-300 animate-pulse"></p>
+                          </div>
+                          <p className="w-20 p-4 rounded-lg bg-slate-300 animate-pulse"></p>
+                        </div>
+                        <div className="w-full h-20 px-5 rounded-xl bg-slate-100 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] flex items-center justify-between">
+                          <div className="flex items-center gap-5">
+                            <p className="w-12 h-12 rounded-lg bg-slate-300 animate-pulse"></p>
+                            <p className="w-44 p-3 rounded-md bg-slate-300 animate-pulse"></p>
+                          </div>
+                          <p className="w-20 p-4 rounded-lg bg-slate-300 animate-pulse"></p>
+                        </div>
+                        <div className="w-full h-20 px-5 rounded-xl bg-slate-100 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] flex items-center justify-between">
+                          <div className="flex items-center gap-5">
+                            <p className="w-12 h-12 rounded-lg bg-slate-300 animate-pulse"></p>
+                            <p className="w-44 p-3 rounded-md bg-slate-300 animate-pulse"></p>
+                          </div>
+                          <p className="w-20 p-4 rounded-lg bg-slate-300 animate-pulse"></p>
+                        </div>
+                      </>) :
+                        products?.data?.data?.length > 0 ? (
+                          products?.data?.data?.map((item: any, index: number) => {
+                            return (
+                              <Link href={`/products/${item?._id}`}
+                                key={index}
+                                // href={`products/productId=${item.id}`}
+                                className="w-full flex  bg-slate-100 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]  justify-between  p-3 items-center rounded-xl  duration-500"
+                              >
+                                <div className="flex gap-5 items-center">
+                                  <img
+                                    src={item.images?.[0]?.imageUrl}
+                                    alt="productImage"
+                                    className=" w-20 h-20 rounded-lg object-contain"
+                                  />
+
+                                  <p className=" flex flex-col gap-1 items-start">
+                                    <span className=" text-lg font-medium text-gray-600">
+                                      {item?.name}
+                                    </span>
+                                    <span className=" text-sm font-medium text-gray-500">
+                                      Category : {item?.categoryName}
+                                    </span>
+                                  </p>
+                                </div>
+
+                              </Link>
+                            );
+                          })
+                        ) : (
+                          <div className="w-full flex flex-col items-center p-4 ">
+                            <img
+                              src="/emptyProduct.webp" // Replace with your image path
+                              alt="No Results"
+                              className=" w-[16rem] h-[16rem] object-contain"
+                            />
+                            <h1 className=" font-bold text-lg text-center">
+                              Product Not Available
+                            </h1>
+                          </div>
+                        )}
+                  </div>
+                </div>
               </Collapse>
             </div>
           </div>
