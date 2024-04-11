@@ -47,25 +47,38 @@ const Cart = () => {
             {/* Left Part */}
             <div className="lg:w-[70%] md:w-[80%] w-full md:hidden flex flex-col gap-3">
               <hr />
-              {item?.map((curEle: any, index: number) => {
-                return (
-                  <Fragment key={curEle?._id}>
-                    <CartMobileViewCard item={curEle} isValidating={isValidating} mutate={mutate} />
-                    <hr />
-                  </Fragment>
-                );
-              })}
+              {
+                item?.length > 0 ?
+                  item?.map((curEle: any, index: number) => {
+                    return (
+                      <Fragment key={curEle?._id}>
+                        <CartMobileViewCard item={curEle} isValidating={isValidating} mutate={mutate} />
+                        <hr />
+                      </Fragment>
+                    );
+                  }) :
+                  <div className="w-full h-full flex items-center justify-center">
+                    <img src="/emptyProduct.webp" className="w-full h-full object-contain" alt="" />
+                  </div>
+
+              }
             </div>
             <div className="lg:w-[70%] md:w-[80%] w-full hidden md:flex flex-col gap-3">
               <hr />
-              {item?.map((curEle: any, index: number) => {
-                return (
-                  <Fragment key={curEle?._id}>
-                    <CartCard item={curEle} isValidating={isValidating} mutate={mutate} />
-                    <hr />
-                  </Fragment>
-                );
-              })}
+              {
+                item?.length > 0 ?
+                  item?.map((curEle: any, index: number) => {
+                    return (
+                      <Fragment key={curEle?._id}>
+                        <CartCard item={curEle} isValidating={isValidating} mutate={mutate} />
+                        <hr />
+                      </Fragment>
+                    );
+                  })
+                  : <div className="w-full h-full flex items-center justify-center">
+                    <img src="/emptyProduct.webp" className="w-full h-full object-contain" alt="" />
+                  </div>
+              }
             </div>
 
             <div className="md:w-[50%] w-full p-2 sticky top-20 bg-white shadow-[rgba(17,_17,_26,_0.1)_0px_0px_16px] rounded-lg p-4">
@@ -75,9 +88,12 @@ const Cart = () => {
                   <h2 className="text-2xl text-gray-500 font-semibold uppercase">
                     Price Details
                   </h2>
-                  <p className="lg:px-6 px-2.5 py-1 lg:text-base text-xs rounded-md bg-green-400 text-white font-medium">
-                    {totalDiscount}% Off
-                  </p>
+                  {
+                    item?.length > 0 && <p className="lg:px-6 px-2.5 py-1 lg:text-base text-xs rounded-md bg-green-400 text-white font-medium">
+                      {totalDiscount}% Off
+                    </p>
+                  }
+
                 </div>
                 <hr />
                 <div className="flex justify-between">
