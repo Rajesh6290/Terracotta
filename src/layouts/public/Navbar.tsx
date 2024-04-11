@@ -92,6 +92,7 @@ const Navbar = () => {
   searchText && (url += `&search=${searchText}`)
 
   const { data, isValidating } = useSwr(url)
+  const { data: cartData, isValidating: cardValidating } = useSwr(user?._id ? `cart` : ``)
   useEffect(() => {
     const keyOperation = (e: KeyboardEvent) => {
       if (e.ctrlKey && e.shiftKey && e.key === "K") {
@@ -151,12 +152,16 @@ const Navbar = () => {
                   <IoSearchSharp className="text-gray-600 text-xl " />
                 </div>
                 <Link
-                  href="/cart"
+                  href={!user?._id ? "/login" : '/cart'}
                   className="w-11 h-11 bg-slate-100 cursor-pointer rounded-full flex items-center justify-center relative"
                 >
-                  <p className=" absolute -top-2 -right-2 w-5 h-5 rounded-full flex items-center justify-center bg-red-500 text-white font-semibold text-xs">
-                    2
-                  </p>
+                  {
+                    !user?._id ? null : isValidating ? null :
+
+                      <p className=" absolute -top-2 -right-2 w-5 h-5 rounded-full flex items-center justify-center bg-red-500 text-white font-semibold text-xs">
+                        {cartData?.data?.data?.length}
+                      </p>
+                  }
                   <MdOutlineShoppingCart className="text-gray-600 text-xl " />
                 </Link>
                 <Link

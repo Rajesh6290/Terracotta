@@ -1,11 +1,43 @@
 /* eslint-disable @next/next/no-img-element */
+import useAuth from "@/hooks/useAuth";
+import useMutation from "@/hooks/useMutation";
+import useSwr from "@/hooks/useSwr";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { AiFillEye, AiFillHeart } from "react-icons/ai";
 import { FaStar } from "react-icons/fa";
 import { MdOutlineShoppingCart } from "react-icons/md";
+import { toast } from "react-toastify";
 
 
 const ProductCard = ({ item }: { item: Product }) => {
+  const { user } = useAuth()
+  const { mutation, isLoading } = useMutation();
+  const { data, isValidating, mutate } = useSwr(!user?._id ? `` : `cart`);
+  const cartData = data?.data?.data
+  const router = useRouter()
+  const addToCart = async (id: string) => {
+    try {
+      const findFirst = cartData?.filter((pre: any) => pre?.product?._id === id);
+
+
+      if (findFirst?.length > 0) {
+        return router.push('/cart')
+      }
+      const res = await mutation(`cart/${id}`, {
+        method: "POST",
+        isAlert: true,
+      })
+      if (res?.status === 200) {
+        mutate()
+        toast.success(res?.results?.msg)
+      } else {
+        toast.error(res?.results?.msg)
+      }
+    } catch (error) {
+      toast.error(error instanceof Error)
+    }
+  }
   return (
     <div
       className="relative h-full group overflow-hidden  w-full flex flex-col gap-2 justify-between items-center  bg-white shadow-[0px_0px_4px_0px_#00000024] rounded-lg p-4"
@@ -72,11 +104,23 @@ const ProductCard = ({ item }: { item: Product }) => {
                 ₹{item?.price}
               </span>
             </p>
-            <Link href="/cart">
-              <p className=" w-10 h-10 rounded-md cursor-pointer  hover:bg-primary border duration-300 border-primary flex items-center justify-center">
-                <MdOutlineShoppingCart className=" text-primary hover:text-white text-xl " />
+            <div onClick={() => {
+              if (!user?._id) {
+                router.push('/')
+              } else {
+                addToCart(item?._id)
+              }
+            }}>
+              <p className=" w-10 h-10 rounded-md cursor-pointer  group-hover:bg-primary border duration-300 border-primary flex items-center justify-center">
+                {
+                  isLoading ? <div
+                    className="w-3 h-3 rounded-full animate-spin
+                            border-y border-solid border-primary group-hover:border-white border-t-transparent shadow-md"
+                  ></div> :
+                    <MdOutlineShoppingCart className=" text-primary group-hover:text-white text-xl " />
+                }
               </p>
-            </Link>
+            </div>
           </div>
         </div>
       </div>

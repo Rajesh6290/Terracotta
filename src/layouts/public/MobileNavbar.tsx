@@ -30,7 +30,7 @@ const MobileNavbar = () => {
   searchText && (url += `&search=${searchText}`)
 
   const { data: products, isValidating } = useSwr(url)
-
+  const { data: cartData, isValidating: cardValidating } = useSwr(user?._id ? `cart` : ``)
 
 
   const MENU_ARR = [
@@ -149,11 +149,13 @@ const MobileNavbar = () => {
               <BiSearch className=" text-2xl  text-orange-500/50 cursor-pointer" />
             </p>
 
-            <Link href="/cart">
+            <Link href={!user?._id ? '/login' : "/cart"}>
               <p className=" relative w-10 h-10 rounded-lg  duration-300 bg-white cursor-pointer p-1 flex items-center justify-center">
-                <span className=" absolute -top-3 -right-2 bg-red-500 w-5 h-5 rounded-full flex items-center justify-center text-white font-medium text-xs">
-                  0
-                </span>
+                {
+                  !user?._id ? null : isValidating ? null :
+                    <span className=" absolute -top-3 -right-2 bg-red-500 w-5 h-5 rounded-full flex items-center justify-center text-white font-medium text-xs">
+                      {cartData?.data?.data?.length}
+                    </span>}
                 <HiOutlineShoppingCart className=" text-2xl  text-orange-500/50 cursor-pointer" />
               </p>
             </Link>
