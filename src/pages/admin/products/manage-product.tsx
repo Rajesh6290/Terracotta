@@ -25,7 +25,7 @@ const ManageProduct = () => {
     const [pageNumber, setPageNumber] = useState<number>(1);
 
 
-    const { data, isValidating, mutate, pagination } = useSwr(`product?page=${pageNumber}&limit=10`, { revalidateOnFocus: true });
+    const { data, isValidating, mutate, pagination } = useSwr(`product?sortBy=desc&page=${pageNumber}&limit=10`, { revalidateOnFocus: true });
     const UpdateProduct = async (item: any) => {
         try {
             const res = await mutation(`product/${item?.id}`, {
