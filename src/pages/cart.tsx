@@ -154,44 +154,55 @@ const CartCard = ({ item, isValidating, mutate }: { item: any, isValidating: any
 
           <CartQuantity item={item} isValidating={isValidating} mutate={mutate} />
         </div>
-        <span className=" flex flex-col gap-3">
-          <p className="flex flex-col">
+        <div className=" flex flex-col gap-5">
+          <div className="flex flex-col gap-1">
             <span className="text-xl text-gray-800 font-semibold">
               {item?.product?.name}
             </span>
             <span className="text-sm">{item?.product?.description}</span>
-          </p>
-          <p className="flex flex-row md:items-center gap-4">
-            <span className="text-sm line-through">₹{item?.product?.price}</span>
+            <span className="text-xs text-gray-400 font-light capitalize">Pack of {item?.quantity}, {item?.product?.color},{item?.product?.category?.name}</span>
+            <p className="flex items-center gap-0.5">
+              {[...Array(5)].map((_, index) => (
+                <Fragment key={index}>
+                  {item?.product?.star >= index + 1 ? (
+                    <FaStar className=" text-amber-500" />
+                  ) : (
+                    <MdStarBorder fontSize="inherit" color="inherit" />
+                  )}
+                </Fragment>
+              ))}
+            </p>
+
+          </div>
+          <p className="flex flex-row md:items-center gap-2">
+            <span className="text-sm line-through font-semibold text-gray-400">₹{item?.product?.price}</span>
             <span className="text-gray-800 font-semibold text-lg">
               ₹{item?.product?.salePrice}
             </span>
-            <span className="text-center px-4 py-1 text-white bg-green-500 rounded-md text-sm font-semibold">
+            <span className="text-center px-4 py-1 text-white bg-green-500 rounded-md text-xs font-semibold">
               {item?.product?.discount}% Off
             </span>
+
           </p>
-          {
-            isLoading ? <div
-              className="w-5 h-5 rounded-full animate-spin
-                      border-y border-solid border-red-500 border-t-transparent shadow-md"
-            ></div> :
-
-              <p
-                onClick={() => handleRemoveProductFromCart(item?._id)}
-                className=" font-medium text-white uppercase text-xs w-fit cursor-pointer bg-red-500 px-4 py-2 rounded-lg"
-              >
-                Remove
-
-
-              </p>
-          }
-        </span>
+          <div className="w-full flex items-center gap-5">
+            <div onClick={() => handleRemoveProductFromCart(item?._id)} className="px-4 py-1 rounded-md bg-red-500 text-white font-medium text-sm">
+              {
+                isLoading ? <div
+                  className="w-5 h-5 rounded-full animate-spin
+                      border-y border-solid border-white border-t-transparent shadow-md"
+                ></div> : `Remove`
+              }
+            </div>
+            <div className="px-4 py-1 rounded-md bg-yellow-400 text-white font-medium text-sm">Buy Bow</div>
+          </div>
+        </div>
       </div>
     </article>
   );
 };
 
 const CartMobileViewCard = ({ item, isValidating, mutate }: { item: any, isValidating: any; mutate: () => void }) => {
+  const router = useRouter()
   const { mutation, isLoading } = useMutation()
   const handleRemoveProductFromCart = async (id: string) => {
     try {
@@ -213,7 +224,7 @@ const CartMobileViewCard = ({ item, isValidating, mutate }: { item: any, isValid
     <div className="w-full h-fit flex  items-center gap-5 rounded-md bg-white shadow-[rgba(17,_17,_26,_0.1)_0px_0px_16px] p-5">
 
       <div className="flex flex-col gap-3 items-center">
-        <img src={item?.product?.images?.[0]?.imageUrl} className="w-16 h-fit  object-fill rounded-lg" alt="" />
+        <img onClick={() => router?.push(`/products/${item?.product?._id}`)} src={item?.product?.images?.[0]?.imageUrl} className="w-16 h-fit  object-fill rounded-lg" alt="" />
         <CartMobileViewQuantity item={item} isValidating={isValidating} mutate={mutate} />
       </div>
       <div className="w-full flex items-start flex-col gap-2">

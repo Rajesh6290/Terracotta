@@ -8,12 +8,12 @@ import { MuiTblOptions } from '@/utils'
 import MaterialTable from '@material-table/core'
 import { Pagination, Paper, Switch, Tooltip } from '@mui/material'
 import Link from 'next/link'
-import { useDeferredValue, useState } from 'react'
+import { Fragment, useDeferredValue, useState } from 'react'
 import { AiFillEye } from 'react-icons/ai'
 import { BsEye } from 'react-icons/bs'
 import { FaStar } from 'react-icons/fa'
 import { IoMdSearch } from 'react-icons/io'
-import { MdDelete, MdDeleteOutline, MdEdit, MdTableRows } from 'react-icons/md'
+import { MdDelete, MdDeleteOutline, MdEdit, MdStarBorder, MdTableRows } from 'react-icons/md'
 import { PiCardsBold } from 'react-icons/pi'
 
 const ManageProduct = () => {
@@ -355,12 +355,16 @@ const ProductCardView = ({ item, mutate }: { item: any; mutate: () => void }) =>
                         <p className="  md:font-semibold font-medium md:text-base text-sm  text-gray-700">
                             {item?.name}
                         </p>
-                        <p className="text-sm flex items-center gap-1">
-                            <FaStar className=" text-amber-500" />
-                            <FaStar className=" text-amber-500" />
-                            <FaStar className=" text-amber-500" />
-                            <FaStar className=" text-amber-500" />
-                            <FaStar className=" text-amber-500" />
+                        <p className="flex items-center gap-0.5">
+                            {[...Array(5)].map((_, index) => (
+                                <Fragment key={index}>
+                                    {item?.star >= index + 1 ? (
+                                        <FaStar className=" text-amber-400" />
+                                    ) : (
+                                        <MdStarBorder fontSize="inherit" color="inherit" />
+                                    )}
+                                </Fragment>
+                            ))}
                         </p>
                         <div className=" flex justify-between items-center  ">
                             <p className=" flex flex-col sm:flex-row items-center gap-1">

@@ -4,9 +4,10 @@ import useMutation from "@/hooks/useMutation";
 import useSwr from "@/hooks/useSwr";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { Fragment } from "react";
 import { AiFillEye, AiFillHeart } from "react-icons/ai";
 import { FaStar } from "react-icons/fa";
-import { MdOutlineShoppingCart } from "react-icons/md";
+import { MdOutlineShoppingCart, MdStarBorder } from "react-icons/md";
 import { toast } from "react-toastify";
 
 
@@ -90,12 +91,16 @@ const ProductCard = ({ item }: { item: Product }) => {
           <p className="  md:font-semibold font-medium md:text-base text-sm  text-gray-700">
             {item?.name}
           </p>
-          <p className="text-sm flex items-center gap-1">
-            <FaStar className=" text-amber-500" />
-            <FaStar className=" text-amber-500" />
-            <FaStar className=" text-amber-500" />
-            <FaStar className=" text-amber-500" />
-            <FaStar className=" text-amber-500" />
+          <p className="flex items-center gap-0.5">
+            {[...Array(5)].map((_, index) => (
+              <Fragment key={index}>
+                {item?.star >= index + 1 ? (
+                  <FaStar className=" text-amber-400" />
+                ) : (
+                  <MdStarBorder fontSize="inherit" color="inherit" />
+                )}
+              </Fragment>
+            ))}
           </p>
           <div className=" flex justify-between items-center  ">
             <p className=" flex flex-col sm:flex-row items-center gap-1">
