@@ -1,17 +1,14 @@
-import { AdminLayout } from '@/layouts';
-import React, { useState } from 'react';
-import MaterialTable from '@material-table/core';
-import { Switch, Avatar, Paper, Tooltip } from '@mui/material';
-import { BiSolidSend } from 'react-icons/bi';
-import { MuiTblOptions } from '@/utils';
-import { MdGroups2 } from 'react-icons/md';
-import useSwr from '@/hooks/useSwr';
-import moment from 'moment';
-import { BsViewList } from 'react-icons/bs';
-import { FaEye } from 'react-icons/fa';
-import useMutation from '@/hooks/useMutation';
-import { toast } from 'react-toastify';
 import CustomLoader from '@/components/core/CustomLoader';
+import useMutation from '@/hooks/useMutation';
+import useSwr from '@/hooks/useSwr';
+import { AdminLayout } from '@/layouts';
+import { MuiTblOptions } from '@/utils';
+import MaterialTable from '@material-table/core';
+import { Paper, Switch, Tooltip } from '@mui/material';
+import moment from 'moment';
+import { FaEye } from 'react-icons/fa';
+import { MdGroups2 } from 'react-icons/md';
+import { toast } from 'react-toastify';
 
 const Customers = () => {
   const { data, isValidating, mutate } = useSwr(`customer`)
@@ -28,7 +25,7 @@ const Customers = () => {
       })
       if (res?.status == 200) {
         mutate()
-        toast.info(`Customer ${item?.status === true ? `Blocked` : `Active`} Successfully`)
+        toast.info(`Customer ${item?.status === true ? `Active` : `Blocked`} Successfully`)
       } else {
         toast.error(res?.results?.msg)
       }
