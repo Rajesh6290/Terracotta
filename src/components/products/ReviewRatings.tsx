@@ -62,7 +62,6 @@ const ReviewAndRating = ({ productId, rating, mutate }: { productId: string; rat
   const finalImages = flattenedImages?.map((imageUrl: any) => {
     return imageUrl;
   });
-  console.log("finalImage===========>", finalImages)
 
 
   return (

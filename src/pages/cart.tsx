@@ -12,6 +12,7 @@ import { MdStarBorder } from "react-icons/md";
 import { FaArrowDown, FaStar } from "react-icons/fa";
 
 const Cart = () => {
+  const { mutation, isLoading } = useMutation()
   const { user } = useAuth()
   const router = useRouter()
   const { data, isValidating, mutate } = useSwr(!user?._id ? `` : `cart`)
@@ -35,6 +36,24 @@ const Cart = () => {
       router.push('/')
     }
   }, [user])
+  const handelSubmit = async () => {
+    const allProductIds = item?.map((pre: any) => pre?.product?._id)
+    const res = await mutation(`checkout`, {
+      method: "POST",
+      body: {
+        productIds: allProductIds,
+      },
+      isAlert: true
+    })
+    if (res?.status === 200) {
+      mutate()
+      toast.success(res?.results?.msg)
+      router.push('/checkout')
+    } else {
+      toast.error(res?.results?.msg)
+    }
+
+  }
   return (
     <PublicLayout title="Cart | Terracotta Craft">
       <section className="main-container py-10 ">
@@ -118,9 +137,11 @@ const Cart = () => {
                   You will save ₹{totalAmount - totalSaleAmount} on this order
                 </div>
                 <hr />
-                <div className=" flex justify-end">
-                  <button className="btn-primary lg:py-2 py-1 px-4 lg:px-8 rounded-lg   uppercase lg:text-lg  font-medium">
-                    Proceed to Checkout
+                <div onClick={() => handelSubmit()} className=" flex justify-end">
+                  <button disabled={isLoading} className="btn-primary lg:py-2 py-1 px-4 lg:px-8 rounded-lg   uppercase lg:text-lg  font-medium">
+                    {
+                      isLoading ? `wait........` : `Proceed to Checkout`
+                    }
                   </button>
                 </div>
 
