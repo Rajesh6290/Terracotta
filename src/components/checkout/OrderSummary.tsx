@@ -41,14 +41,10 @@ const OrderSummary = ({
           <div className=" w-full h-full  scroll flex flex-col gap-2 py-3">
             <article className=" w-full flex flex-col gap-3 items-start justify-start py-2 ">
               <div className="w-full grid md:grid-cols-2 grid-cols-1 items-center gap-5">
-                {item?.map((curEle: any, index: number) => {
-                  return (
 
-                    <CartCard key={index} item={curEle} isValidating={isValidating} mutate={mutate} />
+                <CartCard item={item} isValidating={isValidating} mutate={mutate} />
 
 
-                  );
-                })}
               </div>
               <p className="w-full h-[0.11rem] bg-gray-300"></p>
               <p className=" w-full flex justify-end ">

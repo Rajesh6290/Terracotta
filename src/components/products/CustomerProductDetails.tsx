@@ -265,7 +265,7 @@ const CustomerProductDetails = ({ item, isValidating, mutate }: any) => {
               </div>
 
               <Link
-                href={`/checkout?productId=#`}
+                href={`/checkout/${item?._id}`}
                 className="rounded-full py-2 md:px-10 px-5 overflow-hidden relative group cursor-pointer border-2 font-medium bg-primary text-white"
               >
                 <span className="absolute w-64 h-0 transition-all duration-300 origin-center rotate-45 -translate-x-20 bg-gradient-to-r from-cyan-500 to-blue-500 top-1/2 group-hover:h-64 group-hover:-translate-y-32 ease"></span>
