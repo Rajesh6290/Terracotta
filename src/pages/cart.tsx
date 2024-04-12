@@ -37,22 +37,7 @@ const Cart = () => {
     }
   }, [user])
   const handelSubmit = async () => {
-    const allProductIds = item?.map((pre: any) => pre?.product?._id)
-    const res = await mutation(`checkout`, {
-      method: "POST",
-      body: {
-        productIds: allProductIds,
-      },
-      isAlert: true
-    })
-    if (res?.status === 200) {
-      mutate()
-      toast.success(res?.results?.msg)
-      router.push('/checkout')
-    } else {
-      toast.error(res?.results?.msg)
-    }
-
+    router.push(`/checkout`)
   }
   return (
     <PublicLayout title="Cart | Terracotta Craft">
