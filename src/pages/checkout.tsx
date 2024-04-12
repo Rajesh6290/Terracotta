@@ -116,7 +116,7 @@ const Congratulations = ({ open, close }: any) => {
     }}>
       <div className="md:w-[34rem] w-full h-fit md:p-10 p-5 bg-white flex flex-col gap-5 items-center">
         <Congratulation />
-        <p className="md:text-3xl text-xl font-semibold text-gray-900">Congrats! Your Order Placed...</p>
+        <p className="md:text-3xl text-lg font-semibold text-gray-900">Congrats! Your Order Placed...</p>
         <p className=" text-gray-600">Thank you for Shopping. Visit again!</p>
         <Button onClick={() => close(false)} className="px-6 py-1.5 text-lg font-semibold">
           Okay
