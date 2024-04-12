@@ -44,7 +44,7 @@ const OrderSummary = ({
                 {item?.map((curEle: any, index: number) => {
                   return (
 
-                    <CartCard item={curEle} isValidating={isValidating} mutate={mutate} />
+                    <CartCard key={index} item={curEle} isValidating={isValidating} mutate={mutate} />
 
 
                   );

@@ -50,7 +50,7 @@ const AddressDetails = ({
         <div className=" w-full h-full  scroll  flex flex-col gap-2 p-1">
           {
             AllAddress?.map((item: any) => (
-              <article className=" flex flex-col py-1">
+              <article key={item?._id} className=" flex flex-col py-1">
                 <div className=" flex gap-3 items-start p-2">
                   <input
                     onClick={() => {
