@@ -1,7 +1,11 @@
+import useAuth from "@/hooks/useAuth";
+import useSwr from "@/hooks/useSwr";
 import { PublicLayout } from "@/layouts";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { motion } from "framer-motion";
+import moment from "moment";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { AiFillQuestionCircle } from "react-icons/ai";
 import { FaX } from "react-icons/fa6";
@@ -24,62 +28,65 @@ const validationSchema = Yup.object().shape({
 });
 const MyOrder = () => {
     const [helpOpen, setHelpOpen] = useState(false);
+    const { user } = useAuth()
+    const router = useRouter()
+    const { data, isValidating } = useSwr(!user?._id ? `` : `order/${router?.query?.id}`)
+    const item = data?.data?.data
+    const quantity = item?.product?.map((pre: any) => pre?.quantity)
+    const totalQuantity = quantity?.reduce((total: any, quantity: any) => total + quantity, 0)
     const orderStatuses = [
         {
             id: "1",
             title: "Received",
-            destination: true,
+            destination: ["INITIATE", "PICKED", "TRANSITS", "PROCESSING", "COMPLETED"]?.includes(item?.orderStatus),
             img: "/orderstatus/rcv.png",
-            message: true,
+            message: ["INITIATE", "PICKED", "TRANSITS", "PROCESSING", "COMPLETED"]?.includes(item?.orderStatus),
             status: "Your order has  Confirmed",
-            processing: true,
+            processing: ["PICKED", "TRANSITS", "PROCESSING", "COMPLETED"]?.includes(item?.orderStatus),
         },
 
         {
             id: "2",
             title: "Picked",
-            destination: false,
+            destination: ["PICKED", "TRANSITS", "PROCESSING", "COMPLETED"]?.includes(item?.orderStatus),
             img: "/orderstatus/pick.png",
-            message: false,
+            message: ["PICKED", "TRANSITS", "PROCESSING", "COMPLETED"]?.includes(item?.orderStatus),
             status: "Your order has been picked up by your courier partner",
-            processing: false,
+            processing: ["TRANSITS", "PROCESSING", "COMPLETED"]?.includes(item?.orderStatus),
         },
         {
             id: "3",
             title: "Transit",
-            destination: false,
+            destination: ["TRANSITS", "PROCESSING", "COMPLETED"]?.includes(item?.orderStatus),
             img: "/orderstatus/transit.png",
-            message: false,
+            message: ["TRANSITS", "PROCESSING", "COMPLETED"]?.includes(item?.orderStatus),
             status: "Your order is on its way to customers address",
-            processing: false,
+            processing: ["PROCESSING", "COMPLETED"]?.includes(item?.orderStatus),
         },
         {
             id: "4",
             title: "Out For Delivery",
-            destination: false,
+            destination: ["PROCESSING", "COMPLETED"]?.includes(item?.orderStatus),
             img: "/orderstatus/out.png",
-            message: false,
+            message: ["PROCESSING", "COMPLETED"]?.includes(item?.orderStatus),
             status: "The courier executive  is on the way to your doorstep",
 
-            processing: false,
+            processing: ["COMPLETED"]?.includes(item?.orderStatus),
         },
         {
             id: "5",
             title: "Reached Location",
-            destination: false,
+            destination: ["COMPLETED"]?.includes(item?.orderStatus),
             img: "/orderstatus/location.png",
-            message: false,
+            message: item?.orderStatus === "COMPLETED",
             status: "Your order has reached your Destination",
         },
     ];
 
     return (
         <PublicLayout title="Order Details | PrintBrix">
-            <motion.section
-                layout
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 1 }}
+            <section
+
                 className="main-container py-10 w-full h-full flex flex-col gap-5 justify-center"
             >
                 <div className="flex gap-1 items-center p-1 text-xs text-gray-500 font-semibold font-sub ">
@@ -97,34 +104,34 @@ const MyOrder = () => {
                         My Orders
                     </Link>
                     <IoChevronForwardSharp />
-                    <p>Id: 328366183350278100</p>
+                    <p>Id:{item?._id}</p>
                 </div>
                 <article className="w-full bg-white rounded p-7 text-gray-800 font-semibold text-sm shadow-[0px_0px_4px_1px_#00000024] flex      md:items-center md:justify-between flex-col gap-5 md:flex-row">
-                    <p className="text-[1rem]">Order id: #ndjs4423nsnsjd4nmn2222923ns</p>
+                    <p className="text-[1rem]">Order id: {item?.orderNo}</p>
                     <p className="flex items-center gap-2">
-                        <span>21/08/2023</span>
-                        <span>10:48:31 AM</span>
+                        <span>Last Update :</span>
+                        <span>{moment(item?.updatedAt).format("llll")}</span>
                     </p>
                 </article>
                 <article className="flex lg:flex-row flex-col w-full  h-full bg-white shadow-[0px_0px_4px_1px_#00000024] rounded-md">
                     <div className=" flex flex-col justify-center gap-3 lg:w-3/4  w-full p-6 md:border-r-[1px] border-b-2 h-full ">
                         <p className="font-bold font-sub ">Delivery Address</p>
                         <p className=" text-gray-800 font-semibold text-[1rem]">
-                            PrintBrix
+                            {item?.addresses?.name}
                         </p>
                         <p className="font-sub text-gray-500">
-                            Plot-102 , Fm Nagar , Baleshwar District - 756003, Odisha
+                            {item?.addresses?.landmark}, {item?.addresses?.address} ,{item?.addresses?.city} City - {item?.addresses?.pincode}, {item?.addresses?.state}
                         </p>
                         <p className="flex flex-col ">
                             <span className=" text-gray-800 font-semibold text-[1rem]">
                                 Phone number
                             </span>
                             <span className="font-sub text-gray-500">
-                                6290467488, 9668834544
+                                {item?.addresses?.mobileNo}
                             </span>
                         </p>
                         <p className=" text-sm text-gray-400">
-                            This Order is also tracked by +91 9668834544
+                            This Order is also tracked by +91 {item?.addresses?.mobileNo}
                         </p>
                     </div>
                     <div className="flex flex-col gap-5 lg:w-1/2 w-full p-6 md:border-r-[1px] border-b-2  ">
@@ -145,12 +152,15 @@ const MyOrder = () => {
                             >
                                 Download
                             </a>
-                            <p className="rounded-md py-2 px-8 overflow-hidden text-center flex items-center justify-center relative group cursor-pointer border-2 border-red-400  bg-red-50 text-xs font-bold text-white">
-                                <span className="absolute w-64 h-0 transition-all duration-300 origin-center rotate-45 -translate-x-20  bg-red-500 top-1/2 group-hover:h-64 group-hover:-translate-y-32 ease"></span>
-                                <span className="relative text-red-500 transition duration-300 group-hover:text-white ease font-semibold text-center">
-                                    Cancel
-                                </span>
-                            </p>
+                            {
+                                item?.isCancelled && <p className="rounded-md py-2 px-8 overflow-hidden text-center flex items-center justify-center relative group cursor-pointer border-2 border-red-400  bg-red-50 text-xs font-bold text-white">
+                                    <span className="absolute w-64 h-0 transition-all duration-300 origin-center rotate-45 -translate-x-20  bg-red-500 top-1/2 group-hover:h-64 group-hover:-translate-y-32 ease"></span>
+                                    <span className="relative text-red-500 transition duration-300 group-hover:text-white ease font-semibold text-center">
+                                        Cancel
+                                    </span>
+                                </p>
+                            }
+
                         </map>
                     </div>
                 </article>
@@ -166,14 +176,14 @@ const MyOrder = () => {
                         </span>
                         <span className="flex flex-col gap-1">
                             <p className=" font-semibold text-[1rem] text-gray-800">
-                                Wow Skin Face Mask
+                                Order Info
                             </p>
                             <p className=" text-xs text-gray-500 font-normal">
-                                Seller: PrintBrix Howrah Online
+                                Seller:Terracotta Craft Online Services !
                             </p>
-                            <p className=" text-xs text-gray-500 font-normal">Quantity: 1</p>
+                            <p className=" text-xs text-gray-500 font-normal">Total Quantity: {totalQuantity}</p>
                             <p className=" font-semibold text-sm text-gray-800">
-                                Total: ₹461.00
+                                Total: ₹{item?.amount?.totalSaleAmount}
                             </p>
                         </span>
                     </aside>
@@ -274,7 +284,7 @@ const MyOrder = () => {
                     )}
                     {/* help modal End */}
                 </article>
-            </motion.section>
+            </section>
         </PublicLayout>
     );
 };

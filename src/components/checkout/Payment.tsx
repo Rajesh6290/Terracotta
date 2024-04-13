@@ -1,16 +1,28 @@
+import useMutation from "@/hooks/useMutation";
+import { Dialog } from "@mui/material";
 import { useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { toast } from "react-toastify";
 import Swal from "sweetalert2";
+import Congratulation from "../core/Congratulation";
+import Button from "../core/Button";
+import { useRouter } from "next/router";
 
 const Payment = ({
   paymentOpen,
-
   setPaymentOpen,
-  setOrderConfirmed
+  checkedAddress,
+  item,
+  totalAmount,
+  totalSaleAmount,
+  totalDiscount
 }: any) => {
+
+  const [orderConfirmed, setOrderConfirmed] = useState(false);
   const [selectedOption, setSelectedOption] = useState("selectoptionhere");
   const [confirmPaymentOption, setConfirmPaymentOption] = useState(false);
-
+  const [response, setResponse] = useState<string>("");
+  const { mutation, isLoading } = useMutation()
   const handleOptionChange = (event: any) => {
     setSelectedOption(event.target.id);
   };
@@ -22,13 +34,59 @@ const Payment = ({
       confirmButtonText: "Yes, order",
     }).then(async (results) => {
       if (results.isConfirmed) {
-        setOrderConfirmed(true)
-        setPaymentOpen(false)
+        try {
+          const product = item?.map((pre: any) => {
+            const amount = pre?.product?.price * pre?.quantity
+            const saleAmount = pre?.product?.salePrice * pre?.quantity
+            const discount = ((amount - saleAmount) / amount) * 100
+            return {
+              id: pre?.product?._id,
+              name: pre?.product?.name,
+              price: pre?.product?.price,
+              quantity: pre?.quantity,
+              totalPrice: amount,
+              totalSalePrice: saleAmount,
+              discount: Math.ceil(discount),
+              color: pre?.product?.color,
+              category: pre?.product?.category?.name,
+              description: pre?.product?.description,
+              image: pre?.product?.images?.[0]?.imageUrl
+            }
+          })
+          const res = await mutation(`order`, {
+            method: "POST",
+            body: {
+              product: product,
+              amount: {
+                totalAmount: totalAmount,
+                totalSaleAmount: totalSaleAmount,
+                discountAmount: totalAmount - totalSaleAmount,
+                deliveryCharge: 0,
+                discount: totalDiscount
+              },
+              address: checkedAddress
+
+            },
+            isAlert: true,
+          })
+          console.log(res)
+          if (res?.status === 200) {
+            setResponse(res?.results?.data?._id)
+            setOrderConfirmed(true)
+            setPaymentOpen(false)
+            toast.success(res?.results?.msg)
+          } else {
+            toast.error(res?.results?.msg)
+          }
+        } catch (error) {
+          toast.error(error instanceof Error)
+        }
       }
     })
   };
   return (
     <>
+      <Congratulations open={orderConfirmed} close={setOrderConfirmed} response={response} />
       <div
         className="w-full bg-white h-full rounded 
     flex flex-col gap-2 justify-center  "
@@ -107,3 +165,25 @@ const Payment = ({
 
 export default Payment;
 
+const Congratulations = ({ open, close, response }: any) => {
+  const router = useRouter()
+  return (
+    <Dialog open={open} maxWidth="lg" PaperProps={{
+      style: {
+        borderRadius: 18, // Adjust the value according to your preference
+      },
+    }}>
+      <div className="md:w-[34rem] w-full h-fit md:p-10 p-5 bg-white flex flex-col gap-5 items-center">
+        <Congratulation />
+        <p className="md:text-3xl text-lg font-semibold text-gray-900">Congrats! Your Order Placed...</p>
+        <p className=" text-gray-600">Thank you for Shopping. Visit again!</p>
+        <Button onClick={() => {
+          close(false)
+          router.push(`/my-account/orders/${response}`)
+        }} className="px-6 py-1.5 text-lg font-semibold">
+          Okay
+        </Button>
+      </div>
+    </Dialog>
+  )
+}

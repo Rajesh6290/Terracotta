@@ -13,7 +13,7 @@ import useSwr from "@/hooks/useSwr";
 import { PublicLayout } from "@/layouts";
 import { Dialog } from "@mui/material";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 const Checkout = () => {
     const { user } = useAuth()
@@ -22,7 +22,6 @@ const Checkout = () => {
     const [paymentOpen, setPaymentOpen] = useState(false);
     const [addressOpen, setAddressOpen] = useState(true);
     const [showForm, setShowForm] = useState(false);
-    const [orderConfirmed, setOrderConfirmed] = useState(false);
     const [checkedAddress, setCheckedAddress] = useState<string>("")
     const { data: address, mutate: addressMutated } = useSwr(`address`);
     const AllAddress = address?.data?.data
@@ -30,14 +29,12 @@ const Checkout = () => {
 
     const { data, isValidating, mutate: cartMutate } = useSwr(!user?._id ? `` : `cart/getById/${router?.query?.id}`)
     const AllCartData = data?.data?.data
-
-    const totalAmount = AllCartData?.product?.price
-    const totalSaleAmount = AllCartData?.product?.salePrice
-    const totalDiscount = AllCartData?.product?.discount
+    const totalAmount = AllCartData?.[0]?.product?.price * AllCartData?.[0]?.quantity
+    const totalSaleAmount = AllCartData?.[0]?.product?.salePrice * AllCartData?.[0]?.quantity
+    const totalDiscount = ((totalAmount - totalSaleAmount) / totalAmount) * 100
 
     return (
         <PublicLayout title="Checkout | Terracotta Craft">
-            <Congratulations open={orderConfirmed} close={setOrderConfirmed} />
             <section className=" bg-gray-100">
                 <main className="main-container py-6 w-full flex flex-col md:flex-row gap-5 items-start">
                     <article className="md:w-[70%] rounded-lg w-full">
@@ -85,7 +82,11 @@ const Checkout = () => {
                             <Payment
                                 paymentOpen={paymentOpen}
                                 setPaymentOpen={setPaymentOpen}
-                                setOrderConfirmed={setOrderConfirmed}
+                                checkedAddress={checkedAddress}
+                                item={AllCartData}
+                                totalAmount={totalAmount}
+                                totalSaleAmount={totalSaleAmount}
+                                totalDiscount={totalDiscount}
                             />
                         </div>
                     </article>
@@ -99,21 +100,3 @@ const Checkout = () => {
 };
 
 export default Checkout;
-const Congratulations = ({ open, close }: any) => {
-    return (
-        <Dialog open={open} maxWidth="lg" PaperProps={{
-            style: {
-                borderRadius: 18, // Adjust the value according to your preference
-            },
-        }}>
-            <div className="md:w-[34rem] w-full h-fit md:p-10 p-5 bg-white flex flex-col gap-5 items-center">
-                <Congratulation />
-                <p className="md:text-3xl text-lg font-semibold text-gray-900">Congrats! Your Order Placed...</p>
-                <p className=" text-gray-600">Thank you for Shopping. Visit again!</p>
-                <Button onClick={() => close(false)} className="px-6 py-1.5 text-lg font-semibold">
-                    Okay
-                </Button>
-            </div>
-        </Dialog>
-    )
-}

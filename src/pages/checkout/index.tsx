@@ -22,7 +22,6 @@ const Checkout = () => {
     const [paymentOpen, setPaymentOpen] = useState(false);
     const [addressOpen, setAddressOpen] = useState(true);
     const [showForm, setShowForm] = useState(false);
-    const [orderConfirmed, setOrderConfirmed] = useState(false);
     const [checkedAddress, setCheckedAddress] = useState<string>("")
     const { data: address, mutate: addressMutated } = useSwr(`address`);
     const AllAddress = address?.data?.data
@@ -45,7 +44,6 @@ const Checkout = () => {
 
     return (
         <PublicLayout title="Checkout | Terracotta Craft">
-            <Congratulations open={orderConfirmed} close={setOrderConfirmed} />
             <section className=" bg-gray-100">
                 <main className="main-container py-6 w-full flex flex-col md:flex-row gap-5 items-start">
                     <article className="md:w-[70%] rounded-lg w-full">
@@ -93,7 +91,11 @@ const Checkout = () => {
                             <Payment
                                 paymentOpen={paymentOpen}
                                 setPaymentOpen={setPaymentOpen}
-                                setOrderConfirmed={setOrderConfirmed}
+                                checkedAddress={checkedAddress}
+                                item={AllCartData}
+                                totalAmount={totalAmount}
+                                totalSaleAmount={totalSaleAmount}
+                                totalDiscount={totalDiscount}
                             />
                         </div>
                     </article>
@@ -107,21 +109,3 @@ const Checkout = () => {
 };
 
 export default Checkout;
-const Congratulations = ({ open, close }: any) => {
-    return (
-        <Dialog open={open} maxWidth="lg" PaperProps={{
-            style: {
-                borderRadius: 18, // Adjust the value according to your preference
-            },
-        }}>
-            <div className="md:w-[34rem] w-full h-fit md:p-10 p-5 bg-white flex flex-col gap-5 items-center">
-                <Congratulation />
-                <p className="md:text-3xl text-lg font-semibold text-gray-900">Congrats! Your Order Placed...</p>
-                <p className=" text-gray-600">Thank you for Shopping. Visit again!</p>
-                <Button onClick={() => close(false)} className="px-6 py-1.5 text-lg font-semibold">
-                    Okay
-                </Button>
-            </div>
-        </Dialog>
-    )
-}

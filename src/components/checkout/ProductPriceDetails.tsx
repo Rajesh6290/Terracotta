@@ -13,7 +13,7 @@ const ProductPriceDetails = ({ totalAmount, totalSaleAmount, totalDiscount, allC
 
       <div className="flex flex-col gap-5 border-b-2 border-dashed pb-5">
         <p className=" w-full justify-between flex items-center px-5  text-gray-500">
-          <span>{`Price (${allCart?.length} Items)`}</span>
+          <span>{`Price (${allCart?.length || 1} Items)`}</span>
           <span>₹{totalAmount}</span>
         </p>
         <p className=" w-full justify-between flex items-center px-5 text-[1rem] font-semibold text-green-600">
