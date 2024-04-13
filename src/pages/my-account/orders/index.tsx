@@ -27,41 +27,6 @@ interface Order {
 
 const Orders = () => {
     const [ratingOpen, setRatingOpen] = useState(false);
-    const ORDER_ARR: Order[] = [
-        {
-            id: 1,
-            title: "Roadster Men Solid Round Neck Pure Cotton T-Shirt",
-            img: "/home/categoryimage1.png",
-            color: "Color: Yellow",
-            size: "Size: 10",
-            price: "1200",
-            status: "Replacement completed",
-            deliveryStatus: "Your items has been delivered.",
-            review: "Rate & Review Product",
-        },
-        {
-            id: 2,
-            title: "Puma New Shoe 2023 model...",
-            img: "/home/full3.png",
-            color: "Color: Black",
-            size: "Size : 6UK",
-            price: "4549",
-            status: "Replacement Rejected",
-            deliveryStatus: "Your items has been delivered.",
-            review: "Rate & Review Product",
-        },
-        {
-            id: 3,
-            title: "Men Full Sleeve Solid Sweatshirt",
-            img: "/home/categoryimage3.png",
-            color: "Color: Yellow",
-            size: "Size: 10",
-            price: "345",
-            status: "Refund Completed",
-            deliveryStatus: "The Delivery partner unable to find your location.",
-            review: "Rate & Review Product",
-        },
-    ];
     const { data, isValidating, mutate } = useSwr(`order`)
     const AllOrders = data?.data?.data
     return (
