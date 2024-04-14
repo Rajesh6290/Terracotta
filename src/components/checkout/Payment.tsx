@@ -15,7 +15,8 @@ const Payment = ({
   item,
   totalAmount,
   totalSaleAmount,
-  totalDiscount
+  totalDiscount,
+  totalQuantity
 }: any) => {
 
   const [orderConfirmed, setOrderConfirmed] = useState(false);
@@ -43,10 +44,11 @@ const Payment = ({
               id: pre?.product?._id,
               name: pre?.product?.name,
               price: pre?.product?.price,
+              discountPrice: pre?.product?.salePrice,
               quantity: pre?.quantity,
               totalPrice: amount,
               totalSalePrice: saleAmount,
-              discount: Math.ceil(discount),
+              totalDiscount: Math.ceil(discount),
               color: pre?.product?.color,
               category: pre?.product?.category?.name,
               description: pre?.product?.description,
@@ -62,7 +64,8 @@ const Payment = ({
                 totalSaleAmount: totalSaleAmount,
                 discountAmount: totalAmount - totalSaleAmount,
                 deliveryCharge: 0,
-                discount: totalDiscount
+                discount: totalDiscount,
+                totalQuantity: totalQuantity
               },
               address: checkedAddress
 

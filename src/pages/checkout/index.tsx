@@ -30,14 +30,17 @@ const Checkout = () => {
     const { data, isValidating, mutate: cartMutate } = useSwr(!user?._id ? `` : `cart`)
     const AllCartData = data?.data?.data
     const amountData = AllCartData?.map((data: any) => {
+        const totalQuantity = data?.quantity
         const totalAmount = data?.product?.price * data?.quantity
         const totalSaleAmount = data?.product?.salePrice * data?.quantity
         return {
+            totalQuantity: totalQuantity,
             totalAmount: totalAmount,
             totalSaleAmount: totalSaleAmount,
             totalDiscount: Math.round(((totalAmount - totalSaleAmount) / totalAmount) * 100)
         }
     })
+    const totalQuantity = amountData?.reduce((sum: any, amount: any) => sum + amount.totalQuantity, 0)
     const totalAmount = amountData?.reduce((sum: any, amount: any) => sum + amount.totalAmount, 0)
     const totalSaleAmount = amountData?.reduce((sum: any, amount: any) => sum + amount.totalSaleAmount, 0);
     const totalDiscount = Math.ceil(((totalAmount - totalSaleAmount) / totalAmount) * 100)
@@ -96,6 +99,7 @@ const Checkout = () => {
                                 totalAmount={totalAmount}
                                 totalSaleAmount={totalSaleAmount}
                                 totalDiscount={totalDiscount}
+                                totalQuantity={totalQuantity}
                             />
                         </div>
                     </article>

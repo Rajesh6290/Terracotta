@@ -37,7 +37,7 @@ const MyOrder = () => {
     const orderStatuses = [
         {
             id: "1",
-            title: "Received",
+            title: "Placed",
             destination: ["INITIATE", "PICKED", "TRANSITS", "PROCESSING", "COMPLETED"]?.includes(item?.orderStatus),
             img: "/orderstatus/rcv.png",
             message: ["INITIATE", "PICKED", "TRANSITS", "PROCESSING", "COMPLETED"]?.includes(item?.orderStatus),
