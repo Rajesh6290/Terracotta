@@ -16,6 +16,7 @@ import useAuth from "@/hooks/useAuth";
 import { toast } from "react-toastify";
 import useSwr from "@/hooks/useSwr";
 import useMutation from "@/hooks/useMutation";
+import { MdArrowBackIos, MdArrowForwardIos } from "react-icons/md";
 
 const CustomerProductDetails = ({ item, isValidating, mutate }: any) => {
   const { user } = useAuth()
@@ -117,13 +118,37 @@ const CustomerProductDetails = ({ item, isValidating, mutate }: any) => {
         <article className="md:w-[40%] h-full lg:sticky lg:top-24">
           <div className="w-full flex">
             <div className="flex flex-col gap-2 w-full items-center justify-center">
-              <div className="w-full h-[26rem] overflow-hidden border-2 p-2 rounded-lg">
+              <div className="w-full h-[26rem] overflow-hidden border-2 p-2 rounded-lg relative">
+                <p
+                  onClick={() => {
+                    if (activeImg === 0) {
+                      setActiveImg(item?.images?.length - 1)
+                    } else {
+                      setActiveImg((pre) => pre - 1)
+                    }
+                  }}
+                  className=" absolute z-[999] top-1/2 -translate-y-1/2 -left-5 w-14 md:h-20 h-16  rounded-lg bg-slate-200 bg-opacity-40 hover:bg-opacity-100 duration-300 cursor-pointer text-black/20 hover:text-black/60 flex items-center justify-center pl-5"
+                >
+                  <MdArrowBackIos />
+                </p>
+                <p
+                  onClick={() => {
+                    if (activeImg === item?.images?.length - 1) {
+                      setActiveImg(0)
+                    } else {
+                      setActiveImg((pre) => pre + 1)
+                    }
+                  }}
+                  className=" absolute z-[999]  top-1/2 -translate-y-1/2 -right-5 w-14 md:h-20 h-16  rounded-lg bg-slate-200 bg-opacity-40 hover:bg-opacity-100 duration-300 cursor-pointer text-black/20 hover:text-black/60 flex items-center justify-center pr-5"
+                >
+                  <MdArrowForwardIos />
+                </p>
                 {
                   isValidating ? <div className="w-full h-full bg-slate-200 animate-pulse"></div> :
 
                     <img
-                      src={item?.images?.[activeImg].imageUrl}
-                      className="w-full h-full object-contain"
+                      src={item?.images?.[activeImg]?.imageUrl}
+                      className="w-full h-full object-contain z-10"
                       alt=""
                     />}
               </div>

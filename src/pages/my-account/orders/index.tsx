@@ -1,7 +1,6 @@
 
 import CustomerRatings from "@/components/common/CustomerRating";
 import ExpandTitle from "@/components/common/ExpandTitle";
-import Ratings from "@/components/common/Ratings";
 import useSwr from "@/hooks/useSwr";
 import { PublicLayout } from "@/layouts";
 import { Dialog } from "@mui/material";
@@ -10,9 +9,8 @@ import moment from "moment";
 import Link from "next/link";
 import { Fragment, useState } from "react";
 import { AiOutlineStar } from "react-icons/ai";
-import { BiCurrentLocation, BiStar } from "react-icons/bi";
+import { BiCurrentLocation } from "react-icons/bi";
 import { FaStar } from "react-icons/fa";
-import { FaX } from "react-icons/fa6";
 import { IoChevronForwardSharp } from "react-icons/io5";
 import { MdStarBorder } from "react-icons/md";
 
@@ -23,7 +21,7 @@ const Orders = () => {
     const [ratingOpen, setRatingOpen] = useState(false);
     const [value, setValue] = useState<any>()
     const [orderId, setOrderId] = useState<string>("")
-    const { data, isValidating, mutate } = useSwr(`order`)
+    const { data, isValidating, mutate } = useSwr(`order`, { revalidateOnFocus: true, })
     const AllOrders = data?.data?.data
     return (
         <PublicLayout>
