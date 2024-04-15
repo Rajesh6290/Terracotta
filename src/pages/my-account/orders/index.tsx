@@ -88,7 +88,7 @@ const Orders = () => {
                                                 item?.product?.map((pre: any) => (
                                                     <div key={pre?.id} className=" flex items-center gap-5  w-full">
                                                         <Link
-                                                            href=""
+                                                            href={`/products/${pre.id}`}
                                                             className="md:w-28 w-24 h-16 md:h-20 md:p-2 p-1 bg-slate-100 rounded-md shadow-[0px_0px_3px_1px_#00000024]"
                                                         >
                                                             <img
@@ -98,12 +98,11 @@ const Orders = () => {
                                                             />
                                                         </Link>
                                                         <div className="flex flex-col gap-1">
-                                                            <Link
-                                                                href=""
+                                                            <p
                                                                 className=" font-semibold text-gray-800 md:text-[1.3rem] text-[1rem]"
                                                             >
                                                                 {pre?.name}
-                                                            </Link>
+                                                            </p>
                                                             <span className="md:text-sm text-xs text-gray-600">
                                                                 <ExpandTitle limit={4} text={pre?.description} />
                                                             </span>
