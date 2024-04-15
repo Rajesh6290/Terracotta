@@ -96,21 +96,15 @@ const useAdminMenuItem = () => [
     submenus: [
       {
         _id: "6.1",
-        title: "B2C Order",
-        route: "/admin/orders/b2c-orders",
+        title: "All Order",
+        route: "/admin/orders",
         icon: <BsBox className="text-xl" />,
       },
       {
         _id: "6.2",
-        title: "Customized Order",
-        route: "/admin/orders/customized-orders",
+        title: "Cancelled Order",
+        route: "/admin/orders/cancelled",
         icon: <BsBoxes className="text-xl" />,
-      },
-      {
-        _id: "6.3",
-        title: "B2B Order",
-        route: "/admin/orders/b2b-orders",
-        icon: <BiBox className="text-xl" />,
       },
     ],
   },

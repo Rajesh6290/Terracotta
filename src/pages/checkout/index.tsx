@@ -40,7 +40,7 @@ const Checkout = () => {
             totalDiscount: Math.round(((totalAmount - totalSaleAmount) / totalAmount) * 100)
         }
     })
-    const totalQuantity = amountData?.reduce((sum: any, amount: any) => sum + amount.totalQuantity, 0)
+    const totalQuantity = amountData?.reduce((sum: any, item: any) => sum + item?.totalQuantity, 0)
     const totalAmount = amountData?.reduce((sum: any, amount: any) => sum + amount.totalAmount, 0)
     const totalSaleAmount = amountData?.reduce((sum: any, amount: any) => sum + amount.totalSaleAmount, 0);
     const totalDiscount = Math.ceil(((totalAmount - totalSaleAmount) / totalAmount) * 100)
