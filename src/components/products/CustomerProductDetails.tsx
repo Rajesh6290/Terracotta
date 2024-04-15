@@ -5,18 +5,23 @@ import { AiFillStar } from "react-icons/ai";
 import { BiWorld } from "react-icons/bi";
 import { FaShippingFast } from "react-icons/fa";
 import {
-  FaArrowRight,
   FaArrowsTurnToDots,
-  FaChevronRight,
+  FaChevronRight
 } from "react-icons/fa6";
-import { HiOutlineMinusSmall, HiOutlinePlusSmall } from "react-icons/hi2";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { RiRefund2Line } from "react-icons/ri";
 import Slider from "react-slick";
 import ReviewAndRating from "./ReviewRatings";
+import useAuth from "@/hooks/useAuth";
+import { toast } from "react-toastify";
+import useSwr from "@/hooks/useSwr";
+import useMutation from "@/hooks/useMutation";
 
 const CustomerProductDetails = ({ item, isValidating, mutate }: any) => {
-  console.log(item)
+  const { user } = useAuth()
+  const { mutation, isLoading } = useMutation()
+  const { data } = useSwr(!user?._id ? `` : `cart`)
+
   const router = useRouter();
 
   var settings = {
@@ -83,6 +88,29 @@ const CustomerProductDetails = ({ item, isValidating, mutate }: any) => {
   const handleNext = () => {
     navigationRef?.current?.slickNext();
   };
+  const cartData = data?.data?.data
+  const findCart = cartData?.filter((search: any) => search?.product?._id === item?._id)
+  const handleOperation = async () => {
+    try {
+
+      if (findCart.length > 0) {
+        router.push(`/checkout/${item?._id}`)
+      } else {
+        const res = await mutation(`cart/${item?._id}`, {
+          method: "POST",
+          isAlert: true,
+        })
+        if (res?.status === 200) {
+          router.push(`/checkout/${item?._id}`)
+          mutate()
+        } else {
+          toast.error(res?.results?.msg)
+        }
+      }
+    } catch (error) {
+      toast.error(error instanceof Error)
+    }
+  }
   return (
     <section className="main-container py-6 w-full">
       <div className="w-full flex flex-col md:flex-row gap-8">
@@ -238,41 +266,41 @@ const CustomerProductDetails = ({ item, isValidating, mutate }: any) => {
 
 
             <div className="flex items-end gap-5 py-2">
-              <div className="flex items-center gap-5">
-                <button
-                  //   onClick={handleremoveToCart}
-                  className="p-2 rounded-full border-2 font-bold text-black"
-                >
-                  <HiOutlineMinusSmall />
-                </button>
-                {/* <div className="text-lg font-semibold">
-                  {isValidating ? (
-                    <div
-                      className="w-7 h-7 rounded-full animate-spin
-                    border-y border-solid border-green-500 border-t-transparent shadow-md"
-                    ></div>
-                  ) : (
-                    <span>{variantData?.cartItems.length}</span>
-                  )}
-                </div> */}
-                2
-                <button
-                  //   onClick={handleAddToCart}
-                  className="p-2 rounded-full border-2 font-bold text-black"
-                >
-                  <HiOutlinePlusSmall />
-                </button>
-              </div>
 
-              <Link
-                href={`/checkout/${item?._id}`}
+              {
+                user?._id && findCart?.length > 0 && <div
+                  onClick={() => {
+                    router.push(`/cart`)
+                  }}
+                  className="rounded-3xl py-2 md:px-10 px-5 overflow-hidden relative group cursor-pointer border-2 font-medium bg-black text-white"
+                >
+                  <span className="absolute w-64 h-0 transition-all duration-300 origin-center rotate-45 -translate-x-20  top-1/2 group-hover:h-64 group-hover:-translate-y-32 ease"></span>
+                  <span className="relative text-white transition duration-300 group-hover:text-white ease font-semibold">
+                    Go To Cart
+                  </span>
+                </div>
+              }
+
+              <div
+                onClick={() => {
+                  if (!user?._id) {
+                    router.push('/login')
+                  } else {
+                    handleOperation()
+                  }
+                }}
                 className="rounded-full py-2 md:px-10 px-5 overflow-hidden relative group cursor-pointer border-2 font-medium bg-primary text-white"
               >
                 <span className="absolute w-64 h-0 transition-all duration-300 origin-center rotate-45 -translate-x-20 bg-gradient-to-r from-cyan-500 to-blue-500 top-1/2 group-hover:h-64 group-hover:-translate-y-32 ease"></span>
                 <span className="relative text-white transition duration-300 group-hover:text-white ease font-semibold">
-                  Buy Now
+                  {
+                    isLoading ? <div
+                      className="w-5 h-5 rounded-full animate-spin
+          border-y border-solid border-white border-t-transparent shadow-md"
+                    ></div> : `Buy Now`
+                  }
                 </span>
-              </Link>
+              </div>
 
 
             </div>
