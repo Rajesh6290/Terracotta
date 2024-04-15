@@ -1,36 +1,33 @@
 
+import CustomerRatings from "@/components/common/CustomerRating";
 import ExpandTitle from "@/components/common/ExpandTitle";
 import Ratings from "@/components/common/Ratings";
 import useSwr from "@/hooks/useSwr";
 import { PublicLayout } from "@/layouts";
+import { Dialog } from "@mui/material";
 import { motion } from "framer-motion";
 import moment from "moment";
 import Link from "next/link";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { AiOutlineStar } from "react-icons/ai";
 import { BiCurrentLocation, BiStar } from "react-icons/bi";
+import { FaStar } from "react-icons/fa";
 import { FaX } from "react-icons/fa6";
 import { IoChevronForwardSharp } from "react-icons/io5";
+import { MdStarBorder } from "react-icons/md";
 
-interface Order {
-    id: number;
-    title: string;
-    img: string;
-    color: string;
-    size: string;
-    price: string;
-    status: string;
-    deliveryStatus: string;
-    review: string;
-}
+
 
 
 const Orders = () => {
     const [ratingOpen, setRatingOpen] = useState(false);
+    const [value, setValue] = useState<any>()
+    const [orderId, setOrderId] = useState<string>("")
     const { data, isValidating, mutate } = useSwr(`order`)
     const AllOrders = data?.data?.data
     return (
         <PublicLayout>
+            <RatingsModal open={ratingOpen} close={setRatingOpen} item={value} mutate={mutate} orderId={orderId} />
             <section className="bg-slate-50">
                 <main className="main-container py-10">
                     <div className=" flex flex-col w-full gap-3 relative h-full  ">
@@ -85,7 +82,7 @@ const Orders = () => {
                                         </Link>
                                     </div>
                                     <hr />
-                                    <div className=" flex flex-col gap-5  lg:flex-row items-center justify-between w-full">
+                                    <div className=" flex flex-col gap-5  lg:flex-row items-start justify-between w-full">
                                         <div className="lg:w-[50%] w-full flex flex-col gap-4">
                                             {
                                                 item?.product?.map((pre: any) => (
@@ -100,7 +97,7 @@ const Orders = () => {
                                                                 alt=""
                                                             />
                                                         </Link>
-                                                        <p className="flex flex-col gap-1">
+                                                        <div className="flex flex-col gap-1">
                                                             <Link
                                                                 href=""
                                                                 className=" font-semibold text-gray-800 md:text-[1.3rem] text-[1rem]"
@@ -110,6 +107,23 @@ const Orders = () => {
                                                             <span className="md:text-sm text-xs text-gray-600">
                                                                 <ExpandTitle limit={4} text={pre?.description} />
                                                             </span>
+                                                            {
+                                                                item?.orderStatus === "COMPLETED" &&
+
+                                                                <span className="md:text-sm text-xs text-gray-600">
+                                                                    <p className="flex items-center gap-0.5">
+                                                                        {[...Array(5)].map((_, index) => (
+                                                                            <Fragment key={index}>
+                                                                                {pre?.star >= index + 1 ? (
+                                                                                    <FaStar className=" text-amber-400 text-lg" />
+                                                                                ) : (
+                                                                                    <MdStarBorder fontSize="inherit" color="inherit" className="text-lg" />
+                                                                                )}
+                                                                            </Fragment>
+                                                                        ))}
+                                                                    </p>
+                                                                </span>
+                                                            }
                                                             <span className=" flex items-center md:gap-5 gap-2">
                                                                 <p className="flex items-center gap-2 ">
                                                                     <span className=" font-normal text-gray-800 text-sm ">
@@ -128,7 +142,7 @@ const Orders = () => {
                                                                     Rs.{pre?.totalSalePrice}
                                                                 </p>
                                                             </span>
-                                                        </p>
+                                                        </div>
                                                     </div>
                                                 ))
                                             }
@@ -150,11 +164,15 @@ const Orders = () => {
                                             {
                                                 item?.orderStatus === "COMPLETED" &&
                                                 <p
-                                                    onClick={() => setRatingOpen(!ratingOpen)}
+                                                    onClick={() => {
+                                                        setRatingOpen(!ratingOpen)
+                                                        setValue(item?.product)
+                                                        setOrderId(item?._id)
+                                                    }}
                                                     className=" cursor-pointer flex items-center gap-2 text-blue-600 font-semibold"
                                                 >
                                                     <AiOutlineStar />
-                                                    <span>{item.review}</span>
+                                                    <span>Review & Ratings</span>
                                                 </p>
                                             }
                                         </span>
@@ -171,9 +189,7 @@ const Orders = () => {
                             );
                         })}
 
-                        {/* Rating modals */}
 
-                        {/* <Ratings open={ratingOpen} close={() => setRatingOpen(false)} /> */}
                     </div>
                 </main>
             </section>
@@ -182,3 +198,44 @@ const Orders = () => {
 };
 
 export default Orders;
+
+const RatingsModal = ({ open, close, item, mutate, orderId }: any) => {
+    const [rating, setRating] = useState(false);
+    const [productId, setProductId] = useState<string>("")
+    return (
+        <>
+            <CustomerRatings open={rating} close={() => setRating(false)} productId={productId} mutate={mutate} orderId={orderId} />
+            <Dialog open={open} maxWidth="lg" onClose={() => close(false)} PaperProps={{
+                style: {
+                    borderRadius: 18, // Adjust the value according to your preference
+                },
+            }}>
+                <div className="w-[40rem] h-fit p-7 flex flex-col gap-5 items-center">
+                    <p className=" font-semibold text-xl">Review And Ratings</p>
+                    <div className="w-full flex flex-col gap-3">
+                        {
+                            item?.map((data: any) => (
+                                <div key={data?.id} className="w-full flex items-center justify-between">
+                                    <div className="flex items-center gap-4">
+                                        <img src={data?.image} className="w-16 h-16 rounded-xl object-fill" alt="" />
+                                        <p className="flex flex-col">
+                                            <span className="text-gray-900 font-semibold">{data?.name}</span>
+                                            <span className="text-xs font-medium text-gray-600">{data?.category}</span>
+                                            <span className="text-xs font-medium text-gray-600">{data?.description}</span>
+
+                                        </p>
+                                    </div>
+                                    <p onClick={() => {
+                                        setProductId(data?.id)
+                                        setRating(true)
+                                    }} className=" cursor-pointer text-sm px-4 py-1.5 rounded-lg bg-primary text-white font-medium">Give Rating</p>
+                                </div>
+                            ))
+                        }
+
+                    </div>
+                </div>
+            </Dialog>
+        </>
+    )
+}

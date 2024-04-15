@@ -75,7 +75,7 @@ const AllOrders = () => {
                                 orderId: item?.orderNo,
                                 quantity: item?.amount?.totalQuantity,
                                 createdAt: moment(item?.createdAt).format("lll"),
-                                address: item?.addresses?.landmark,
+                                address: item?.addresses?.landmark + item?.addresses?.address,
                                 amount: item?.amount?.totalAmount,
                                 status: item?.orderStatus
 

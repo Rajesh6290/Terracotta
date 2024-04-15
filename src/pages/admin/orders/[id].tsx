@@ -1,17 +1,39 @@
 import Button from '@/components/core/Button'
 import CustomInputField from '@/components/core/CustomInputField'
 import useAuth from '@/hooks/useAuth'
+import useMutation from '@/hooks/useMutation'
 import useSwr from '@/hooks/useSwr'
 import { AdminLayout } from '@/layouts'
 import moment from 'moment'
 import { useRouter } from 'next/router'
+import { useState } from 'react'
+import { toast } from 'react-toastify'
 
 const OrderById = () => {
-    const { user } = useAuth()
+    const { mutation, isLoading } = useMutation()
     const router = useRouter()
-    const { data, isValidating } = useSwr(`order/${router?.query?.id}`)
+    const { data, isValidating, mutate } = useSwr(`order/${router?.query?.id}`)
     const item = data?.data?.data
-    console.log(data)
+    const [status, setStatus] = useState<string>(item?.orderStatus ? item?.orderStatus : "")
+    const handleOperation = async () => {
+        try {
+            const res = await mutation(`order/${item?._id}`, {
+                method: "PUT",
+                body: {
+                    orderStatus: status
+                },
+                isAlert: true
+            })
+            if (res?.status === 200) {
+                mutate()
+                toast.success(res?.results?.msg)
+            } else {
+                toast.error(res?.results?.msg)
+            }
+        } catch (error) {
+            toast.error(error instanceof Error)
+        }
+    }
     return (
         <AdminLayout title="Product List | Terracotta">
 
@@ -31,8 +53,9 @@ const OrderById = () => {
 
                         </p>
                         <Button
-
-                            type="submit"
+                            loading={isLoading}
+                            onClick={handleOperation}
+                            disabled={item?.orderStatus === "COMPLETED"}
                         >
                             Update
                         </Button>
@@ -51,7 +74,7 @@ const OrderById = () => {
                                 key="1"
                                 name="OrderStatus"
                                 type="select"
-                                value={item?.orderStatus ? item?.orderStatus : ""}
+                                value={status}
                                 options={[
                                     {
                                         label: "INITIATE",
@@ -75,7 +98,7 @@ const OrderById = () => {
                                     },
                                 ]}
                                 onChange={(e: any) => {
-
+                                    setStatus(e?.target?.value)
                                 }}
                                 fullWidth
 
@@ -174,7 +197,7 @@ const OrderById = () => {
                         </p>
                         <p className=' w-full flex justify-between'>
                             <span className='text-sm text-gray-500'>Discount(%) :</span>
-                            <span className='text-sm text-gray-800'>₹{item?.amount?.discount}</span>
+                            <span className='text-sm text-gray-800'>{item?.amount?.discount}%</span>
                         </p>
                         <p className=' w-full flex justify-between'>
                             <span className='text-sm text-gray-500'>Discount Price :</span>
