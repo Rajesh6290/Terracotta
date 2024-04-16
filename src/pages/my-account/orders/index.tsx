@@ -58,7 +58,7 @@ const Orders = () => {
                                 AllOrders?.map((item: any, index: number) => {
                                     return (
                                         <article
-
+                                            key={index}
                                             className="bg-white rounded-md shadow-[0px_0px_2px_1px_#00000024]  py-4 px-6 w-full h-full flex flex-col gap-5"
                                         >
                                             <div className="flex flex-col lg:flex-row justify-between lg:items-center items-start gap-5 ">
