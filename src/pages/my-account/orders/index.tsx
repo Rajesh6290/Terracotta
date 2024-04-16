@@ -47,144 +47,146 @@ const Orders = () => {
                             <p>My orders</p>
                         </div>
 
-                        {AllOrders?.map((item: any, index: number) => {
-                            return (
-                                <motion.article
-                                    layout
-                                    initial={{ scale: 0, opacity: 0 }}
-                                    whileInView={{ scale: 1, opacity: 1 }}
-                                    transition={{ delay: index < 5 ? index * 0.5 : 1 }}
-                                    exit={{ scale: 0, opacity: 0 }}
-                                    viewport={{ once: true }}
-                                    key={item._id}
-                                    className="bg-white rounded-md shadow-[0px_0px_2px_1px_#00000024]  py-4 px-6 w-full h-full flex flex-col gap-5"
-                                >
-                                    <div className="flex flex-col lg:flex-row justify-between lg:items-center items-start gap-5 ">
-                                        <p className="flex flex-col md:flex-row md:items-center items-start md:gap-6 gap-3">
-                                            <span className="py-3 text-gray-800 px-5 bg-gray-200 rounded-2xl font-medium md:text-[1rem] text-sm">
-                                                Order Id:{" "}
-                                                <span className=" text-primary font-medium tracking-wider">
-                                                    {item?.orderNo}
-                                                </span>
-                                            </span>
-                                            <span className="text-gray-800  font-semibold">
-                                                Order Placed: <span className=" text-sm"> {moment(item?.createdAt).format("lll")}</span>
-                                            </span>
-                                        </p>
-                                        <Link
-                                            href={`/my-account/orders/${item._id}`}
-                                            className="flex items-center gap-2 bg-primary px-8 py-2  text-white font-medium rounded-md "
+                        {
+                            !isValidating ? (
+                                <>
+                                    <OrderLoading />
+                                    <OrderLoading />
+                                    <OrderLoading />
+                                </>
+                            ) :
+                                AllOrders?.map((item: any, index: number) => {
+                                    return (
+                                        <article
+
+                                            className="bg-white rounded-md shadow-[0px_0px_2px_1px_#00000024]  py-4 px-6 w-full h-full flex flex-col gap-5"
                                         >
-                                            <BiCurrentLocation />
-                                            <span className=" uppercase"> Track order</span>
-                                        </Link>
-                                    </div>
-                                    <hr />
-                                    <div className=" flex flex-col gap-5  lg:flex-row items-start justify-between w-full">
-                                        <div className="lg:w-[50%] w-full flex flex-col gap-4">
-                                            {
-                                                item?.product?.map((pre: any) => (
-                                                    <div key={pre?.id} className=" flex items-center gap-5  w-full">
-                                                        <Link
-                                                            href={`/products/${pre.id}`}
-                                                            className="md:w-28 w-24 h-16 md:h-20 md:p-2 p-1 bg-slate-100 rounded-md shadow-[0px_0px_3px_1px_#00000024]"
-                                                        >
-                                                            <img
-                                                                src={pre?.image}
-                                                                className=" w-full h-full  object-contain"
-                                                                alt=""
-                                                            />
-                                                        </Link>
-                                                        <div className="flex flex-col gap-1">
-                                                            <p
-                                                                className=" font-semibold text-gray-800 md:text-[1.3rem] text-[1rem]"
-                                                            >
-                                                                {pre?.name}
-                                                            </p>
-                                                            <span className="md:text-sm text-xs text-gray-600">
-                                                                <ExpandTitle limit={4} text={pre?.description} />
-                                                            </span>
-                                                            {
-                                                                item?.orderStatus === "COMPLETED" &&
-
-                                                                <span className="md:text-sm text-xs text-gray-600">
-                                                                    <p className="flex items-center gap-0.5">
-                                                                        {[...Array(5)].map((_, index) => (
-                                                                            <Fragment key={index}>
-                                                                                {pre?.star >= index + 1 ? (
-                                                                                    <FaStar className=" text-amber-400 text-lg" />
-                                                                                ) : (
-                                                                                    <MdStarBorder fontSize="inherit" color="inherit" className="text-lg" />
-                                                                                )}
-                                                                            </Fragment>
-                                                                        ))}
-                                                                    </p>
-                                                                </span>
-                                                            }
-                                                            <span className=" flex items-center md:gap-5 gap-2">
-                                                                <p className="flex items-center gap-2 ">
-                                                                    <span className=" font-normal text-gray-800 text-sm ">
-                                                                        Category
-                                                                    </span>
-                                                                    <span className=" font-normal text-gray-800 text-xs">
-                                                                        {pre?.category}
-                                                                    </span>
-                                                                </p>
-                                                                <p className="w-[0.02rem] h-6 bg-black "></p>
-                                                                <p>Qty: {pre?.quantity}</p>
-                                                                <p className="w-[0.02rem] h-6 bg-black "></p>
-                                                                <p className=" capitalize">Color : {pre?.color}</p>
-                                                                <p className="w-[0.02rem] h-6 bg-black "></p>
-                                                                <p className=" text-gray-800 font-semibold text-lg">
-                                                                    Rs.{pre?.totalSalePrice}
-                                                                </p>
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                ))
-                                            }
-                                        </div>
-                                        <span className="lg:w-[25%] w-full flex flex-col gap-1 ">
-                                            <p className="text-[1.3rem] font-semibold text-gray-500 text-left">
-                                                Status
-                                            </p>
-                                            <span className=" flex items-center gap-2">
-                                                <p className=" p-1.5 rounded-full bg-green-500"></p>
-                                                <p className=" text-gray-800 font-semibold text-left">
-                                                    {item?.orderStatus}
+                                            <div className="flex flex-col lg:flex-row justify-between lg:items-center items-start gap-5 ">
+                                                <p className="flex flex-col md:flex-row md:items-center items-start md:gap-6 gap-3">
+                                                    <span className="py-3 text-gray-800 px-5 bg-gray-200 rounded-2xl font-medium md:text-[1rem] text-sm">
+                                                        Order Id:{" "}
+                                                        <span className=" text-primary font-medium tracking-wider">
+                                                            {item?.orderNo}
+                                                        </span>
+                                                    </span>
+                                                    <span className="text-gray-800  font-semibold">
+                                                        Order Placed: <span className=" text-sm"> {moment(item?.createdAt).format("lll")}</span>
+                                                    </span>
                                                 </p>
-                                            </span>
-
-                                            <p className=" text-gray-800  capitalize  text-left">
-                                                Your items has been <span className=" capitalize">{item?.orderStatus}</span>
-                                            </p>
-                                            {
-                                                item?.orderStatus === "COMPLETED" &&
-                                                <p
-                                                    onClick={() => {
-                                                        setRatingOpen(!ratingOpen)
-                                                        setValue(item?.product)
-                                                        setOrderId(item?._id)
-                                                    }}
-                                                    className=" cursor-pointer flex items-center gap-2 text-blue-600 font-semibold"
+                                                <Link
+                                                    href={`/my-account/orders/${item._id}`}
+                                                    className="flex items-center gap-2 bg-primary px-8 py-2  text-white font-medium rounded-md "
                                                 >
-                                                    <AiOutlineStar />
-                                                    <span>Review & Ratings</span>
-                                                </p>
-                                            }
-                                        </span>
-                                        <span className="flex flex-col lg:w-[20%] w-full lg:items-end ">
-                                            <p className="text-gray-600 text-[1rem]">
-                                                Delivery Expected By:
-                                            </p>
-                                            <p className=" text-gray-800 font-semibold text-xl">
-                                                Not Available
-                                            </p>
-                                        </span>
-                                    </div>
-                                </motion.article>
-                            );
-                        })}
+                                                    <BiCurrentLocation />
+                                                    <span className=" uppercase"> Track order</span>
+                                                </Link>
+                                            </div>
+                                            <hr />
+                                            <div className=" flex flex-col gap-5  lg:flex-row items-start justify-between w-full">
+                                                <div className="lg:w-[50%] w-full flex flex-col gap-4">
+                                                    {
+                                                        item?.product?.map((pre: any) => (
+                                                            <div key={pre?.id} className=" flex items-center gap-5  w-full">
+                                                                <Link
+                                                                    href={`/products/${pre.id}`}
+                                                                    className="md:w-28 w-24 h-16 md:h-20 md:p-2 p-1 bg-slate-100 rounded-md shadow-[0px_0px_3px_1px_#00000024]"
+                                                                >
+                                                                    <img
+                                                                        src={pre?.image}
+                                                                        className=" w-full h-full  object-contain"
+                                                                        alt=""
+                                                                    />
+                                                                </Link>
+                                                                <div className="flex flex-col gap-1">
+                                                                    <p
+                                                                        className=" font-semibold text-gray-800 md:text-[1.3rem] text-[1rem]"
+                                                                    >
+                                                                        {pre?.name}
+                                                                    </p>
+                                                                    <span className="md:text-sm text-xs text-gray-600">
+                                                                        <ExpandTitle limit={4} text={pre?.description} />
+                                                                    </span>
+                                                                    {
+                                                                        item?.orderStatus === "COMPLETED" &&
+
+                                                                        <span className="md:text-sm text-xs text-gray-600">
+                                                                            <p className="flex items-center gap-0.5">
+                                                                                {[...Array(5)].map((_, index) => (
+                                                                                    <Fragment key={index}>
+                                                                                        {pre?.star >= index + 1 ? (
+                                                                                            <FaStar className=" text-amber-400 text-lg" />
+                                                                                        ) : (
+                                                                                            <MdStarBorder fontSize="inherit" color="inherit" className="text-lg" />
+                                                                                        )}
+                                                                                    </Fragment>
+                                                                                ))}
+                                                                            </p>
+                                                                        </span>
+                                                                    }
+                                                                    <span className=" flex items-center md:gap-5 gap-2">
+                                                                        <p className="flex items-center gap-2 ">
+                                                                            <span className=" font-normal text-gray-800 text-sm ">
+                                                                                Category
+                                                                            </span>
+                                                                            <span className=" font-normal text-gray-800 text-xs">
+                                                                                {pre?.category}
+                                                                            </span>
+                                                                        </p>
+                                                                        <p className="w-[0.02rem] h-6 bg-black "></p>
+                                                                        <p>Qty: {pre?.quantity}</p>
+                                                                        <p className="w-[0.02rem] h-6 bg-black "></p>
+                                                                        <p className=" capitalize">Color : {pre?.color}</p>
+                                                                        <p className="w-[0.02rem] h-6 bg-black "></p>
+                                                                        <p className=" text-gray-800 font-semibold text-lg">
+                                                                            Rs.{pre?.totalSalePrice}
+                                                                        </p>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        ))
+                                                    }
+                                                </div>
+                                                <span className="lg:w-[25%] w-full flex flex-col gap-1 ">
+                                                    <p className="text-[1.3rem] font-semibold text-gray-500 text-left">
+                                                        Status
+                                                    </p>
+                                                    <span className=" flex items-center gap-2">
+                                                        <p className=" p-1.5 rounded-full bg-green-500"></p>
+                                                        <p className=" text-gray-800 font-semibold text-left">
+                                                            {item?.orderStatus}
+                                                        </p>
+                                                    </span>
+
+                                                    <p className=" text-gray-800  capitalize  text-left">
+                                                        Your items has been <span className=" capitalize">{item?.orderStatus}</span>
+                                                    </p>
+                                                    {
+                                                        item?.orderStatus === "COMPLETED" &&
+                                                        <p
+                                                            onClick={() => {
+                                                                setRatingOpen(!ratingOpen)
+                                                                setValue(item?.product)
+                                                                setOrderId(item?._id)
+                                                            }}
+                                                            className=" cursor-pointer flex items-center gap-2 text-blue-600 font-semibold"
+                                                        >
+                                                            <AiOutlineStar />
+                                                            <span>Review & Ratings</span>
+                                                        </p>
+                                                    }
+                                                </span>
+                                                <span className="flex flex-col lg:w-[20%] w-full lg:items-end ">
+                                                    <p className="text-gray-600 text-[1rem]">
+                                                        Delivery Expected By:
+                                                    </p>
+                                                    <p className=" text-gray-800 font-semibold text-xl">
+                                                        Not Available
+                                                    </p>
+                                                </span>
+                                            </div>
+                                        </article>
+                                    );
+                                })}
 
 
                     </div>
@@ -234,5 +236,91 @@ const RatingsModal = ({ open, close, item, mutate, orderId }: any) => {
                 </div>
             </Dialog>
         </>
+    )
+}
+
+
+const OrderLoading = () => {
+    return (
+        <article
+
+            className=" bg-slate-100  rounded-xl  py-4 px-6 w-full h-full flex flex-col gap-5"
+        >
+            <div className="flex flex-col lg:flex-row justify-between lg:items-center items-start gap-5 ">
+                <p className="flex flex-col md:flex-row md:items-center items-start md:gap-6 gap-3">
+                    <span className="bg-slate-300 animate-pulse w-36 p-3 rounded-md">
+
+                    </span>
+                    <span className="bg-slate-300 animate-pulse w-36 p-3 rounded-md">
+
+                    </span>
+                </p>
+                <div
+                    className="bg-slate-300 animate-pulse w-32 p-4 rounded-lg"
+                >
+
+                </div>
+            </div>
+            <hr />
+            <div className=" flex flex-col gap-5  lg:flex-row items-start justify-between w-full">
+                <div className="lg:w-[50%] w-full flex flex-col gap-4">
+
+                    <div className=" flex items-center gap-5  w-full">
+                        <div
+                            className="w-16 h-16 bg-slate-300 animate-pulse p-5 rounded-md"
+                        >
+
+                        </div>
+                        <div className="flex flex-col gap-1">
+                            <p
+                                className="bg-slate-300 animate-pulse w-36 p-2 rounded"
+                            >
+
+                            </p>
+                            <span className="bg-slate-300 animate-pulse w-36 p-2 rounded">
+
+                            </span>
+
+                            <span className=" flex items-center md:gap-5 gap-2">
+                                <p className="bg-slate-300 animate-pulse w-36 p-2 rounded">
+
+                                </p>
+                                <p className="w-[0.02rem] h-6 bg-black "></p>
+                                <p className="bg-slate-300 animate-pulse w-36 p-2 rounded"></p>
+                                <p className="w-[0.02rem] h-6 bg-black "></p>
+                                <p className=" capitalize bg-slate-300 animate-pulse w-36 p-2 rounded"></p>
+
+                            </span>
+                        </div>
+                    </div>
+
+
+                </div>
+                <span className="lg:w-[25%] w-full flex flex-col gap-2 ">
+                    <p className="bg-slate-300 animate-pulse w-36 p-2.5 rounded">
+
+                    </p>
+                    <span className="bg-slate-300 animate-pulse w-36 p-2.5 rounded">
+
+                    </span>
+
+                    <p className=" bg-slate-300 animate-pulse w-36 p-2.5 rounded">
+
+                    </p>
+
+
+
+                </span>
+                <span className="flex flex-col lg:w-[20%] w-full lg:items-end gap-2 ">
+
+                    <p className=" bg-slate-300 animate-pulse w-28 p-3 rounded-md">
+
+                    </p>
+                    <p className="bg-slate-300 animate-pulse w-36 p-3 rounded-md">
+
+                    </p>
+                </span>
+            </div>
+        </article>
     )
 }
