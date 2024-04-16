@@ -135,31 +135,46 @@ const MyOrder = () => {
                     <p>Id:{item?._id}</p>
                 </div>
                 <article className="w-full bg-white rounded p-7 text-gray-800 font-semibold text-sm shadow-[0px_0px_4px_1px_#00000024] flex      md:items-center md:justify-between flex-col gap-5 md:flex-row">
-                    <p className="text-[1rem]">Order id: {item?.orderNo}</p>
-                    <p className="flex items-center gap-2">
-                        <span>Last Update :</span>
-                        <span>{moment(item?.updatedAt).format("llll")}</span>
-                    </p>
+                    {
+                        isValidating ? <span className="w-52 p-2.5 bg-slate-300 animate-pulse rounded-md"></span> :
+                            <p className="text-[1rem]">Order id:  {item?.orderNo}</p>
+                    }
+                    {
+                        isValidating ? <span className="w-52 p-2.5 bg-slate-300 animate-pulse rounded-md"></span> :
+                            <p className="flex items-center gap-2">
+                                <span>Last Update :</span>
+                                <span>{moment(item?.updatedAt).format("llll")}</span>
+                            </p>
+                    }
                 </article>
                 <article className="flex lg:flex-row flex-col w-full  h-full bg-white shadow-[0px_0px_4px_1px_#00000024] rounded-md">
                     <div className=" flex flex-col justify-center gap-3 lg:w-3/4  w-full p-6 md:border-r-[1px] border-b-2 h-full ">
                         <p className="font-bold font-sub ">Delivery Address</p>
-                        <p className=" text-gray-800 font-semibold text-[1rem]">
-                            {item?.addresses?.name}
-                        </p>
-                        <p className="font-sub text-gray-500">
-                            {item?.addresses?.landmark}, {item?.addresses?.address} ,{item?.addresses?.city} City - {item?.addresses?.pincode}, {item?.addresses?.state}
-                        </p>
+                        {
+                            isValidating ? <span className="w-52 p-2.5 bg-slate-300 animate-pulse rounded-md"></span> :
+                                <p className=" text-gray-800 font-semibold text-[1rem]">
+                                    {item?.addresses?.name}
+                                </p>
+                        }
+                        {
+                            isValidating ? <span className="w-full p-2 bg-slate-300 animate-pulse rounded"></span> :
+                                <p className="font-sub text-gray-500">
+                                    {item?.addresses?.landmark}, {item?.addresses?.address} ,{item?.addresses?.city} City - {item?.addresses?.pincode}, {item?.addresses?.state}
+                                </p>
+                        }
                         <p className="flex flex-col ">
                             <span className=" text-gray-800 font-semibold text-[1rem]">
                                 Phone number
                             </span>
-                            <span className="font-sub text-gray-500">
-                                {item?.addresses?.mobileNo}
-                            </span>
+                            {
+                                isValidating ? <span className="w-52 p-2 bg-slate-300 animate-pulse rounded"></span> :
+                                    <span className="font-sub text-gray-500">
+                                        {item?.addresses?.mobileNo}
+                                    </span>
+                            }
                         </p>
                         <p className=" text-sm text-gray-400">
-                            This Order is also tracked by +91 {item?.addresses?.mobileNo}
+                            This Order is also tracked by +91  {item?.addresses?.mobileNo}
                         </p>
                     </div>
                     <div className="flex flex-col gap-5 lg:w-1/2 w-full p-6 md:border-r-[1px] border-b-2  ">
@@ -215,9 +230,12 @@ const MyOrder = () => {
                                 Seller:Terracotta Craft Online Services !
                             </p>
                             <p className=" text-xs text-gray-500 font-normal">Total Quantity: {totalQuantity}</p>
-                            <p className=" font-semibold text-sm text-gray-800">
-                                Total: ₹{item?.amount?.totalSaleAmount}
-                            </p>
+                            {
+                                isValidating ? <span className="w-20 p-2 bg-slate-300 animate-pulse rounded"></span> :
+                                    <p className=" font-semibold text-sm text-gray-800">
+                                        Total: ₹{item?.amount?.totalSaleAmount}
+                                    </p>
+                            }
                         </span>
                     </aside>
 
@@ -333,7 +351,7 @@ const ProductCard = ({
             layout
             initial={{ scale: 0, opacity: 0 }}
             whileInView={{ scale: 1, opacity: 1 }}
-            transition={{ delay: index < 5 ? index * 0.28 : 1 }}
+            transition={{ delay: index < 5 ? index * 0.1 : 0.5 }}
             exit={{ scale: 0, opacity: 0 }}
             viewport={{ once: true }}
             key={index}
