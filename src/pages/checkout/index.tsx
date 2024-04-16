@@ -5,15 +5,12 @@ import {
     Payment,
     ProductPriceDetails,
 } from "@/components/checkout";
-import Button from "@/components/core/Button";
-import Congratulation from "@/components/core/Congratulation";
 import { AddAddressForm } from "@/components/form";
 import useAuth from "@/hooks/useAuth";
 import useSwr from "@/hooks/useSwr";
 import { PublicLayout } from "@/layouts";
-import { Dialog } from "@mui/material";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 const Checkout = () => {
     const { user } = useAuth()
@@ -23,7 +20,7 @@ const Checkout = () => {
     const [addressOpen, setAddressOpen] = useState(true);
     const [showForm, setShowForm] = useState(false);
     const [checkedAddress, setCheckedAddress] = useState<string>("")
-    const { data: address, mutate: addressMutated } = useSwr(`address`);
+    const { data: address, mutate: addressMutated, isValidating: addressValidate } = useSwr(`address`);
     const AllAddress = address?.data?.data
 
 
@@ -61,6 +58,7 @@ const Checkout = () => {
                                 mutate={addressMutated}
                                 checkedAddress={checkedAddress}
                                 setCheckedAddress={setCheckedAddress}
+                                addressValidate={addressValidate}
                             />
                             {addressOpen && (
                                 <div className="flex flex-col gap-5">
