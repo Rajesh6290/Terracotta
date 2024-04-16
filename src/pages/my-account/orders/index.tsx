@@ -48,7 +48,7 @@ const Orders = () => {
                         </div>
 
                         {
-                            !isValidating ? (
+                            isValidating ? (
                                 <>
                                     <OrderLoading />
                                     <OrderLoading />
