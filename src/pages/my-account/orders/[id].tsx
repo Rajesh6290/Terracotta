@@ -1,15 +1,18 @@
 import useAuth from "@/hooks/useAuth";
+import { getAccessToken } from "@/hooks/useMutation";
 import useSwr from "@/hooks/useSwr";
 import { PublicLayout } from "@/layouts";
+import { BASE_URL } from "@/utils";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { motion } from "framer-motion";
 import moment from "moment";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import { useState } from "react";
 import { AiFillQuestionCircle } from "react-icons/ai";
 import { FaX } from "react-icons/fa6";
 import { IoChevronForwardSharp } from "react-icons/io5";
+import { toast } from "react-toastify";
 import * as Yup from "yup";
 interface OrderStatusProps {
     [x: string]: any;
@@ -29,6 +32,7 @@ const validationSchema = Yup.object().shape({
 const MyOrder = () => {
     const [helpOpen, setHelpOpen] = useState(false);
     const { user } = useAuth()
+    const [isLoading, setIsLoading] = useState(false)
     const router = useRouter()
     const { data, isValidating } = useSwr(!user?._id ? `` : `order/${router?.query?.id}`)
     const item = data?.data?.data
@@ -83,6 +87,30 @@ const MyOrder = () => {
         },
     ];
 
+    const handelDownloadInvoice = async () => {
+        try {
+            setIsLoading(true)
+            const res = await fetch(`${BASE_URL}/order/invoice/${router?.query?.id}`,
+                {
+                    method: "GET",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${getAccessToken()}`,
+                    },
+                }
+            );
+            const data = await res.blob();
+            const url = window.URL.createObjectURL(data);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "Invoice.pdf";
+            a.click();
+            setIsLoading(false)
+        } catch (error) {
+            setIsLoading(false)
+            toast.error(error instanceof Error ? error.message : "Something went wrong")
+        }
+    }
     return (
         <PublicLayout title="Order Details | PrintBrix">
             <section
@@ -145,13 +173,18 @@ const MyOrder = () => {
                                 />
                                 <p className="text-sm font-sub">Download invoice</p>
                             </span>
-                            <a
-                                href="#"
-                                download="orderInvoice"
-                                className="text-xs font-bold text-red-400 py-2 px-8 border-2 border-red-400 bg-red-50 rounded-md"
+                            <div
+                                onClick={handelDownloadInvoice}
+                                className="text-xs font-bold text-red-400 cursor-pointer py-2 px-8 border-2 border-red-400 bg-red-50 rounded-md"
                             >
-                                Download
-                            </a>
+                                {
+                                    isLoading ? <div
+                                        className="w-5 h-5 rounded-full animate-spin
+                          border-y border-solid border-white border-t-transparent shadow-md"
+                                    ></div> : `Download`
+                                }
+
+                            </div>
                             {
                                 item?.isCancelled && <p className="rounded-md py-2 px-8 overflow-hidden text-center flex items-center justify-center relative group cursor-pointer border-2 border-red-400  bg-red-50 text-xs font-bold text-white">
                                     <span className="absolute w-64 h-0 transition-all duration-300 origin-center rotate-45 -translate-x-20  bg-red-500 top-1/2 group-hover:h-64 group-hover:-translate-y-32 ease"></span>
