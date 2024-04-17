@@ -1,13 +1,17 @@
 
+import useSwr from "@/hooks/useSwr";
 import { AdminLayout } from "@/layouts";
 import dynamic from "next/dynamic";
 import React from "react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 const Admin = () => {
-  const startDate = new Date().setHours(0, 0, 0);
-  const endDate = new Date().setHours(23, 23, 59);
-
+  const { data, isValidating } = useSwr(`order/getAll`)
+  const fetchTotal = data?.data?.data?.map((item: any) => item?.amount?.totalSaleAmount)
+  const TotalOrderValue = fetchTotal?.reduce((st: any, lt: any) => st + lt, 0)
+  const findTodayOrder = data?.data?.data?.filter((item: any) => new Date(item?.createdAt).toDateString() === new Date().toDateString())
+  const fetchTodayTotal = findTodayOrder?.map((item: any) => item?.amount?.totalSaleAmount)
+  const TotalTodayOrderValue = fetchTodayTotal?.reduce((st: any, lt: any) => st + lt, 0)
   const FIRST_ARR = [
     {
       id: "1",
@@ -90,7 +94,18 @@ const Admin = () => {
       "Dec",
     ],
   };
+  function greet() {
+    var currentTime = new Date();
+    var currentHour = currentTime.getHours();
 
+    if (currentHour < 12) {
+      return "Good Morning !";
+    } else if (currentHour < 18) {
+      return "Good Afternoon !";
+    } else {
+      return "Good Evening !";
+    }
+  }
   return (
     <AdminLayout title="Dashboard | Terracotta Craft">
       <section className=" w-full h-full flex flex-col gap-5 px-10 py-5">
@@ -98,7 +113,7 @@ const Admin = () => {
           <div className="w-full h-full  bg-white rounded-lg shadow-[0px_0px_3px_0.1px_#00000024] flex flex-col gap-4 px-5 py-5">
             <p className=" flex flex-col gap-2">
               <span className=" text-primary font-medium ">
-                Good Evening, ArtSmart Admin!
+                {greet()}, Terracotta Admin!
               </span>
               <span className=" text-sm text-gray-500">{`Here’s what happening with your store today!`}</span>
             </p>
@@ -106,15 +121,15 @@ const Admin = () => {
               <div className=" flex flex-col gap-5">
                 <p className=" flex flex-col gap-1">
                   <span className=" text-2xl font-semibold text-gray-700">
-                    15,350.25
+                    {TotalTodayOrderValue}
                   </span>
-                  <span className=" text-sm text-gray-500">{`Today’s Visit`}</span>
+                  <span className=" text-sm text-gray-500">{`Today’s Order Amount`}</span>
                 </p>
                 <p className=" flex flex-col gap-1">
                   <span className=" text-2xl font-semibold text-gray-700">
-                    15,350.25
+                    {TotalOrderValue}
                   </span>
-                  <span className=" text-sm text-gray-500">Total Visit</span>
+                  <span className=" text-sm text-gray-500">Total Order Amount</span>
                 </p>
               </div>
               <img src="/welcome.svg" className=" h-fit w-38" alt="" />
