@@ -49,11 +49,9 @@ const AdminDrawer = () => {
                         {/* Main menu items */}
                         <div
                             className={`w-full group rounded-md flex items-center justify-between px-4 py-3 text-gray-300 hover:text-primary hover:bg-primary/10 transition-all duration-150 ease-in-out cursor-pointer border-l-4 ${router.asPath === menuItem.route ||
-                                (menuItem.submenus && menuItem.submenus.some(submenuItem => router.asPath === submenuItem.route))
+                                selectedSubMenu === menuItem._id
                                 ? "bg-primary/10 text-primary border-primary/75"
-                                : selectedSubMenu === menuItem._id
-                                    ? "bg-primary/10 text-primary border-primary/75"
-                                    : "border-transparent"
+                                : "border-transparent"
                                 }`}
                             onClick={() => handleMenuItemClick(menuItem)}
                             style={{
