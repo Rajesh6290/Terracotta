@@ -28,7 +28,7 @@ const Checkout = () => {
     const AllCartData = data?.data?.data
     const totalAmount = AllCartData?.[0]?.product?.price * AllCartData?.[0]?.quantity
     const totalSaleAmount = AllCartData?.[0]?.product?.salePrice * AllCartData?.[0]?.quantity
-    const totalDiscount = ((totalAmount - totalSaleAmount) / totalAmount) * 100
+    const totalDiscount = Math.ceil(((totalAmount - totalSaleAmount) / totalAmount) * 100)
 
     return (
         <PublicLayout title="Checkout | Terracotta Craft">

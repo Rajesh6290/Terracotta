@@ -26,12 +26,16 @@ const Orders = () => {
     const [value, setValue] = useState<any>()
     const [orderId, setOrderId] = useState<string>("")
     const { data, isValidating, mutate } = useSwr(`order`, { revalidateOnFocus: true, })
+    const [rating, setRating] = useState(false)
+    const [productId, setProductId] = useState<string>("")
     const AllOrders = data?.data?.data
     return (
         <PublicLayout>
             <RatingsModal open={ratingOpen} close={setRatingOpen} item={value} mutate={mutate} orderId={orderId} />
+            <CustomerRatings open={rating} close={() => setRating(false)} productId={productId} mutate={mutate} orderId={orderId} />
             <section className="bg-slate-50">
                 <main className="main-container py-10">
+                    {/* Desktop View */}
                     <div className=" md:flex hidden flex-col w-full gap-3 relative h-full  ">
                         <div className="flex gap-1 items-center p-1 text-xs text-gray-500 font-semibold font-sub ">
                             <Link
@@ -194,6 +198,7 @@ const Orders = () => {
 
 
                     </div>
+                    {/* Mobile View */}
                     <div className=" flex md:hidden flex-col w-full gap-3 relative h-full  ">
                         <div className="flex gap-1 items-center p-1 text-xs text-gray-500 font-semibold font-sub ">
                             <Link
@@ -217,15 +222,23 @@ const Orders = () => {
                                 <div key={index} className=" w-full rounded-xl bg-white shadow-[0px_0px_5px_0px_#00000024] py-4 flex flex-col gap-4">
                                     <div className=" w-full flex items-center justify-between px-5">
                                         <div className="flex items-center gap-3">
-                                            <p className="w-14 h-14 bg-blue-50 rounded-full flex items-center justify-center p-1">
-                                                <FaBoxesPacking className=" text-blue-400 text-3xl " />
+                                            <p className={`w-14 h-14  rounded-full flex items-center justify-center p-1
+                                                ${item?.orderStatus === "INITIATE" || item?.orderStatus === "PICKED" ? `bg-blue-50` :
+                                                    item?.orderStatus === "TRANSITS" ? `bg-yellow-50` : item?.orderStatus === "PROCESSING" ?
+                                                        `bg-purple-50` : `bg-green-50`
+                                                }
+                                            `}>
+                                                <FaBoxesPacking className={`${item?.orderStatus === "INITIATE" || item?.orderStatus === "PICKED" ? `text-blue-400` :
+                                                    item?.orderStatus === "TRANSITS" ? `text-yellow-400` : item?.orderStatus === "PROCESSING" ?
+                                                        `text-purple-400` : `text-green-400`
+                                                    }  text-3xl `} />
                                             </p>
                                             <p className="flex flex-col gap-1">
-                                                <span className="text-gray-900 font-semibold">Order Recevied</span>
+                                                <span className="text-gray-900 font-semibold uppercase">Order {item?.orderStatus}</span>
                                                 <span className=" text-xs font-normal text-gray-500">Last Update : {moment(item?.createdAt).format("lll")}</span>
                                             </p>
                                         </div>
-                                        <p onClick={() => router.push(`/my-account/orders/${item._id}`)}>
+                                        <p className=" cursor-pointer" onClick={() => router.push(`/my-account/orders/${item._id}`)}>
                                             <IoIosArrowForward className=" text-gray-500 text-3xl" />
                                         </p>
                                     </div>
@@ -273,7 +286,11 @@ const Orders = () => {
                                                                     </Fragment>
                                                                 ))}
                                                             </p>
-                                                            <p className="text-blue-500  rounded-md text-sm font-medium  cursor-pointer">Give Review</p>
+                                                            <p onClick={() => {
+                                                                setProductId(pre?.id)
+                                                                setOrderId(item?._id)
+                                                                setRating(true)
+                                                            }} className="text-blue-500  rounded-md text-sm font-medium  cursor-pointer">Give Review</p>
                                                         </div>
                                                     }
                                                     <p className="flex items-center gap-2">
