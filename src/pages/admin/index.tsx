@@ -1,4 +1,5 @@
 
+import AnimateNumber from "@/components/core/AnimateNumber";
 import useSwr from "@/hooks/useSwr";
 import { AdminLayout } from "@/layouts";
 import dynamic from "next/dynamic";
@@ -6,53 +7,68 @@ import React from "react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 const Admin = () => {
-  const { data, isValidating } = useSwr(`order/getAll`)
+  const { data, isValidating } = useSwr(`order/getAllCount`)
+  const { data: ratings } = useSwr(`rating/getAllCount`)
   const fetchTotal = data?.data?.data?.map((item: any) => item?.amount?.totalSaleAmount)
+  const totalPercentage = ((fetchTotal?.length - data?.data?.data?.filter((item: any) => item?.orderStatus === "COMPLETED").length) / fetchTotal?.length) * 100
   const TotalOrderValue = fetchTotal?.reduce((st: any, lt: any) => st + lt, 0)
   const findTodayOrder = data?.data?.data?.filter((item: any) => new Date(item?.createdAt).toDateString() === new Date().toDateString())
+  const todayPercentage = ((fetchTotal?.length - findTodayOrder?.length) / fetchTotal?.length) * 100
   const fetchTodayTotal = findTodayOrder?.map((item: any) => item?.amount?.totalSaleAmount)
   const TotalTodayOrderValue = fetchTodayTotal?.reduce((st: any, lt: any) => st + lt, 0)
+  let week = new Date()
+  week.setDate(week.getDate() - 7)
+  const getLastWeek = data?.data?.data?.filter((item: any) => new Date(item?.createdAt).toDateString() > week.toDateString())
+  const weekPercentage = ((data?.data?.data?.length - getLastWeek?.length) / data?.data?.data?.length) * 100
+  let month = new Date()
+  month.setDate(month.getDate() - 30)
+
+  const getLast30Days = data?.data?.data?.filter((item: any) => new Date(item?.createdAt).toDateString() > month.toDateString())
+  const last30DaysPercentage = ((data?.data?.data?.length - getLast30Days?.length) / data?.data?.data?.length) * 100
+  const reviewPercentage = ((ratings?.data?.data?.length - ratings?.data?.data?.filter((item: any) => item?.star === "5").length) / ratings?.data?.data?.length) * 100
+
+
   const FIRST_ARR = [
     {
       id: "1",
-      name: "Android",
-      totalVisit: "32,350",
-      percentage: "30.34%",
-      image: "/home/android.png",
+      name: "Today Orders",
+      totalVisit: <AnimateNumber number={findTodayOrder?.length} />,
+      percentage: Math.ceil(todayPercentage) + "%",
+      image: "/order.png",
     },
     {
       id: "2",
-      name: "IOS",
-      totalVisit: "32,350",
-      percentage: "30.34%",
-      image: "/home/ios.png",
+      name: "Last Week",
+      totalVisit: getLastWeek?.length,
+      percentage: Math.ceil(weekPercentage) + "%",
+      image: "/order.png",
     },
     {
       id: "1",
-      name: "Windows",
-      totalVisit: "32,350",
-      percentage: "30.34%",
-      image: "/home/windows.png",
+      name: "Last 30 Days",
+      totalVisit: getLast30Days?.length,
+      percentage: Math.ceil(last30DaysPercentage) + "%",
+      image: "/order.png",
     },
     {
       id: "1",
-      name: "Mac OS",
-      totalVisit: "32,350",
-      percentage: "30.34%",
-      image: "/home/macos.jpg",
+      name: "Total Orders",
+      totalVisit: fetchTotal?.length,
+      percentage: Math.ceil(totalPercentage) + "%",
+      image: "/order.png",
     },
   ];
   const SECOND_ARR = [
     {
       id: "1",
-      name: "Others Visit",
+      name: "Site  Visit",
       total: "32,350",
       percentage: 86,
       type: "Total Visit",
     },
     {
       id: "1",
-      name: "Contact",
+      name: "Support",
       total: 0,
       percentage: 0,
       type: "Today Connect",
@@ -67,8 +83,8 @@ const Admin = () => {
     {
       id: "1",
       name: "Reviews",
-      total: "87,234",
-      percentage: 83,
+      total: ratings?.data?.data?.length + 1,
+      percentage: Math.ceil(reviewPercentage),
       type: "Total Reviews",
     },
   ];
@@ -106,6 +122,7 @@ const Admin = () => {
       return "Good Evening !";
     }
   }
+
   return (
     <AdminLayout title="Dashboard | Terracotta Craft">
       <section className=" w-full h-full flex flex-col gap-5 px-10 py-5">
@@ -121,7 +138,7 @@ const Admin = () => {
               <div className=" flex flex-col gap-5">
                 <p className=" flex flex-col gap-1">
                   <span className=" text-2xl font-semibold text-gray-700">
-                    {TotalTodayOrderValue}
+                    <AnimateNumber number={TotalTodayOrderValue} />
                   </span>
                   <span className=" text-sm text-gray-500">{`Today’s Order Amount`}</span>
                 </p>
@@ -158,7 +175,7 @@ const Admin = () => {
                   </span>
                   <p className=" w-full flex items-center justify-between">
                     <span className=" font-medium text-gray-400 text-sm">
-                      Total visit
+                      Total Percent
                     </span>
                     <span className=" text-sm text-blue-500">
                       {item.percentage}

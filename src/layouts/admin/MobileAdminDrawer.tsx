@@ -15,7 +15,7 @@ const MobileAdminDrawer = () => {
             <Link href={`/admin`} className=" w-full flex justify-center">
                 <img
                     src="/logo.png"
-                    className=" w-40 h-24 object-fill"
+                    className=" w-40 h-fit object-fill"
                     alt=""
                 />
             </Link>

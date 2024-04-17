@@ -46,12 +46,12 @@ const AdminLayout = ({
         >
           <p
             onClick={() => setAdminMenuOpen(!adminMenuOpen)}
-            className=" p-1 bg-teal-50 border border-green-200 rounded-md absolute right-2 top-2 "
+            className=" p-1  rounded-md absolute right-2 top-2 "
           >
             {adminMenuOpen ? (
-              <FaXmark className=" text-3xl text-green-500 cursor-pointer" />
+              <FaXmark className=" text-3xl text-red-500 cursor-pointer" />
             ) : (
-              <CgMenuLeftAlt className=" text-3xl text-green-500 cursor-pointer" />
+              <CgMenuLeftAlt className=" text-3xl text-red-500 cursor-pointer" />
             )}
           </p>
           <MobileAdminDrawer />
